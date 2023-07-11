@@ -43,7 +43,7 @@ public class MainDashboardScreen : MonoBehaviour
     public GameObject[] screens; // All screens prefab
     public Transform[] screenLayers; // screen spawn parent
     private List<MainDashboardActiveScreen> mainDashboardActiveScreens = new List<MainDashboardActiveScreen>();
-    public Text userNameText, drawerUsernameText;
+    public Text userNameText, drawerUsernameText, balanceText;
     public Image profilePic, frameImage;
     public GameObject[] activeBottomIcons;
     public GameObject[] deactiveBottomIcons;
@@ -170,6 +170,7 @@ public class MainDashboardScreen : MonoBehaviour
         GlobalGameManager.instance.isKYCDone = bool.Parse(data["data"]["is_kyc_done"].ToString());
         PlayerGameDetails playerData = PlayerManager.instance.GetPlayerGameData();
         playerData.userName = userNameText.text = drawerUsernameText.text = data["data"]["username"].ToString();
+        balanceText.text = data["data"]["user_wallet"]["real_amount"].ToString();
 
         /*for (int i = 0; i < data["getData"].Count; i++)
         {

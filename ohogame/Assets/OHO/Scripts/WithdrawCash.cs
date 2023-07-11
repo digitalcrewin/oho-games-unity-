@@ -95,7 +95,7 @@ public class WithdrawCash : MonoBehaviour
 		}
 		else
 		{
-			Debug.LogError(data["error"].ToString());
+			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
 			//MainMenuController.instance.ShowMessage(data["error"].ToString());
 		}
 	}

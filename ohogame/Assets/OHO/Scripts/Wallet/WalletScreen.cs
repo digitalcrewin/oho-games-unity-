@@ -90,13 +90,15 @@ public class WalletScreen : MonoBehaviour
 
 		if (data["statusCode"].ToString() == "200")
 		{
-			walletBalanceText.text = depositAmountText.text = "<size=21>₹</size> " + (data["data"]["real_amount"]).ToString();
+			Debug.Log("Real Amount " + data["data"]["real_amount"].ToString());
+			walletBalanceText.text = depositAmountText.text = "<size=21>₹</size> " + data["data"]["real_amount"].ToString();
 			winAmountText.text = "<size=21>₹</size> " + (data["data"]["win_amount"]).ToString();
 			bonusAmountText.text = "<size=21>₹</size> " + (data["data"]["bonus_amount"]).ToString();
 		}
 		else
 		{
-			Debug.LogError(data["error"].ToString());
+			//Debug.LogError(data["error"].ToString());
+			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
 		}
 	}
 
@@ -120,24 +122,27 @@ public class WalletScreen : MonoBehaviour
 		print("Transaction Details Response : " + serverResponse);
 		JsonData data = JsonMapper.ToObject(serverResponse);
 
-		for (int i = 0; i < data["data"].Count; i++)
+		if (data["statusCode"].ToString() == "200")
 		{
-			TransactionItem transactionItem = CreateTransactionItems((data["data"][i]["other_type"]).ToString());
-			transactionItems.Add(transactionItem);
-			string cat = "";
-			if (data["data"][i]["category"] != null)
-				cat = data["data"][i]["category"].ToString();
-			Debug.Log("Category " + cat);
-			transactionItem.SetTransactionDetails((int)data["data"][i]["transaction_id"],
-					(int)data["data"][i]["user_id"],
-					data["data"][i]["other_type"].ToString(),
-					data["data"][i]["amount"].ToString(),
-					/*data["data"][i]["category"].ToString()*/cat,
-					data["data"][i]["createdAt"].ToString(),
-					data["data"][i]["updatedAt"].ToString());
+			for (int i = 0; i < data["data"].Count; i++)
+			{
+				TransactionItem transactionItem = CreateTransactionItems((data["data"][i]["other_type"]).ToString());
+				transactionItems.Add(transactionItem);
+				string cat = "";
+				if (data["data"][i]["category"] != null)
+					cat = data["data"][i]["category"].ToString();
+				Debug.Log("Category " + cat);
+				transactionItem.SetTransactionDetails((int)data["data"][i]["transaction_id"],
+						(int)data["data"][i]["user_id"],
+						data["data"][i]["other_type"].ToString(),
+						data["data"][i]["amount"].ToString(),
+						/*data["data"][i]["category"].ToString()*/cat,
+						data["data"][i]["createdAt"].ToString(),
+						data["data"][i]["updatedAt"].ToString());
 
-			transactionItem.ShowTransactionDetails();
+				transactionItem.ShowTransactionDetails();
 
+			}
 		}
 	}
 

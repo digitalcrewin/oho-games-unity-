@@ -465,9 +465,9 @@ public class EditProfileScreenUiManager : MonoBehaviour
             Debug.Log("Response => EditProfile :" + serverResponse);
             JsonData data = JsonMapper.ToObject(serverResponse);
 
+            MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
             if (bool.Parse(data["status"].ToString()))
             {
-                MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
                 MainDashboardScreen.instance.ShowScreen(MainDashboardScreen.MainDashboardScreens.UserProfile);
             }
         }
@@ -530,8 +530,8 @@ public class EditProfileScreenUiManager : MonoBehaviour
         }
         else
         {
-            Debug.LogError(data["error"].ToString());
-            //MainMenuController.instance.ShowMessage(data["error"].ToString());
+            //Debug.LogError(data["error"].ToString());
+            MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
         }
     }
 
@@ -565,11 +565,11 @@ public class EditProfileScreenUiManager : MonoBehaviour
                     MainDashboardScreen.instance.ShowMessage(error);
                     break;
                 }
-                //if (!IsValidDate(dobText.text, out error))
-                //{
-                //    MainDashboardScreen.instance.ShowMessage(error);
-                //    break;
-                //}
+                if (!IsValidDate(dobText.text, out error))
+                {
+                    MainDashboardScreen.instance.ShowMessage(error);
+                    break;
+                }
 
                 string requestData = "{\"full_name\":\"" + userNameText.text + "\",";
                 if (!string.IsNullOrEmpty(emailText.text))
@@ -717,6 +717,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
         else
         {   
             DateTime today = DateTime.Today;
+            Debug.Log(dt + " - " + today.AddYears(-18));
             if (dt >= today.AddYears(-18))
             {
                 error = "Less than 18 years age is not allowed";

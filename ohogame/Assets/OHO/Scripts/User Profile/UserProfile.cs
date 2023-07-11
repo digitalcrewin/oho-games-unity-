@@ -114,7 +114,8 @@ public class UserProfile : MonoBehaviour
 		}
 		else
 		{
-			Debug.LogError(data["error"].ToString());
+			//Debug.LogError(data["error"].ToString());
+			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
 		}
 	}
 
