@@ -116,6 +116,12 @@ public class P_Players : MonoBehaviour
         P_InGameManager.instance.mySeatIndex = 0;
         P_InGameManager.instance.mySeatIndexTemp = -1;
         P_InGameManager.instance.isSeatRotation = false;
+
+        // for bug: When player click on leave seat button in between game, & click on + button again UI issue showing. (fold, leave & join before winner)
+        fold2CardsImage.SetActive(false);
+        fold4CardsImage.SetActive(false);
+        fold5CardsImage.SetActive(false);
+        fold6CardsImage.SetActive(false);
     }
 
     public void UpdateLastAction(string textToShow)
