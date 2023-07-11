@@ -314,6 +314,7 @@ public class P_HandHistory : MonoBehaviour
                                 for (int j = 0; j < data["data"]["result_json"]["players"].Count; j++)  //i
                                 {
                                     int tempj = j;
+                                    IDictionary iPlayer = data["data"]["result_json"]["players"][tempj] as IDictionary;
                                     for (int k = 0; k < data["data"]["result_json"]["players"][tempj]["cards"].Count; k++)
                                     {
                                         int tempk = k;
@@ -322,41 +323,46 @@ public class P_HandHistory : MonoBehaviour
                                         {
                                             if (data["data"]["table_attributes"]["players"][tempi]["userId"].ToString() == data["data"]["result_json"]["players"][tempj]["userId"].ToString())
                                             {
-                                                if (data["data"]["result_json"]["players"][tempj]["isMuckEnabled"].ToString().ToLower() == "true")
+                                                //if (data["data"]["result_json"]["players"][tempj]["isMuckEnabled"].ToString().ToLower() == "true")
+                                                //{
+                                                
+                                                // new condition:
+                                                //    data me X ho to card back sprite
+                                                //    baki jo card value ho, wo cards show hoge
+                                                if (
+                                                    data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardRank"].ToString() == "X" ||
+                                                    data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardSuit"].ToString() == "X"
+                                                )
                                                 {
-                                                    if (
-                                                        data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardRank"].ToString() == "X" ||
-                                                        data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardSuit"].ToString() == "X"
-                                                    )
-                                                    {
-                                                        Phandsummary.userCards[tempk].sprite = P_CardsManager.instance.cardBackSprite;
-                                                        PhandDetailssummary.userCards[tempk].sprite = P_CardsManager.instance.cardBackSprite;
-                                                    }
-                                                    else if (data["data"]["result_json"]["players"][tempj]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
-                                                    {
-                                                        if (
-                                                            data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardRank"].ToString() != "X" ||
-                                                            data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardSuit"].ToString() != "X"
-                                                        )
-                                                        {
-                                                            P_CardData cardData = P_CardsManager.instance.GetCardData(
-                                                            data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardRank"].ToString() +
-                                                            data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardSuit"].ToString()
-                                                            );
-                                                            Phandsummary.userCards[tempk].sprite = cardData.cardsSprite;
-                                                            PhandDetailssummary.userCards[tempk].sprite = cardData.cardsSprite;
-                                                        }
-                                                    }
+                                                    Phandsummary.userCards[tempk].sprite = P_CardsManager.instance.cardBackSprite;
+                                                    PhandDetailssummary.userCards[tempk].sprite = P_CardsManager.instance.cardBackSprite;
                                                 }
-                                                else
+                                                else //if (data["data"]["result_json"]["players"][tempj]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
                                                 {
+                                                    //if (
+                                                    //    data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardRank"].ToString() != "X" ||
+                                                    //    data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardSuit"].ToString() != "X"
+                                                    //)
+                                                    //{
                                                     P_CardData cardData = P_CardsManager.instance.GetCardData(
-                                                            data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardRank"].ToString() +
-                                                            data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardSuit"].ToString()
-                                                            );
+                                                    data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardRank"].ToString() +
+                                                    data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardSuit"].ToString()
+                                                    );
                                                     Phandsummary.userCards[tempk].sprite = cardData.cardsSprite;
                                                     PhandDetailssummary.userCards[tempk].sprite = cardData.cardsSprite;
+                                                    //}
                                                 }
+
+                                                //}
+                                                //else
+                                                //{
+                                                //    P_CardData cardData = P_CardsManager.instance.GetCardData(
+                                                //            data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardRank"].ToString() +
+                                                //            data["data"]["result_json"]["players"][tempj]["cards"][tempk]["cardSuit"].ToString()
+                                                //            );
+                                                //    Phandsummary.userCards[tempk].sprite = cardData.cardsSprite;
+                                                //    PhandDetailssummary.userCards[tempk].sprite = cardData.cardsSprite;
+                                                //}
 
 
                                                 Phandsummary.userCards[tempk].gameObject.SetActive(true);
@@ -386,12 +392,20 @@ public class P_HandHistory : MonoBehaviour
                                                     Phandsummary.ActionTwoText.gameObject.SetActive(false);
                                                     PhandDetailssummary.ActionTwoText.gameObject.SetActive(false);
                                                 }
-                                                else if((bool) data["data"]["result_json"]["players"][tempj]["isMuckEnabled"] == true)
+                                                else if (iPlayer.Contains("isMuckEnabled"))
                                                 {
-                                                    Phandsummary.MuckBG.SetActive(true);
-                                                    PhandDetailssummary.MuckBG.SetActive(true);
-                                                    Phandsummary.ActionTwoText.gameObject.SetActive(false);
-                                                    PhandDetailssummary.ActionTwoText.gameObject.SetActive(false);
+                                                    if ((bool)data["data"]["result_json"]["players"][tempj]["isMuckEnabled"] == true)
+                                                    {
+                                                        Phandsummary.MuckBG.SetActive(true);
+                                                        PhandDetailssummary.MuckBG.SetActive(true);
+                                                        Phandsummary.ActionTwoText.gameObject.SetActive(false);
+                                                        PhandDetailssummary.ActionTwoText.gameObject.SetActive(false);
+                                                    }
+                                                    else
+                                                    {
+                                                        Phandsummary.ActionTwoText.text = data["data"]["result_json"]["players"][tempj]["hand"].ToString();
+                                                        PhandDetailssummary.ActionTwoText.text = data["data"]["result_json"]["players"][tempj]["hand"].ToString();
+                                                    }
                                                 }
                                                 else
                                                 {

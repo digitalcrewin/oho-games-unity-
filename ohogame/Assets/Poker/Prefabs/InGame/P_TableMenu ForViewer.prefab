@@ -2574,6 +2574,7 @@ MonoBehaviour:
   profilePic: {fileID: 4098503082200077557}
   frameImage: {fileID: 3457854847990912081}
   buttonContainer: {fileID: 8688966650145977506}
+  topUpBtn: {fileID: 4547701836877717758}
 --- !u!114 &4547701835638141706
 MonoBehaviour:
   m_ObjectHideFlags: 0

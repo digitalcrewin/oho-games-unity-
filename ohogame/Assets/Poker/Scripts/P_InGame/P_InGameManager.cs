@@ -2297,21 +2297,23 @@ public class P_InGameManager : MonoBehaviour
                                     pl.playerData.sixCards[k].transform.localPosition = new Vector3(pos, 0f, 0f);
                                 }
                             }
-                            if ((bool)data["winners"][i]["isMuckEnabled"] == true)
-                            {
-                                pl.UpdateLastAction("");
-                                StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.5f, () =>
-                                {
-                                    pl.muckBG.SetActive(true);
-                                    StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(3f, () => {
-                                        pl.muckBG.GetComponent<Image>().DOFade(0f, 0.5f).OnComplete(() =>
-                                        {
-                                            pl.muckBG.SetActive(false);
-                                            pl.muckBG.GetComponent<Image>().color = Color.white;
-                                        });
-                                    }));
-                                }));
-                            }
+
+                            // new condition: winner me muck text show nahi karvana hain
+                            //if ((bool)data["winners"][i]["isMuckEnabled"] == true)
+                            //{
+                            //    pl.UpdateLastAction("");
+                            //    StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.5f, () =>
+                            //    {
+                            //        pl.muckBG.SetActive(true);
+                            //        StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(3f, () => {
+                            //            pl.muckBG.GetComponent<Image>().DOFade(0f, 0.5f).OnComplete(() =>
+                            //            {
+                            //                pl.muckBG.SetActive(false);
+                            //                pl.muckBG.GetComponent<Image>().color = Color.white;
+                            //            });
+                            //        }));
+                            //    }));
+                            //}
                         }
 
                         InstantiateWin(data["winners"][tempI]["userId"].ToString(), data["winners"][tempI]["id"].ToString(), data["winners"][tempI]["winAmount"].ToString(), true);

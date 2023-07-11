@@ -10,6 +10,7 @@ public class P_TableMenu : MonoBehaviour
     public Text userNameText;
     public Image profilePic, frameImage;
     public Transform buttonContainer;
+    public Button topUpBtn;
 
     void Awake()
     {
@@ -24,6 +25,13 @@ public class P_TableMenu : MonoBehaviour
     void Start()
     {
         userNameText.text = PlayerManager.instance.GetPlayerGameData().userName;
+
+        if (P_SocketController.instance.gameTypeName == "SIT N GO") //for SIT N GO rule: top-up not allowed
+        {
+            topUpBtn.interactable = false;
+            topUpBtn.transform.GetChild(0).GetComponent<Image>().color = new Color32(255, 255, 255, 100);
+            topUpBtn.transform.GetChild(1).GetComponent<Text>().color = new Color32(255, 255, 255, 100);
+        }
     }
 
     public void OnClickOnButton(string eventName)
