@@ -70,6 +70,8 @@ public class P_InGameManager : MonoBehaviour
     private Sprite[] holeCardsTemp;
 
     public bool isSeatRotation = false;
+    [SerializeField]
+    Sprite chatIconTopBottom, chatIconLeftRight;
 
     private void Awake()
     {
@@ -2554,6 +2556,108 @@ public class P_InGameManager : MonoBehaviour
         //    resetGame = false;
         //    GlobalGameManager.instance.LoadScene(Scenes.InGame);
         //}
+    }
+
+    public void ShowChatOnPlayer(string serverResponse)
+    {
+        JsonData jsonData = JsonMapper.ToObject(serverResponse);
+        for (int i = 0; i < playersScript.Length; i++)
+        {
+            if (playersScript[i].playerData.userId == jsonData[0]["userId"].ToString())
+            {
+                Debug.Log("Seat " + playersScript[i].currentSeat);
+                switch (playersScript[i].currentSeat)
+                {
+                    case "1":
+                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(33f, 80f);
+                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(111f, 60f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 5f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(102f, 40f);
+                        playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconTopBottom;
+                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 0f);
+                        break;
+                    case "2":
+                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(112f, 12f);
+                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
+                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 0f);
+                        break;
+                    case "3":
+                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(112f, -7f);
+                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
+                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        break;
+                    case "4":
+                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(121f, -75f);
+                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(102f, 42f);
+                        playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
+                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        break;
+                    case "5":
+                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(35f, -121f);
+                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(111f, 60f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 5f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconTopBottom;
+                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        break;
+                    case "6":
+                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-121f, -75f);
+                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
+                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 180f);
+                        break;
+                    case "7":
+                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-112f, -7f);
+                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
+                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 180f);
+                        break;
+                    case "8":
+                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-112f, 12f);
+                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
+                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 180f, 0f);
+                        break;
+                }
+
+                if (jsonData[0]["message"].ToString().Length > 22)
+                    playersScript[i].chatObj.transform.GetChild(0).GetComponent<Text>().text = jsonData[0]["message"].ToString().Substring(0, 20) + "..";
+                else
+                    playersScript[i].chatObj.transform.GetChild(0).GetComponent<Text>().text = jsonData[0]["message"].ToString();
+
+                playersScript[i].chatObj.SetActive(true);
+
+                StartCoroutine(HideChatOnPlayer(playersScript[i].chatObj));
+            }
+        }
+    }
+
+    IEnumerator HideChatOnPlayer(GameObject chatObj)
+    {
+        yield return new WaitForSeconds(2f);
+        chatObj.SetActive(false);
     }
 }
 

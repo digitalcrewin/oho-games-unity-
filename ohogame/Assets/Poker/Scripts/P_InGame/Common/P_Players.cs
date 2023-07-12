@@ -25,6 +25,7 @@ public class P_Players : MonoBehaviour
     public Text lastActionText;
     public Sprite[] EventSprite;
     public bool isItMe;
+    public GameObject chatObj;
 
     private void Awake()
     {

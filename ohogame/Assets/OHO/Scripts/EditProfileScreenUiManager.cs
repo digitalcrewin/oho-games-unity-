@@ -110,7 +110,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 //emailGetOTPBtn.SetActive(false);
             }
 
-            if (d["dob"] != null)
+            if (!string.IsNullOrEmpty(d["dob"].ToString()))
             {
                 DateTime dt;
                 if (DateTime.TryParse(d["dob"].ToString(), out dt))
@@ -126,7 +126,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 dobText.placeholder.GetComponent<Text>().text = "Date of Birth (DD-MM-YYYY)";
             }
 
-            if (d["pan_number"] != null)
+            if (!string.IsNullOrEmpty(d["pan_number"].ToString()))
                 panText.text = d["pan_number"].ToString();
             else
             {
@@ -134,7 +134,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 panText.placeholder.GetComponent<Text>().text = "PAN Number";
             }
 
-            if (d["bank_details"]["account_holder_name"] != null)
+            if (!string.IsNullOrEmpty(d["bank_details"]["account_holder_name"].ToString()))
                 accNameText.text = d["bank_details"]["account_holder_name"].ToString();
             else
             {
@@ -142,7 +142,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 accNameText.placeholder.GetComponent<Text>().text = "Account Name";
             }
 
-            if (d["bank_details"]["account_no"] != null)
+            if (!string.IsNullOrEmpty(d["bank_details"]["account_no"].ToString()))
                 accNumText.text = d["bank_details"]["account_no"].ToString();
             else
             {
@@ -150,7 +150,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 accNumText.placeholder.GetComponent<Text>().text = "Account Number";
             }
 
-            if (d["bank_details"]["bank_name"] != null)
+            if (!string.IsNullOrEmpty(d["bank_details"]["bank_name"].ToString()))
                 bankNameText.text = d["bank_details"]["bank_name"].ToString();
             else
             {
@@ -158,7 +158,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 bankNameText.placeholder.GetComponent<Text>().text = "Bank Name";
             }
 
-            if (d["bank_details"]["ifsc_code"] != null)
+            if (!string.IsNullOrEmpty(d["bank_details"]["ifsc_code"].ToString()))
                 ifscText.text = d["bank_details"]["ifsc_code"].ToString();
             else
             {
@@ -166,7 +166,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 ifscText.placeholder.GetComponent<Text>().text = "IFSC Code";
             }
 
-            if (d["bank_details"]["bank_address"] != null)
+            if (!string.IsNullOrEmpty(d["bank_details"]["bank_address"].ToString()))
                 branchAddText.text = d["bank_details"]["bank_address"].ToString();
             else
             {
@@ -468,9 +468,14 @@ public class EditProfileScreenUiManager : MonoBehaviour
             MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
             if (bool.Parse(data["status"].ToString()))
             {
-                MainDashboardScreen.instance.ShowScreen(MainDashboardScreen.MainDashboardScreens.UserProfile);
+                Invoke("ShowUserProfileScreen", 1.5f);
             }
         }
+    }
+
+    void ShowUserProfileScreen()
+    {
+        MainDashboardScreen.instance.ShowScreen(MainDashboardScreen.MainDashboardScreens.UserProfile);
     }
 
     public void LoadImages(string urlAvtar,string urlframe,string urlflag)

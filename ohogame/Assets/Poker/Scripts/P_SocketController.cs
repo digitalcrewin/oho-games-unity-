@@ -637,6 +637,7 @@ public class P_SocketController : MonoBehaviour
             Debug.Log("<color=yellow>OnChatReceived</color>: " + str);
 
         P_ChatManager.instance.OnChatMessageReceived(str);
+        P_InGameManager.instance.ShowChatOnPlayer(str);
     }
     
     private void OnGetChatReceived(string str)
