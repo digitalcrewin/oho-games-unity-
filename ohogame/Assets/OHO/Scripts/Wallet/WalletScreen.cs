@@ -78,7 +78,7 @@ public class WalletScreen : MonoBehaviour
 		
 	}
 
-	private void GetWalletDetails()
+	public void GetWalletDetails()
 	{
 		StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/user/get-wallet", WalletDetailsResponse));
 	}

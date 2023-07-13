@@ -167,7 +167,7 @@ public class P_ChatUiManager : MonoBehaviour
 
     public void OnClickOnSuggestions(Text suggestionText)
     {
-        SoundManager.instance.PlaySound(SoundType.Click);
+        //SoundManager.instance.PlaySound(SoundType.Click);
 
         P_ChatManager.instance.SendChatMessage(suggestionText.text);
 

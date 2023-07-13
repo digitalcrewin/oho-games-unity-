@@ -86,17 +86,12 @@ public class WithdrawCash : MonoBehaviour
 		Debug.Log("Response => Withdraw: " + serverResponse);
 		JsonData data = JsonMapper.ToObject(serverResponse);
 
+			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
 		if (data["statusCode"].ToString() == "200")
 		{
-			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
-			//amountInputField.text = "";
-			////MainMenuController.instance.ShowMessage(data["message"].ToString());
-			//WalletScreen.instance.InitialiseWebView(data["data"].ToString());
+			WalletScreen.instance.GetWalletDetails();
+			MainDashboardScreen.instance.DestroyScreen(MainDashboardScreen.MainDashboardScreens.WithdrawCash);
 		}
-		else
-		{
-			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
-			//MainMenuController.instance.ShowMessage(data["error"].ToString());
-		}
+		
 	}
 }
