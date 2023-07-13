@@ -77,18 +77,9 @@ public class P_BuyinPopup : MonoBehaviour
             gameObject.SetActive(true);
             gameObject.GetComponent<RectTransform>().DOLocalMove(new Vector3(0, 0, 0), 0.3f);
 
-            //.OnComplete( () => {
-            //    buyInPopUp.GetComponent<RectTransform>().DOLocalMove(new Vector3(0, -1170, 0), 1f);
-            //    buyInPopUp.SetActive(false);
-            //});
-
-            //buyInTitle.text = P_InGameUiManager.instance.tableInfoText.text;
-            //buyInTitle.text = P_SocketController.instance.smallBlindTableData + "/" + P_SocketController.instance.bigBlindTableData + " (" + P_InGameUiManager.instance.tableInfoText.text + ")";
             buyInTitle.text = P_SocketController.instance.tableData["game_json_data"]["small_blind"].ToString() + "/" + P_SocketController.instance.tableData["game_json_data"]["big_blind"].ToString()
                             + " (" + P_InGameUiManager.instance.tableInfoText.text + ")";
 
-            //buyInSlider.minValue = float.Parse(P_SocketController.instance.bigBlindTableData);
-            //buyInSlider.maxValue = buyInSlider.minValue * (float.Parse(P_SocketController.instance.minimumBuyinTableData));
             buyInSlider.minValue = float.Parse(P_SocketController.instance.tableData["game_json_data"]["minimum_buyin"].ToString());  //bigBlind
             buyInSlider.maxValue = float.Parse(P_SocketController.instance.tableData["game_json_data"]["maximum_buyin"].ToString());  //maxBuyIn
 
@@ -131,20 +122,6 @@ public class P_BuyinPopup : MonoBehaviour
                 timerText.gameObject.SetActive(false);
                 timerImage.gameObject.SetActive(false);
             }
-            //initialBalance = userInitialBalance;
-            //balanceText.text = "Balance : " + Utility.GetTrimmedAmount("" + PlayerManager.instance.GetPlayerGameData().cashAmount.ToString());
-            //string str = "";
-            //switch (GlobalGameManager.instance.GetRoomData().gameMode)
-            //{
-            //    case GameMode.NLH:
-            //        str = "(HOLD’EM)";
-            //        break;
-            //}
-            //blinds.text = GlobalGameManager.instance.GetRoomData().smallBlind + "/" + GlobalGameManager.instance.GetRoomData().bigBlind + " " + str;
-        }
-        else
-        {
-
         }
     }
 
@@ -162,22 +139,6 @@ public class P_BuyinPopup : MonoBehaviour
             case "CloseBuyIn":
                 gameObject.SetActive(false);
                 p_InGameUiManager.isCallFromMenu = false;
-                //if (isTopUp)
-                //{
-                //    bool myPlayerFind = false;
-                //    for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
-                //    {
-                //        if (P_InGameManager.instance.playersScript[i].GetPlayerData().userId == PlayerManager.instance.GetPlayerGameData().userId)
-                //        {
-                //            myPlayerFind = true;
-                //        }
-                //    }
-                //    if (myPlayerFind == false)
-                //    {
-                //        P_SocketController.instance.SendJoinViewer();
-                //        AllPlayerPosPlusOn();
-                //    }
-                //}
                 break;
 
             case "SendTopUp":
@@ -191,7 +152,6 @@ public class P_BuyinPopup : MonoBehaviour
                         if (selectedText > 0)
                         {
                             P_SocketController.instance.SendTopUp(selectedText);
-                            //P_SocketController.instance.isTopUpSended = true;
                             buyInButton.interactable = false;
                             buyInCloseButton.interactable = false;
                         }

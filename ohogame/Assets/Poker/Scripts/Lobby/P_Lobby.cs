@@ -73,7 +73,6 @@ public class P_Lobby : MonoBehaviour
         }
 
         P_SocketController.instance.SendGetRooms();
-        //GetLobby1Data("TEXAS");
     }
 
     public void OnGameTypeButtonClick(int clickedI, string tempName)
@@ -91,46 +90,30 @@ public class P_Lobby : MonoBehaviour
         if (tempName.Equals("TEXAS"))
         {
             currentCategory = "TEXAS";
-            //GetLobby1Data("TEXAS");
         }
         else if (tempName.Equals("HOLDEM"))
         {
             currentCategory = "HOLDEM";
-            //GetLobby1Data("HOLDEM");
         }
         else if (tempName.Equals("PLO"))
         {
             currentCategory = "PLO";
-            //GetLobby1Data("PLO");
         }
         else if (tempName.Equals("SIT N GO"))
         {
-            //Instantiate(sitNGoPrefab, mainScrollViewContent);
-            //Instantiate(sitNGoPrefab, mainScrollViewContent);
             currentCategory = "SIT N GO";
-            //GetLobby1Data("SIT N GO");
         }
         else if (tempName.Equals("ANONYMOUS"))
         {
-            //Instantiate(texasPrefab, mainScrollViewContent);
-            //Instantiate(PLOPrefab, mainScrollViewContent);
-            //Instantiate(sitNGoPrefab, mainScrollViewContent);
             currentCategory = "ANONYMOUS";
-            //GetLobby1Data("ANONYMOUS");
         }
         else if (tempName.Equals("PRACTICE"))
         {
-            //Instantiate(practicePrefab, mainScrollViewContent);
-            //Instantiate(practicePrefab, mainScrollViewContent);
             currentCategory = "PRACTICE";
-            //GetLobby1Data("PRACTICE");
         }
         else if (tempName.Equals("TOURNAMENT"))
         {
-            //Instantiate(tournamentPrefab, mainScrollViewContent);
-            //Instantiate(tournamentPrefab, mainScrollViewContent);
             currentCategory = "TOURNAMENT";
-            //GetLobby1Data("TOURNAMENT");
         }
         P_SocketController.instance.SendGetRooms();
     }
@@ -344,14 +327,6 @@ public class P_Lobby : MonoBehaviour
 
     void SecondPrefab(string gameType, JsonData dataOfI)
     {
-        //ClearMainScrollView();
-
-        //GameObject subCategory = Instantiate(secondTexasPrefab, mainScrollViewContent);
-        //subCategory.transform.GetChild(0).GetComponent<Button>().onClick.AddListener(() =>
-        //{
-        //    P_SocketController.instance.LoadGamePlay();
-        //});
-
         if (P_GameConstant.enableLog)
             Debug.Log(JsonMapper.ToJson(dataOfI));
 

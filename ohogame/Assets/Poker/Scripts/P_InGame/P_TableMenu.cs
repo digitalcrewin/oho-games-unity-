@@ -44,10 +44,6 @@ public class P_TableMenu : MonoBehaviour
                         P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.MenuForViewer);
                     else
                         P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.Menu);
-                    
-                    //Canvas socketCanvas = P_SocketController.instance.transform.GetChild(0).GetComponent<Canvas>();
-                    //socketCanvas.sortingOrder = 1;
-                    //Canvas.ForceUpdateCanvases();
                 }
                 break;
 
@@ -82,7 +78,7 @@ public class P_TableMenu : MonoBehaviour
 
             case "topup":
                 P_InGameUiManager.instance.isCallFromMenu = true;
-                P_InGameUiManager.instance.p_BuyinPopup.ShowBuyInPopup(true); //P_InGameUiManager.instance.ShowBuyInPopup(true);
+                P_InGameUiManager.instance.p_BuyinPopup.ShowBuyInPopup(true);
                 if (P_InGameUiManager.instance.IsScreenActive(P_InGameScreens.Menu))
                     P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.Menu);
                 if (P_InGameUiManager.instance.IsScreenActive(P_InGameScreens.MenuForViewer))
@@ -124,19 +120,6 @@ public class P_TableMenu : MonoBehaviour
                         {
                             P_SocketController.instance.SendLeaveViewer();
                         }
-                        //StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.4f, () =>
-                        //{
-                        //    try
-                        //    {
-                        //        //P_SocketController.instance.SocketClose();
-                                
-                        //    }
-                        //    catch(System.Exception e)
-                        //    {
-                        //        if (P_GameConstant.enableLog)
-                        //            Debug.Log("Socket close: " + e.Message);
-                        //    }
-                        //}));
                         P_SocketController.instance.isJoinSended = false;
                     }
                     P_InGameUiManager.instance.ShowScreen(P_InGameScreens.Loading);

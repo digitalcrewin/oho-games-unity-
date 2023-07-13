@@ -5,15 +5,8 @@ using BestHTTP.SocketIO3;
 using System.Collections;
 using BestHTTP.JSON;
 using LitJson;
-//using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using BestHTTP.SocketIO3.Events;
-//using TMPro;
-//using DG.Tweening;
-//using System.Linq;
-
-
-
 
 
 public class P_SocketController : MonoBehaviour
@@ -48,10 +41,6 @@ public class P_SocketController : MonoBehaviour
 
 
     public int playerTurnIndex = 0, lastPlayerTurnIndex = -1, oneTokenOpenPos, totalPlayersInGame = 0, myPlayerIndex = -1;
-
-
-
-
 
 
     [HideInInspector]
@@ -91,7 +80,6 @@ public class P_SocketController : MonoBehaviour
     void Awake()
     {
         instance = this;
-        //if (Application.isEditor)
         Application.runInBackground = true;
         SetSocketState(P_SocketState.NULL);
         turnValue = 0;
@@ -168,7 +156,6 @@ public class P_SocketController : MonoBehaviour
     {
         //    SendLeaveMatchRequest();
         //Debug.Log("socket controller OnDestroy");
-
     }
 
     bool isPaused = false;
@@ -269,13 +256,10 @@ public class P_SocketController : MonoBehaviour
         if (P_GameConstant.enableLog)
             Debug.Log(socketManager.Uri);
 
-        //socketManager.Open();
-
         socketManager.Socket.On<ConnectResponse>(SocketIOEventTypes.Connect, OnServerConnect);
         socketManager.Socket.On<ConnectResponse>(SocketIOEventTypes.Disconnect, OnServerDisconnect);
         socketManager.Socket.On<SocketCustomError>(SocketIOEventTypes.Error, OnSocketError);
         //socketManager.Socket.On(SocketIOEventTypes.Error, OnError);
-        //socketManager.Socket.On<string>("chat message", OnChatMessage);
 
         ////Default Events
         //socketManager.Socket.On("reconnect", OnReconnect);
@@ -323,16 +307,10 @@ public class P_SocketController : MonoBehaviour
             {
                 case P_SocketEvetns.CONNECT:
                     {
-                        //SendPlayerDetails();
-
                         switch (GetSocketState())
                         {
                             case P_SocketState.Connecting:
-                                //SetSocketState(P_SocketState.WaitingForOpponent);
-                                //Debug.Log(responseObject.eventType + "<color=yellow> IsJoiningPreviousGame " + P_GlobalGameManager.IsJoiningPreviousGame + "</color>");
-                                //CreateRoom();
                                 SetSocketState(P_SocketState.Connected);
-                                //SendJoin(LoginScreen.instance.tableIdtext.text, LoginScreen.instance.userNametext.text, LoginScreen.instance.chipsToPlaytext.text);
                                 break;
 
                             case P_SocketState.ReConnecting:
@@ -446,18 +424,6 @@ public class P_SocketController : MonoBehaviour
 
         SocketClose();
     }
-
-    //private void OnGameTimeLeft(Socket socket, object[] args)
-    //{
-    //    string responseText = JsonMapper.ToJson(args);
-    //    //Debug.Log("Socket => <color=yellow>GAME_TIME_LEFT</color>: " + responseText);
-    //    //if (Panel_Controller.instance != null)
-    //    {
-    //        string trimedStr = responseText.Remove(0, 2); //["10:00"]   10:00"]
-    //        trimedStr = trimedStr.Remove((trimedStr.Length - 2), 2); //10:00"]   10:00
-    //        //Panel_Controller.instance.gameTimerText.text = trimedStr;
-    //    }
-    //}
 
     private void OnGameCounter(string str)
     {
@@ -647,28 +613,6 @@ public class P_SocketController : MonoBehaviour
 
         P_ChatManager.instance.OnChatMessageReceived(str);
     }
-
-    //IEnumerator ShowWinLoseScreen(JsonData data)
-    //{
-    //    yield return new WaitForSeconds(2f);
-    //    MainMenuController.instance.ShowScreen(MainMenuScreens.Winner);
-    //    if (data[0].ToString() == myPlayerIndex.ToString())
-    //    {
-    //        // self winner
-    //        if (WinnerLooser.instance != null)
-    //        {
-    //            WinnerLooser.instance.SelfWinner(true); //gameAmount
-    //        }
-    //    }
-    //    else
-    //    {
-    //        // self lose
-    //        if (WinnerLooser.instance != null)
-    //        {
-    //            WinnerLooser.instance.SelfWinner(false); //gameAmount
-    //        }
-    //    }
-    //}
 
     void OnSocketError(SocketCustomError args)
     {
@@ -1027,15 +971,8 @@ public class P_SocketController : MonoBehaviour
         {
             if (gamePlayerId == currentTurnUserId)
             {
-                //Players.instance.betAmount.SetActive(true);
-                //Players.instance.betAmount.transform.GetChild(0).GetComponent<Text>().text = currentBet.ToString();
-                //Players.instance.betAmount.GetComponent<RectTransform>().DOAnchorPos(new Vector2(1, 440), 2f);
-                ////yield return new WaitForSeconds(0.5f);
-                ////Players.instance.betAmount.SetActive(false);
-
                 P_InGameManager.instance.playersScript[0].betAmount.SetActive(true);
                 P_InGameManager.instance.playersScript[0].betAmount.transform.GetChild(0).GetComponent<Text>().text = currentBet.ToString();
-                //P_InGameManager.instance.players[0].GetComponent<P_Players>().betAmount.GetComponent<RectTransform>().DOAnchorPos(new Vector2(1, 450), 1f);
                 yield return new WaitForSeconds(1f);
                 P_InGameManager.instance.playersScript[0].betAmount.SetActive(false);
                 P_InGameManager.instance.playersScript[0].betAmount.GetComponent<RectTransform>().anchoredPosition = new Vector2(1, 75.5f);

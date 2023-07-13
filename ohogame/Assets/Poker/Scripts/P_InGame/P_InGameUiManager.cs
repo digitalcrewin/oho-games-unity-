@@ -408,14 +408,6 @@ public class P_InGameUiManager : MonoBehaviour
                     }
                     break;
             }
-
-            //for (int i = 0; i < data["pots"].Count; i++)
-            //{
-            //    if (data["pots"][i] != null)
-            //    {
-                    
-            //    }
-            //}
         }
         string potAmount = data["roundBets"].ToString();
         if (!potAmountText.gameObject.activeSelf)
@@ -449,12 +441,7 @@ public class P_InGameUiManager : MonoBehaviour
             {
                 StopCoroutine(diceTimerCo);
             }
-            if (pl.betAmount.activeSelf)
-            {
-                
-            }
         }
-        //HideAllPots();
     }
 
     #endregion
@@ -652,16 +639,7 @@ public class P_InGameUiManager : MonoBehaviour
             if (pl.playerData.userId == id)
             {
                 pl.foldImage.SetActive(true);
-                //Debug.Log("foldImage TRUE FoldLoginPlayers");
 
-                //if (pl.playerData.twoCards[0].transform.parent.gameObject.activeSelf)
-                //{
-                //    pl.fold2CardsImage.SetActive(true);
-                //}
-                //else if (pl.playerData.fourCards[0].transform.parent.gameObject.activeSelf)
-                //{
-                //    pl.fold4CardsImage.SetActive(true);
-                //}
                 if (pl.playerData.sixCards[0].transform.parent.gameObject.activeSelf)
                 {
                     if (P_InGameManager.instance.holeCardCount == 2)
@@ -739,15 +717,6 @@ public class P_InGameUiManager : MonoBehaviour
                     pl.realTimeResult.color = new Color(255f, 255f, 255f, 255f);
                 });
             }
-
-            //pl.UpdateLastAction("");
-
-            //winner me bich me player join ho uska unhide ho raha tha isi liye comment kiya
-            //pl.playerData.isFold = false;
-
-            //if (pl.foldImage != null) pl.foldImage.SetActive(false);
-            //if (pl.fold2CardsImage != null) pl.fold2CardsImage.SetActive(false);
-            //if (pl.fold4CardsImage != null) pl.fold4CardsImage.SetActive(false);
         }
     }
 
@@ -794,63 +763,9 @@ public class P_InGameUiManager : MonoBehaviour
         {
             int tempi = i;
             P_Players pl = P_InGameManager.instance.playersScript[i];
-            //for (int j = 0; j < pl.playerData.twoCards.Length; j++)
-            //{
-            //    pl.playerData.twoCards[j].sprite = P_CardsManager.instance.cardBackSprite;
-            //}
-            //for (int j = 0; j < pl.playerData.fourCards.Length; j++)
-            //{
-            //    pl.playerData.fourCards[j].sprite = P_CardsManager.instance.cardBackSprite;
-            //}
-            //pl.playerData.fourCards[0].transform.parent.gameObject.SetActive(false);
-            //pl.playerData.twoCards[0].transform.parent.gameObject.SetActive(false);
-            //pl.playerData.sixCards[0].transform.parent.gameObject.SetActive(false);
-
-            //pl.playerData.twoCards[0].transform.parent.GetComponent<RectTransform>().localScale = new Vector3(1f, 1f, 1f);
-            //pl.playerData.twoCards[0].transform.parent.DOScale(new Vector3(1f, 1f, 1f), GameConstants.CARD_ANIMATION_DURATION).OnComplete(() =>
-            //{
-            //    pl.playerData.twoCards[0].transform.parent.gameObject.SetActive(false);
-            //    for (int j = 0; j < pl.playerData.twoCards.Length; j++)
-            //    {
-            //        pl.playerData.twoCards[j].sprite = P_CardsManager.instance.cardBackSprite;
-            //    }
-            //    for (int j = 0; j < pl.playerData.fourCards.Length; j++)
-            //    {
-            //        pl.playerData.fourCards[j].sprite = P_CardsManager.instance.cardBackSprite;
-            //    }
-            //});
 
             for (int j = 0; j < pl.playerData.sixCards.Length; j++)
             {
-                // two card
-                //int tempj = j;
-                //StartCoroutine(Fade(pl.playerData.twoCards[tempj], 0.5f, false));
-                ////pl.playerData.twoCards[tempj].DOKill();
-                ////pl.playerData.twoCards[tempj].DOFade(0f, 0.5f);
-
-                //StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.5f, () => {
-                //    for (int k = 0; k < pl.playerData.twoCards.Length; k++)
-                //    {
-                //        pl.playerData.twoCards[k].color = new Color(255, 255, 255, 255);
-                //        if (pl.playerData.userId == PlayerManager.instance.GetPlayerGameData().userId)
-                //        {
-                //            pl.playerData.twoCards[k].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
-                //        }
-                //    }
-
-                //    for (int s = 0; s < pl.playerData.twoCards.Length; s++)
-                //    {
-                //        pl.playerData.twoCards[s].sprite = P_CardsManager.instance.cardBackSprite;
-                //    }
-                //    pl.playerData.twoCards[0].transform.parent.localScale = new Vector3(1f, 1f, 1f);
-                //    pl.playerData.twoCards[0].transform.parent.gameObject.SetActive(false);
-                //    if (tempi > 0)
-                //    {
-                //        pl.playerData.twoCards[0].transform.parent.GetComponent<RectTransform>().localPosition = new Vector3(30f, 5f, 0f);
-                //    }
-                //}));
-
-
                 // five card
                 int tempj = j;
                 StartCoroutine(Fade(pl.playerData.sixCards[tempj], 0.5f, false));
@@ -868,26 +783,6 @@ public class P_InGameUiManager : MonoBehaviour
                         }
                     }
                 }));
-
-                //pl.playerData.twoCards[tempj].DOFade(0f, 0.5f).OnComplete(() => //GameConstants.LOCAL_BET_ANIMATION_DURATION
-                //{
-                //    Debug.Log("DoColor 2");
-                //    for (int k = 0; k < pl.playerData.twoCards.Length; k++)
-                //    {
-                //        Debug.Log("DoColor 3");
-                //        pl.playerData.twoCards[k].color = new Color(255, 255, 255, 255);
-                //    }
-
-                //    for (int s = 0; s < pl.playerData.twoCards.Length; s++)
-                //    {
-                //        pl.playerData.twoCards[s].sprite = P_CardsManager.instance.cardBackSprite;
-                //    }
-                //    pl.playerData.twoCards[0].transform.parent.localScale = new Vector3(1f, 1f, 1f);
-
-                //    Debug.Log("DoColor false 0");
-                //    pl.playerData.twoCards[0].transform.parent.gameObject.SetActive(false);
-                //    Debug.Log("DoColor false 1");
-                //});
             }
             
 
@@ -985,13 +880,6 @@ public class P_InGameUiManager : MonoBehaviour
                     });
                 }
             }
-            //if (pl.foldImage.activeInHierarchy)
-            //{
-            //    pl.foldImage.GetComponent<Image>().DOFade(0f, 0.5f).From().SetEase(Ease.OutQuad).OnComplete(() =>
-            //    {
-            //        pl.foldImage.SetActive(false);
-            //    });
-            //}
         }
     }
 
