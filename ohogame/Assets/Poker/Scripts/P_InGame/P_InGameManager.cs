@@ -907,19 +907,45 @@ public class P_InGameManager : MonoBehaviour
             P_BuyinPopup.instance.buyInButton.interactable = true;
             P_BuyinPopup.instance.buyInCloseButton.interactable = true;
         }
-        
-        //Debug.Log("myPlayerFind: " + myPlayerFind);
-        if (!myPlayerFind) //(mySeatIndexTemp == -1)
+
+        if (P_SocketController.instance.gameTypeName == "SIT N GO")
         {
-            P_InGameUiManager.instance.AllPlayerPosPlusOff(false);
-            P_SocketController.instance.isViewer = true;
-            P_SocketController.instance.isJoinSended = false;
+            if (!myPlayerFind) //(mySeatIndexTemp == -1)
+            {
+                if (P_SocketController.instance.gameTableData["table_attributes"]["players"].Count < int.Parse(P_SocketController.instance.gameTableData["table_attributes"]["maxPlayers"].ToString()))
+                {
+                    //SIT N GO SEAT Table have empty seat
+                    P_InGameUiManager.instance.AllPlayerPosPlusOff(false); //plus icon on
+                }
+                else
+                {
+                    //SIT N GO SEAT Table is full
+                    P_InGameUiManager.instance.AllPlayerPosPlusOff(true); //plus icon off
+                }
+                P_SocketController.instance.isViewer = true;
+                P_SocketController.instance.isJoinSended = false;
+            }
+            else
+            {
+                P_InGameUiManager.instance.AllPlayerPosPlusOff(true);
+                P_SocketController.instance.isViewer = false;
+                P_SocketController.instance.isJoinSended = true;
+            }
         }
         else
         {
-            P_InGameUiManager.instance.AllPlayerPosPlusOff(true);
-            P_SocketController.instance.isViewer = false;
-            P_SocketController.instance.isJoinSended = true;
+            if (!myPlayerFind) //(mySeatIndexTemp == -1)
+            {
+                P_InGameUiManager.instance.AllPlayerPosPlusOff(false);
+                P_SocketController.instance.isViewer = true;
+                P_SocketController.instance.isJoinSended = false;
+            }
+            else
+            {
+                P_InGameUiManager.instance.AllPlayerPosPlusOff(true);
+                P_SocketController.instance.isViewer = false;
+                P_SocketController.instance.isJoinSended = true;
+            }
         }
 
 
@@ -1897,6 +1923,10 @@ public class P_InGameManager : MonoBehaviour
                         if ((playersScript[j].GetPlayerData().userId == P_SocketController.instance.gamePlayerId) && (P_SocketController.instance.gamePlayerId == data["userId"].ToString()))
                         {
                             P_InGameUiManager.instance.FoldLoginPlayers(P_SocketController.instance.gamePlayerId);
+
+                            // for auto-fold login player
+                            actionButtons[0].GetComponent<Button>().interactable = false;
+                            actionBtnParent.SetActive(false);
                         }
                         else if ((playersScript[j].GetPlayerData().userId == data["userId"].ToString()) && (data["userId"].ToString() != P_SocketController.instance.gamePlayerId))
                         {
@@ -2347,10 +2377,14 @@ public class P_InGameManager : MonoBehaviour
                             if (data["other"][i]["stackSize"].ToString() == "0")
                             {
                                 P_SocketController.instance.isMyBalanceZero = true;
-                                StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(5f, () => {
-                                    P_InGameUiManager.instance.isTopUp = true;
-                                    P_InGameUiManager.instance.p_BuyinPopup.ShowBuyInPopup(true);  //P_InGameUiManager.instance.ShowBuyInPopup(true);
-                                }));
+                                if (P_SocketController.instance.gameTypeName != "SIT N GO")
+                                {
+                                    StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(5f, () =>
+                                    {
+                                        P_InGameUiManager.instance.isTopUp = true;
+                                        P_InGameUiManager.instance.p_BuyinPopup.ShowBuyInPopup(true);  //P_InGameUiManager.instance.ShowBuyInPopup(true);
+                                    }));
+                                }
                             }
                         }
                         else

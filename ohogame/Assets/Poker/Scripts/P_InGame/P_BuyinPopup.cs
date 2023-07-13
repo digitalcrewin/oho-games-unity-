@@ -98,6 +98,13 @@ public class P_BuyinPopup : MonoBehaviour
             buyInSlider.value = buyInSlider.maxValue;
             buyInBalance.text = buyInSlider.maxValue.ToString();
 
+            if (P_SocketController.instance.gameTypeName == "SIT N GO")
+            {
+                buyInSlider.gameObject.SetActive(false);
+                buyInSliderMinText.gameObject.SetActive(false);
+                buyInSliderMaxText.gameObject.SetActive(false);
+            }
+
             if (p_InGameUiManager.isTopUp || p_InGameUiManager.isCallFromMenu)
             {
                 buyInSelectedTitle.text = "Top-up";

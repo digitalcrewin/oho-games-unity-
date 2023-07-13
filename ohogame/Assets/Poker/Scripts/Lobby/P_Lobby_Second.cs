@@ -234,18 +234,17 @@ public class P_Lobby_Second : MonoBehaviour
                     P_SocketController.instance.gameTypeName = roomData["game_type"]["name"].ToString();
                     if (P_InGameManager.instance != null)
                     {
-                        Debug.Log("PlusOn: players.count: " + data["data"][tempI]["table_attributes"]["players"].Count);
-                        Debug.Log("PlusOn: maxPlayers: " + data["data"][tempI]["table_attributes"]["maxPlayers"].ToString());
                         if (P_SocketController.instance.gameTypeName == "SIT N GO") //for SIT N GO rule: game start ho to join nahi karwana
                         {
                             if (data["data"][tempI]["table_attributes"]["players"].Count < int.Parse(data["data"][tempI]["table_attributes"]["maxPlayers"].ToString()))
                             {
-                                Debug.Log("SIT N GO Table have empty seat");
+                                //SIT N GO Table have empty seat
                                 P_InGameUiManager.instance.AllPlayerPosPlusOn();
                             }
                             else
                             {
-                                Debug.Log("SIT N GO Table is full");
+                                //SIT N GO Table is full
+                                P_InGameUiManager.instance.AllPlayerPosPlusOff(true);
                             }
                         }
                         else
