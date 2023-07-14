@@ -135,69 +135,123 @@ public class P_Lobby : MonoBehaviour
 
                 if (currentCategory.Contains(categoryData) || categoryData.Contains(currentCategory))
                 {
-                    GameObject texas1 = Instantiate(texasPrefab, mainScrollViewContent);
-                    P_Lobby_Texas pLobbyTexas1 = texas1.GetComponent<P_Lobby_Texas>();
-
                     IDictionary iDataI = data["data"][i] as IDictionary;
-                    if (iDataI.Contains("game_json_data"))
+
+                    if (currentCategory.Equals("SIT N GO"))
                     {
-                        IDictionary iDataIgame = data["data"][i]["game_json_data"] as IDictionary;
-                        string smallBlindData = "0", bigBlindData = "0", minimumBuyin = "0";
-                        if (iDataIgame.Contains("small_blind"))
-                            smallBlindData = data["data"][i]["game_json_data"]["small_blind"].ToString();
+                        GameObject sitNGoObj = Instantiate(sitNGoPrefab, mainScrollViewContent);
+                        P_Lobby_SitnGo pLobbySitNGo = sitNGoObj.GetComponent<P_Lobby_SitnGo>();
 
-                        if (iDataIgame.Contains("big_blind"))
-                            bigBlindData = data["data"][i]["game_json_data"]["big_blind"].ToString();
-
-                        pLobbyTexas1.blindsText.text = smallBlindData + "/" + bigBlindData;
-
-                        if (iDataIgame.Contains("minimum_buyin"))
-                            minimumBuyin = data["data"][i]["game_json_data"]["minimum_buyin"].ToString();
-
-                        pLobbyTexas1.minBuyInText.text = minimumBuyin;
-                    }
-
-                    pLobbyTexas1.playerCountText.text = data["data"][i]["totalPlayers"].ToString();
-
-                    if (currentCategory.Equals("TEXAS"))
-                    {
-                        pLobbyTexas1.heading.text = "HOLD'EM";
-                        pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                        if (iDataI.Contains("game_json_data"))
                         {
-                            SecondPrefab("TEXAS", data["data"][tempI]);
-                        });
+                            if (iDataI.Contains("game_json_data"))
+                            {
+                                IDictionary iDataIgame = data["data"][i]["game_json_data"] as IDictionary;
+                                string smallBlindData = "0", bigBlindData = "0", minimumBuyin = "0";
+                                if (iDataIgame.Contains("small_blind"))
+                                    smallBlindData = data["data"][i]["game_json_data"]["small_blind"].ToString();
+
+                                if (iDataIgame.Contains("big_blind"))
+                                    bigBlindData = data["data"][i]["game_json_data"]["big_blind"].ToString();
+
+                                pLobbySitNGo.titleText.text = data["data"][i]["game_json_data"]["room_name"].ToString(); //categoryData;
+
+                                pLobbySitNGo.registerStatusBtn.onClick.AddListener(() =>
+                                {
+                                    SecondPrefab("SIT N GO", data["data"][tempI]);
+                                });
+
+                                if (iDataIgame.Contains("minimum_buyin"))
+                                    minimumBuyin = data["data"][i]["game_json_data"]["minimum_buyin"].ToString();
+
+                                pLobbySitNGo.bagAmountText.text = minimumBuyin;
+
+                                pLobbySitNGo.trophyAmountText.text = data["data"][i]["game_json_data"]["prize_money"].ToString();
+                                pLobbySitNGo.startsText.text = "Starts when " + data["data"][i]["game_json_data"]["minimum_player"].ToString() + " player joins";
+                                pLobbySitNGo.playersText.text = data["data"][i]["totalPlayers"].ToString() + "/" + data["data"][i]["game_json_data"]["maximum_player"].ToString();
+
+                                float maxPlayers = 0f, totalPlayers = 0f;
+                                if (float.TryParse(data["data"][i]["game_json_data"]["maximum_player"].ToString(), out maxPlayers)) { }
+                                if (float.TryParse(data["data"][i]["totalPlayers"].ToString(), out totalPlayers)) { }
+
+                                try
+                                {
+                                    pLobbySitNGo.playerLineImage.fillAmount = (totalPlayers / maxPlayers);
+                                }
+                                catch (System.Exception e)
+                                {
+                                    // for division error
+                                    Debug.Log("Division error in players line image");
+                                    pLobbySitNGo.playerLineImage.fillAmount = 0f;
+                                }
+                            }
+                        }
                     }
-                    else if (currentCategory.Equals("PLO"))
+                    else
                     {
-                        pLobbyTexas1.heading.text = categoryData;
-                        pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                        GameObject texas1 = Instantiate(texasPrefab, mainScrollViewContent);
+                        P_Lobby_Texas pLobbyTexas1 = texas1.GetComponent<P_Lobby_Texas>();
+
+                        if (iDataI.Contains("game_json_data"))
                         {
-                            SecondPrefab("PLO", data["data"][tempI]);
-                        });
-                    }
-                    else if (currentCategory.Equals("SIT N GO"))
-                    {
-                        pLobbyTexas1.heading.text = categoryData;
-                        pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                            IDictionary iDataIgame = data["data"][i]["game_json_data"] as IDictionary;
+                            string smallBlindData = "0", bigBlindData = "0", minimumBuyin = "0";
+                            if (iDataIgame.Contains("small_blind"))
+                                smallBlindData = data["data"][i]["game_json_data"]["small_blind"].ToString();
+
+                            if (iDataIgame.Contains("big_blind"))
+                                bigBlindData = data["data"][i]["game_json_data"]["big_blind"].ToString();
+
+                            pLobbyTexas1.blindsText.text = smallBlindData + "/" + bigBlindData;
+
+                            if (iDataIgame.Contains("minimum_buyin"))
+                                minimumBuyin = data["data"][i]["game_json_data"]["minimum_buyin"].ToString();
+
+                            pLobbyTexas1.minBuyInText.text = minimumBuyin;
+                        }
+
+                        pLobbyTexas1.playerCountText.text = data["data"][i]["totalPlayers"].ToString();
+
+                        if (currentCategory.Equals("TEXAS"))
                         {
-                            SecondPrefab("SIT N GO", data["data"][tempI]);
-                        });
-                    }
-                    else if (currentCategory.Equals("ANONYMOUS"))
-                    {
-                        pLobbyTexas1.heading.text = categoryData;
-                        pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                            pLobbyTexas1.heading.text = "HOLD'EM";
+                            pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                            {
+                                SecondPrefab("TEXAS", data["data"][tempI]);
+                            });
+                        }
+                        else if (currentCategory.Equals("PLO"))
                         {
-                            SecondPrefab("ANONYMOUS", data["data"][tempI]);
-                        });
-                    }
-                    else if (currentCategory.Equals("PRACTICE"))
-                    {
-                        pLobbyTexas1.heading.text = categoryData;
-                        pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                            pLobbyTexas1.heading.text = categoryData;
+                            pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                            {
+                                SecondPrefab("PLO", data["data"][tempI]);
+                            });
+                        }
+                        //else if (currentCategory.Equals("SIT N GO"))
+                        //{
+                        //    pLobbyTexas1.heading.text = categoryData;
+                        //    pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                        //    {
+                        //        SecondPrefab("SIT N GO", data["data"][tempI]);
+                        //    });
+                        //}
+                        else if (currentCategory.Equals("ANONYMOUS"))
                         {
-                            SecondPrefab("PRACTICE", data["data"][tempI]);
-                        });
+                            pLobbyTexas1.heading.text = categoryData;
+                            pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                            {
+                                SecondPrefab("ANONYMOUS", data["data"][tempI]);
+                            });
+                        }
+                        else if (currentCategory.Equals("PRACTICE"))
+                        {
+                            pLobbyTexas1.heading.text = categoryData;
+                            pLobbyTexas1.bgButton.onClick.AddListener(() =>
+                            {
+                                SecondPrefab("PRACTICE", data["data"][tempI]);
+                            });
+                        }
                     }
                 }
             }

@@ -223,6 +223,7 @@ MonoBehaviour:
   playerLineImage: {fileID: 1140580626621431471}
   statusImage: {fileID: 875245485543766742}
   bgButton: {fileID: 4981066357805006582}
+  registerStatusBtn: {fileID: 2125149801501925216}
 --- !u!1 &931248699994825194
 GameObject:
   m_ObjectHideFlags: 0
@@ -301,7 +302,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: $1,000
+  m_Text: 
 --- !u!1 &1361875937952546858
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,7 +615,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Head-up PLO hyper turbo (1000 GTD)
+  m_Text: 
 --- !u!1 &4350320245353826553
 GameObject:
   m_ObjectHideFlags: 0
@@ -772,7 +773,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1/2
+  m_Text: 
 --- !u!1 &5255216643937935016
 GameObject:
   m_ObjectHideFlags: 0
@@ -851,7 +852,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: $1K
+  m_Text: 
 --- !u!1 &5675321936934755667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1005,7 +1006,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Starts when 1 player joins
+  m_Text: Starts when player joins
 --- !u!1 &6262579386945444825
 GameObject:
   m_ObjectHideFlags: 0
@@ -1390,7 +1391,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: $550
+  m_Text: 
 --- !u!1 &8976202880183771015
 GameObject:
   m_ObjectHideFlags: 0
@@ -1402,6 +1403,7 @@ GameObject:
   - component: {fileID: 9094574256837870316}
   - component: {fileID: 1684905709641748129}
   - component: {fileID: 875245485543766742}
+  - component: {fileID: 2125149801501925216}
   m_Layer: 5
   m_Name: RegisterStatusImage
   m_TagString: Untagged
@@ -1467,6 +1469,50 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2125149801501925216
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8976202880183771015}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Navigation:
+    m_Mode: 3
+    m_WrapAround: 0
+    m_SelectOnUp: {fileID: 0}
+    m_SelectOnDown: {fileID: 0}
+    m_SelectOnLeft: {fileID: 0}
+    m_SelectOnRight: {fileID: 0}
+  m_Transition: 1
+  m_Colors:
+    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
+    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
+    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_ColorMultiplier: 1
+    m_FadeDuration: 0.1
+  m_SpriteState:
+    m_HighlightedSprite: {fileID: 0}
+    m_PressedSprite: {fileID: 0}
+    m_SelectedSprite: {fileID: 0}
+    m_DisabledSprite: {fileID: 0}
+  m_AnimationTriggers:
+    m_NormalTrigger: Normal
+    m_HighlightedTrigger: Highlighted
+    m_PressedTrigger: Pressed
+    m_SelectedTrigger: Selected
+    m_DisabledTrigger: Disabled
+  m_Interactable: 1
+  m_TargetGraphic: {fileID: 875245485543766742}
+  m_OnClick:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &9028979847632568010
 GameObject:
   m_ObjectHideFlags: 0
