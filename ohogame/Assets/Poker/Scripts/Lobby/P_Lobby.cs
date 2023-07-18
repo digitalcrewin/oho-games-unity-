@@ -158,7 +158,8 @@ public class P_Lobby : MonoBehaviour
 
                                 pLobbySitNGo.registerStatusBtn.onClick.AddListener(() =>
                                 {
-                                    SecondPrefab("SIT N GO", data["data"][tempI]);
+                                    //SecondPrefab("SIT N GO", data["data"][tempI]);
+                                    SecondPrefabSitNGo("SIT N GO", data["data"][tempI]);
                                 });
 
                                 if (iDataIgame.Contains("minimum_buyin"))
@@ -347,7 +348,8 @@ public class P_Lobby : MonoBehaviour
                                     pLobbyTexas1.heading.text = categoryData;
                                     pLobbyTexas1.bgButton.onClick.AddListener(() =>
                                     {
-                                        SecondPrefab("SIT N GO", data["data"][tempI]);
+                                        //SecondPrefab("SIT N GO", data["data"][tempI]);
+                                        SecondPrefabSitNGo("SIT N GO", data["data"][tempI]);
                                     });
                                 }
                                 else if (selectedCategoryStr.Equals("ANONYMOUS"))
@@ -389,6 +391,21 @@ public class P_Lobby : MonoBehaviour
         if (P_Lobby_Second.instance != null)
         {
             P_Lobby_Second.instance.OnLoadScrollDetails(gameType, dataOfI);
+        }
+
+        P_SocketController.instance.lobbySelectedGameType = gameType;
+    }
+
+    void SecondPrefabSitNGo(string gameType, JsonData dataOfI)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log(JsonMapper.ToJson(dataOfI));
+
+        P_LobbySceneManager.instance.ShowScreen(P_LobbyScreens.LobbySecondSitNGo);
+
+        if (P_SitNGoDetails.instance != null)
+        {
+            P_SitNGoDetails.instance.OnLoadScrollDetails(dataOfI);
         }
 
         P_SocketController.instance.lobbySelectedGameType = gameType;

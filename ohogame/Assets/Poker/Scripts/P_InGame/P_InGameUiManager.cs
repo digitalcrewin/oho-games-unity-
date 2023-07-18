@@ -102,6 +102,9 @@ public class P_InGameUiManager : MonoBehaviour
                 P_HandHistory.instance.OnGetTableHandHistoryDetails(1);
                 break;
             case "real_time_result":
+                if (P_SocketController.instance.gameTypeName == "SIT N GO")
+                    ShowScreen(P_InGameScreens.RealTimeResultSitNGo);
+                else
                     ShowScreen(P_InGameScreens.RealTimeResult);
                 break;
             case "chat":
@@ -215,6 +218,7 @@ public class P_InGameUiManager : MonoBehaviour
             case P_InGameScreens.Chat:
             case P_InGameScreens.EmojiScreen:
             case P_InGameScreens.Leaderboard:
+            case P_InGameScreens.SitNGoWinnerLooser:
                 return P_IGScreenLayer.LAYER3;
             //case P_InGameScreens.:
                 //return P_IGScreenLayer.LAYER4;
@@ -938,10 +942,12 @@ public enum P_InGameScreens
     TableSettings,
     SwitchTable,
     RealTimeResult,
+    RealTimeResultSitNGo,
     HandHistory,
     Chat,
     EmojiScreen,
     Leaderboard,
+    SitNGoWinnerLooser,
     //InGameShop,
     //HandRanking,
     //Missions,

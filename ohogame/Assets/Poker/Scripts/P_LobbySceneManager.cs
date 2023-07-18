@@ -78,8 +78,8 @@ public class P_LobbySceneManager : MonoBehaviour
         {
             case P_LobbyScreens.Lobby:
                 return P_ScreenLayer.LAYER1;
-            //case P_LobbyScreens.:
-            //    return P_ScreenLayer.LAYER3;
+            case P_LobbyScreens.LobbySitNGoBlindStructure:
+                return P_ScreenLayer.LAYER3;
             //case P_LobbyScreens.:
             //    return P_ScreenLayer.LAYER4;
             case P_LobbyScreens.Message:
@@ -148,6 +148,8 @@ public enum P_LobbyScreens
 {
     Lobby,
     LobbySecond,
+    LobbySecondSitNGo,
+    LobbySitNGoBlindStructure,
     Loading,
     Message,
 }

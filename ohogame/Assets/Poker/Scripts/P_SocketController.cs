@@ -595,6 +595,8 @@ public class P_SocketController : MonoBehaviour
 
         if (P_Lobby_Second.instance != null)
             P_Lobby_Second.instance.CreateSecondLobby(str);
+        if (P_SitNGoDetails.instance != null)
+            P_SitNGoDetails.instance.OnSitNGoTableData(str);
     }
     
     private void OnChatReceived(string str)
