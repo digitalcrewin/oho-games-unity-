@@ -168,7 +168,7 @@ public class P_Lobby : MonoBehaviour
                                 pLobbySitNGo.bagAmountText.text = minimumBuyin;
 
                                 pLobbySitNGo.trophyAmountText.text = data["data"][i]["game_json_data"]["prize_money"].ToString();
-                                pLobbySitNGo.startsText.text = "Starts when " + data["data"][i]["game_json_data"]["minimum_player"].ToString() + " player joins";
+                                pLobbySitNGo.startsText.text = "Starts when " + data["data"][i]["game_json_data"]["maximum_player"].ToString() + " player joins"; //minimum_player
                                 pLobbySitNGo.playersText.text = data["data"][i]["totalPlayers"].ToString() + "/" + data["data"][i]["game_json_data"]["maximum_player"].ToString();
 
                                 float maxPlayers = 0f, totalPlayers = 0f;
@@ -264,6 +264,7 @@ public class P_Lobby : MonoBehaviour
         }
     }
 
+    // old method: when used API
     public void GetLobby1Data(string selectedCategoryStr)
     {
         if (!P_WebServices.instance.IsInternetAvailable())

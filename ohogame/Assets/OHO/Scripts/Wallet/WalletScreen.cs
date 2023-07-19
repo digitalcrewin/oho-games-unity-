@@ -9,7 +9,7 @@ public class WalletScreen : MonoBehaviour
 {
 	public static WalletScreen instance;
 
-	[SerializeField] Text walletBalanceText, winAmountText, depositAmountText, bonusAmountText, kycStatusText;
+	[SerializeField] Text walletBalanceText, winAmountText, depositAmountText, bonusAmountText, kycStatusText, practiceAmountText;
 	[SerializeField] GameObject transactionsPanel;
 	[SerializeField] Transform transactionScrollContent;
 	[SerializeField] GameObject depositTransactionItemPrefab, withdrawalTransactionItemPrefab, cashbackTransactionItemPrefab;
@@ -94,6 +94,7 @@ public class WalletScreen : MonoBehaviour
 			walletBalanceText.text = depositAmountText.text = "<size=21>₹</size> " + data["data"]["real_amount"].ToString();
 			winAmountText.text = "<size=21>₹</size> " + (data["data"]["win_amount"]).ToString();
 			bonusAmountText.text = "<size=21>₹</size> " + (data["data"]["bonus_amount"]).ToString();
+			practiceAmountText.text = data["data"]["practice_amount"].ToString();
 		}
 		else
 		{
