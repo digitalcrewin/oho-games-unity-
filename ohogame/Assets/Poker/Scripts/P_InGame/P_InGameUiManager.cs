@@ -56,6 +56,12 @@ public class P_InGameUiManager : MonoBehaviour
     public bool isTopUp = false;
     public bool isCallFromMenu = false;
 
+    [Space(10)]
+
+    [SerializeField] Transform[] handRankArray;
+    [SerializeField] Transform[] handRankMeterIcons;
+    [SerializeField] Transform handRankHighlightFrame;
+
 
     void Awake()
     {
@@ -901,6 +907,80 @@ public class P_InGameUiManager : MonoBehaviour
         {
             P_InGameManager.instance.allPots[i].SetActive(false);
         }
+    }
+
+
+
+
+    public void UpdateHandRankFrame(string handTypeData)
+    {
+        for (int i = 0; i < handRankMeterIcons.Length; i++)
+        {
+            handRankMeterIcons[i].gameObject.SetActive(false);
+        }
+        Debug.Log("handTypeData: " + handTypeData);
+        int needToShow = 1;
+        switch (handTypeData)
+        {
+            case "Royal Flush":
+                handRankHighlightFrame.SetParent(handRankArray[0]);
+                needToShow = handRankArray.Length - 10;
+                break;
+            case "Straight Flush":
+                handRankHighlightFrame.SetParent(handRankArray[1]);
+                needToShow = handRankArray.Length - 9;
+                break;
+            case "Four of a Kind":
+                handRankHighlightFrame.SetParent(handRankArray[2]);
+                needToShow = handRankArray.Length - 8;
+                break;
+            case "Full House":
+                handRankHighlightFrame.SetParent(handRankArray[3]);
+                needToShow = handRankArray.Length - 7;
+                break;
+            case "Flush":
+                handRankHighlightFrame.SetParent(handRankArray[4]);
+                needToShow = handRankArray.Length - 6;
+                break;
+            case "Straight":
+                handRankHighlightFrame.SetParent(handRankArray[5]);
+                needToShow = handRankArray.Length - 5;
+                break;
+            case "Three of a Kind":
+                handRankHighlightFrame.SetParent(handRankArray[6]);
+                needToShow = handRankArray.Length - 4;
+                break;
+            case "Two Pair":
+                handRankHighlightFrame.SetParent(handRankArray[7]);
+                needToShow = handRankArray.Length - 3;
+                break;
+            case "Pair":
+                handRankHighlightFrame.SetParent(handRankArray[8]);
+                needToShow = handRankArray.Length - 2;
+                break;
+            case "High Card":
+                handRankHighlightFrame.SetParent(handRankArray[9]);
+                needToShow = handRankArray.Length - 1;
+                break;
+        }
+        handRankHighlightFrame.localPosition = Vector3.zero;
+        for (int i = handRankMeterIcons.Length - 1; i >= needToShow; i--)
+        {
+            handRankMeterIcons[i].gameObject.SetActive(true);
+        }
+        if (!handRankHighlightFrame.gameObject.activeSelf)
+            handRankHighlightFrame.gameObject.SetActive(true);
+    }
+
+
+
+    public void ResetHandMeterIcons()
+    {
+        for (int i = 0; i < handRankMeterIcons.Length; i++)
+        {
+            handRankMeterIcons[i].gameObject.SetActive(false);
+        }
+        handRankHighlightFrame.gameObject.SetActive(false);
     }
 
 

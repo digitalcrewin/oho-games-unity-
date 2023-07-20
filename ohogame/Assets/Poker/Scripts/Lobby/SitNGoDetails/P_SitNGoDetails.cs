@@ -15,7 +15,20 @@ public class P_SitNGoDetails : MonoBehaviour
     [SerializeField] Color selectedGameTypeColor;
 
     [SerializeField] GameObject detailsItem, entriesItem, prizeItem;
-    [SerializeField] Transform detailsScrollContent;
+
+    [Space(10)]
+
+    [SerializeField] Text titleText;
+
+    [Space(10)]
+
+    // details
+    [SerializeField] Text detailsStartsWhenTxt;
+    [SerializeField] Text detailsPlayerCountTxt;
+    [SerializeField] Image detailsPlayersLineImg;
+    [SerializeField] Text detailsBuyInTxt;
+    [SerializeField] Text detailsPrizeTxt;
+
 
     [Space(10)]
 
@@ -53,6 +66,30 @@ public class P_SitNGoDetails : MonoBehaviour
             gameTypeBtn.onClick.AddListener(() => {
                 GameTypeButtonClickSetImageNColor(gameTypeBtn, gameTypeBtn.gameObject.name);
             });
+        }
+
+        P_SocketController.instance.SendGetTables(roomData["game_id"].ToString());
+
+
+        float maxPlayers = 0f, totalPlayers = 0f;
+        if (float.TryParse(roomData["game_json_data"]["maximum_player"].ToString(), out maxPlayers)) { }
+        if (float.TryParse(roomData["totalPlayers"].ToString(), out totalPlayers)) { }
+        detailsStartsWhenTxt.text = "Starts when " + maxPlayers + " player joins";
+        detailsPlayerCountTxt.text = totalPlayers + "/" + maxPlayers;
+        titleText.text = roomData["game_json_data"]["room_name"].ToString();
+
+        detailsBuyInTxt.text = roomData["game_json_data"]["minimum_buyin"].ToString();
+        detailsPrizeTxt.text = roomData["game_json_data"]["prize_money"].ToString();
+
+        try
+        {
+            detailsPlayersLineImg.fillAmount = (totalPlayers / maxPlayers);
+        }
+        catch (System.Exception e)
+        {
+            // for division error
+            Debug.Log("Division error in players line image");
+            detailsPlayersLineImg.fillAmount = 0f;
         }
     }
 
@@ -211,7 +248,7 @@ public class P_SitNGoDetails : MonoBehaviour
                 break;
 
             case "registerBtn":
-                P_SocketController.instance.SendGetTables(roomData["game_id"].ToString());
+                
                 break;
         }
     }
@@ -228,6 +265,39 @@ public class P_SitNGoDetails : MonoBehaviour
     {
         JsonData data = JsonMapper.ToObject(responseData);
 
-        Debug.Log("OnSitNGoTableData: " + data);
+        Debug.Log("OnSitNGoTableData: " + data.ToJson());
+
+        IDictionary iData = data as IDictionary;
+
+        if (iData.Contains("data"))
+        {
+            //for (int i = 0; i < data["data"].Count; i++)
+            //{
+            Debug.Log("players count: " + data["data"][0]["table_attributes"]["players"].Count);
+            Debug.Log("maxPlayers " + data["data"][0]["table_attributes"]["maxPlayers"]);
+
+            // GET_TABLES_BY_GAME_ID_RES's data not matched from GET_GAMES_RES, so set according to GET_GAMES_RES
+            //float maxPlayers = 0f, totalPlayers = 0f;
+            //if (float.TryParse(data["data"][0]["table_attributes"]["maxPlayers"].ToString(), out maxPlayers)) { }
+            //if (float.TryParse(data["data"][0]["table_attributes"]["players"].Count.ToString(), out totalPlayers)) { }
+            //detailsStartsWhenTxt.text = "Starts when " + maxPlayers + " player joins";
+            //detailsPlayerCountTxt.text = totalPlayers + "/" + maxPlayers;
+            //titleText.text = data["data"][0]["table_name"].ToString();
+
+            //detailsBuyInTxt.text = data["data"][0]["buyIn"].ToString();
+            //detailsPrizeTxt.text = data["data"][0]["prizeMoney"].ToString();
+
+            //try
+            //{
+            //    detailsPlayersLineImg.fillAmount = (totalPlayers / maxPlayers);
+            //}
+            //catch (System.Exception e)
+            //{
+            //    // for division error
+            //    Debug.Log("Division error in players line image");
+            //    detailsPlayersLineImg.fillAmount = 0f;
+            //}
+            //}
+        }
     }
 }

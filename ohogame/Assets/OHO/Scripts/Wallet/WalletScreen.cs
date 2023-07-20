@@ -14,6 +14,7 @@ public class WalletScreen : MonoBehaviour
 	[SerializeField] Transform transactionScrollContent;
 	[SerializeField] GameObject depositTransactionItemPrefab, withdrawalTransactionItemPrefab, cashbackTransactionItemPrefab;
 	[SerializeField] GameEvents walletGameEvent;
+	[SerializeField] Button claimPracticeAmtBtn;
 
 	List<TransactionItem> transactionItems = new List<TransactionItem>();
 	public GameObject UniWebViewObject;
@@ -94,13 +95,57 @@ public class WalletScreen : MonoBehaviour
 			walletBalanceText.text = depositAmountText.text = "<size=21>₹</size> " + data["data"]["real_amount"].ToString();
 			winAmountText.text = "<size=21>₹</size> " + (data["data"]["win_amount"]).ToString();
 			bonusAmountText.text = "<size=21>₹</size> " + (data["data"]["bonus_amount"]).ToString();
-			practiceAmountText.text = data["data"]["practice_amount"].ToString();
+			practiceAmountText.text = "<size=21>₹</size> " + data["data"]["practice_amount"].ToString();
+			string is_claim = data["data"]["is_claim"].ToString();
+			if (is_claim == "1")
+			{
+				ClaimPracticeAmtBtnDisable();
+			}
+			else
+			{
+				ClaimPracticeAmtBtnEnable();
+			}
 		}
 		else
 		{
 			//Debug.LogError(data["error"].ToString());
 			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
 		}
+	}
+
+	public void OnClickClaimPracticeAmtBtn()
+    {
+		StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/user/claim-practice-amount", ClaimPracticeAmountResponse));
+		ClaimPracticeAmtBtnDisable();
+	}
+
+	private void ClaimPracticeAmountResponse(string serverResponse, bool isErrorMessage, string errorMessage)
+	{
+		ClaimPracticeAmtBtnEnable();
+
+		Debug.Log("ClaimPracticeAmount Response : " + serverResponse);
+		JsonData data = JsonMapper.ToObject(serverResponse);
+
+		if (data["statusCode"].ToString() == "200")
+		{
+			MainDashboardScreen.instance.MenuSelection(1);
+		}
+		else
+		{
+			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
+		}
+	}
+
+	void ClaimPracticeAmtBtnEnable()
+    {
+		claimPracticeAmtBtn.interactable = true;
+		claimPracticeAmtBtn.transform.GetChild(0).GetComponent<Text>().color = new Color32(255, 255, 255, 255);
+	}
+
+	void ClaimPracticeAmtBtnDisable()
+	{
+		claimPracticeAmtBtn.interactable = false;
+		claimPracticeAmtBtn.transform.GetChild(0).GetComponent<Text>().color = new Color32(200, 200, 200, 128);
 	}
 
 	public void RemovePreviousTransactionItems()

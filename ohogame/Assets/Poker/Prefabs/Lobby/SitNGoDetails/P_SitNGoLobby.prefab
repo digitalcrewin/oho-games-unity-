@@ -5394,7 +5394,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 3871df79a28dcfc4f9368e0c0cad5d48, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cbfad72f9a539d0408b6cdbb1532ad3b, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -6887,7 +6887,12 @@ MonoBehaviour:
   detailsItem: {fileID: 3641287701054224100}
   entriesItem: {fileID: 8864259009914206449}
   prizeItem: {fileID: 4785881870881568591}
-  detailsScrollContent: {fileID: 2821822049627514372}
+  titleText: {fileID: 8870226612853075538}
+  detailsStartsWhenTxt: {fileID: 8093498319023381391}
+  detailsPlayerCountTxt: {fileID: 4580985383283595366}
+  detailsPlayersLineImg: {fileID: 4795866442382968619}
+  detailsBuyInTxt: {fileID: 4840456990355377535}
+  detailsPrizeTxt: {fileID: 3510257670409891643}
   prizePrizePoolTxt: {fileID: 4414957034471832057}
   prizePlacesPaidTxt: {fileID: 9155022410541702342}
   prizeScrollContent: {fileID: 5217849550814307033}
@@ -9048,7 +9053,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Double or Nothing 10
+  m_Text: 
 --- !u!1 &4970955005271985890
 GameObject:
   m_ObjectHideFlags: 0
@@ -11493,7 +11498,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 0.5
+  m_FillAmount: 0
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0

@@ -606,6 +606,8 @@ MonoBehaviour:
   shareBtn: {fileID: 3676651618271509386}
   playAgainBtn: {fileID: 6946805962963159206}
   closeBtn: {fileID: 774692725718008027}
+  winAmountTxt: {fileID: 2869532075245598018}
+  loseAmountTxt: {fileID: 6460649135229158364}
 --- !u!1 &2865830139552159139
 GameObject:
   m_ObjectHideFlags: 0
@@ -1253,7 +1255,7 @@ GameObject:
   - component: {fileID: 7937197870964561426}
   - component: {fileID: 4501279704618137558}
   m_Layer: 5
-  m_Name: WonText
+  m_Name: LoseText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

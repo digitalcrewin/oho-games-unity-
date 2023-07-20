@@ -798,7 +798,7 @@ RectTransform:
   - {fileID: 9045240291767640984}
   - {fileID: 224609465}
   m_Father: {fileID: 1717819958010024151}
-  m_RootOrder: 27
+  m_RootOrder: 28
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -8089,7 +8089,7 @@ RectTransform:
   - {fileID: 2009247222}
   - {fileID: 1435315212464576676}
   m_Father: {fileID: 1717819958010024151}
-  m_RootOrder: 25
+  m_RootOrder: 27
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -9116,10 +9116,10 @@ RectTransform:
   - {fileID: 3852570307735388762}
   - {fileID: 9045240291767648082}
   - {fileID: 6743395423288391787}
-  - {fileID: 1435315211662987886}
-  - {fileID: 6166029280282383657}
-  - {fileID: 2126022227}
   - {fileID: 5507160397917858572}
+  - {fileID: 6166029280282383657}
+  - {fileID: 1435315211662987886}
+  - {fileID: 2126022227}
   - {fileID: 6082536978088672077}
   m_Father: {fileID: 8131980405611678906}
   m_RootOrder: 1
@@ -20561,7 +20561,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3511619384204544414
 RectTransform:
   m_ObjectHideFlags: 0
@@ -24067,7 +24067,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1717819958010024151}
-  m_RootOrder: 28
+  m_RootOrder: 25
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -32138,6 +32138,29 @@ MonoBehaviour:
   buyInErrorText: {fileID: 1079539088600066008}
   isTopUp: 0
   isCallFromMenu: 0
+  handRankArray:
+  - {fileID: 9045240291767645778}
+  - {fileID: 9045240291767618876}
+  - {fileID: 9045240291767645617}
+  - {fileID: 9045240291767644386}
+  - {fileID: 9045240291767647710}
+  - {fileID: 9045240291767644404}
+  - {fileID: 9045240291767647075}
+  - {fileID: 9045240291767646224}
+  - {fileID: 9045240291767645822}
+  - {fileID: 9045240291767619159}
+  handRankMeterIcons:
+  - {fileID: 4633214135007325623}
+  - {fileID: 6085018933696974286}
+  - {fileID: 4082875356307177573}
+  - {fileID: 5768146519613300365}
+  - {fileID: 379527652672900177}
+  - {fileID: 335654494564071868}
+  - {fileID: 3405573685994573926}
+  - {fileID: 1493028817665885847}
+  - {fileID: 4557842049585577325}
+  - {fileID: 8124832954477819808}
+  handRankHighlightFrame: {fileID: 3511619384204544414}
 --- !u!1 &8131980406079796182
 GameObject:
   m_ObjectHideFlags: 0

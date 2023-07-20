@@ -1576,7 +1576,8 @@ public class P_InGameManager : MonoBehaviour
     {
         JsonData data = JsonMapper.ToObject(str);
 
-        bool showCards, folded, left;
+        bool showCards, folded, left, isLoginWinner = false;
+        string winLoseAmount = "";
 
         P_InGameUiManager.instance.ResetPlayersUI();
         actionBtnParent.SetActive(false);
@@ -1587,6 +1588,7 @@ public class P_InGameManager : MonoBehaviour
         }));
         ResetSuggetionAction();
         ResetSuggestionButtonsActiveImage();
+        P_InGameUiManager.instance.ResetHandMeterIcons();
 
         for (int i = 0; i < data["winners"].Count; i++)
         {
@@ -1603,6 +1605,8 @@ public class P_InGameManager : MonoBehaviour
                         if (pl.GetPlayerData().userId == PlayerManager.instance.GetPlayerGameData().userId)
                         {
                             // self login user winner
+                            isLoginWinner = true;
+                            winLoseAmount = data["winners"][tempI]["winAmount"].ToString();
                         }
                         else
                         {
@@ -1659,6 +1663,7 @@ public class P_InGameManager : MonoBehaviour
                 }
             }
         }
+
 
         for (int i = 0; i < data["other"].Count; i++)
         {
@@ -1742,6 +1747,25 @@ public class P_InGameManager : MonoBehaviour
                 }
             }
         }
+
+        if (P_SocketController.instance.gameTypeName == "SIT N GO")
+        {
+            StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(5f, () =>
+            {
+                P_InGameUiManager.instance.ShowScreen(P_InGameScreens.SitNGoWinnerLooser);
+                if (P_SitNGoWinnerLooser.instance != null)
+                {
+                    if (isLoginWinner)
+                    {
+                        P_SitNGoWinnerLooser.instance.SetWinner(winLoseAmount);
+                    }
+                    else
+                    {
+                        P_SitNGoWinnerLooser.instance.SetLooser("");
+                    }
+                }
+            }));
+        }
     }
 
     #endregion
@@ -1793,6 +1817,7 @@ public class P_InGameManager : MonoBehaviour
                 if (!playersScript[i].realTimeResult.gameObject.activeSelf)
                     playersScript[i].realTimeResult.gameObject.SetActive(true);
                 playersScript[i].realTimeResult.DOFade(0f, 1f).From().SetEase(Ease.OutQuad);
+                P_InGameUiManager.instance.UpdateHandRankFrame(trimResult);
             }
         }
     }
