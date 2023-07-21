@@ -696,7 +696,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: New Delhi
+  m_Text: 
 --- !u!1 &783533373071716558
 GameObject:
   m_ObjectHideFlags: 0
@@ -2662,7 +2662,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &783533374761439474
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3460,7 +3460,7 @@ GameObject:
   - component: {fileID: 3718116565094730901}
   - component: {fileID: 3718116565094730900}
   m_Layer: 5
-  m_Name: WTSD Slider
+  m_Name: WSD Slider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12670,7 +12670,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Akankar
+  m_Text: 
 --- !u!1 &7669193933627596201
 GameObject:
   m_ObjectHideFlags: 0
@@ -13492,6 +13492,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db8582f0a2cf5b4498db3e108f7aefff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  profileimage: {fileID: 7669193933627659687}
+  frame: {fileID: 7669193933627659737}
+  ruppeIconOfBalance: {fileID: 1045526921042086476}
+  userName: {fileID: 7669193933627681166}
+  balanceTxt: {fileID: 7669193933627683804}
+  locationTxt: {fileID: 783533373061135734}
+  deviceTxt: {fileID: 7669193933627686096}
+  vpipTxt: {fileID: 783533373622969975}
+  pfrTxt: {fileID: 783533374618772343}
+  bet3Txt: {fileID: 783533373712991409}
+  foldto3Txt: {fileID: 783533374474810833}
+  cbetTxt: {fileID: 783533373601343948}
+  foldToCbetTxt: {fileID: 783533372760076247}
+  stealTxt: {fileID: 783533374742441291}
+  checkRaiseTxt: {fileID: 783533373281625569}
+  wtsTxt: {fileID: 783533373366887430}
+  wsdTxt: {fileID: 3718116566138426013}
+  wtsSlider: {fileID: 783533373964431536}
+  wsdSlider: {fileID: 3718116565094730900}
   containerAry:
   - {fileID: 7669193933627613190}
   - {fileID: 7669193933627619355}
@@ -13499,11 +13518,8 @@ MonoBehaviour:
   containerVal: 0
   hideOnDealerClick: {fileID: 7669193933627609551}
   showOnDealerClick: {fileID: 7669193933627594961}
-  profileimage: {fileID: 7669193933627659687}
-  frame: {fileID: 0}
-  userName: {fileID: 7669193933627681166}
-  UserId: {fileID: 7669193933627683804}
-  levletxt: {fileID: 7669193933627686096}
+  UserId: {fileID: 0}
+  levletxt: {fileID: 0}
   addBtn: {fileID: 0}
   dealerBtn: {fileID: 0}
 --- !u!95 &7669193933627600312
@@ -14958,7 +14974,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 50
+  m_Text: 
 --- !u!1 &7669193933627617239
 GameObject:
   m_ObjectHideFlags: 0
@@ -15726,7 +15742,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Device: <color=yellow>Mobile</color>'
+  m_Text: 
 --- !u!1 &7669193933627620503
 GameObject:
   m_ObjectHideFlags: 0

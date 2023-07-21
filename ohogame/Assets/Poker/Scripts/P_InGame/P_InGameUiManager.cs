@@ -116,11 +116,11 @@ public class P_InGameUiManager : MonoBehaviour
             case "chat":
                 ShowScreen(P_InGameScreens.Chat);
                 break;
-            case "emoji_screen":
-                    //if (inGameManager.AmISpectator)
-                    //    return;
-                    ShowScreen(P_InGameScreens.EmojiScreen);
-                break;
+            //case "emoji_screen":  //now set into individual P_Players.cs
+            //        //if (inGameManager.AmISpectator)
+            //        //    return;
+            //        ShowScreen(P_InGameScreens.EmojiScreen);
+            //    break;
             case "hand_ranking_open":
                 //P_SocketController.instance.JoinSimilarButtonsDisable();
                 //P_SocketController.instance.joinSimilarTblBtnContainer.gameObject.SetActive(false);

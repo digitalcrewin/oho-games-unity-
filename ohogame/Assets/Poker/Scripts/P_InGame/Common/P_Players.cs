@@ -271,6 +271,13 @@ public class P_Players : MonoBehaviour
                 playerData.sixCards[i].transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
         }
     }
+
+    public void OnClickEmoji()
+    {
+        P_InGameUiManager.instance.ShowScreen(P_InGameScreens.EmojiScreen);
+        if (P_EmojiUIScreenManager.instance != null)
+            P_EmojiUIScreenManager.instance.GetUserDetails(GetPlayerData().userId);
+    }
 }
 
 [System.Serializable]

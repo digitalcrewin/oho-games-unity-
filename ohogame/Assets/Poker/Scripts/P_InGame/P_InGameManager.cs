@@ -800,8 +800,11 @@ public class P_InGameManager : MonoBehaviour
                     P_InGameUiManager.instance.isCallFromMenu = false;
                 }
             }
-            P_BuyinPopup.instance.buyInButton.interactable = true;
-            P_BuyinPopup.instance.buyInCloseButton.interactable = true;
+            if (P_BuyinPopup.instance != null)
+            {
+                P_BuyinPopup.instance.buyInButton.interactable = true;
+                P_BuyinPopup.instance.buyInCloseButton.interactable = true;
+            }
         }
 
         if (P_SocketController.instance.gameTypeName == "SIT N GO")

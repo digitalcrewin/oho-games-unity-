@@ -64,6 +64,16 @@ public class P_MainSceneManager : MonoBehaviour
         System.GC.Collect();
     }
 
+    public bool IsInGameSceneActive()
+    {
+        return false;
+
+        if (previousScene.name == "P_InGame(Clone)")
+            return true;
+        else if (previousScene.name == "P_LobbyScene(Clone)")
+            return false;
+    }
+
     //public bool IsScreenActive(MainMenuScreens screenName)
     //{
     //    for (int i = 0; i < gameScens.Count; i++)

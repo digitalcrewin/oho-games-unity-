@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using LitJson;
+using System;
 
 public class P_Lobby : MonoBehaviour
 {
@@ -144,48 +145,80 @@ public class P_Lobby : MonoBehaviour
 
                         if (iDataI.Contains("game_json_data"))
                         {
-                            if (iDataI.Contains("game_json_data"))
+                            IDictionary iDataIgame = data["data"][i]["game_json_data"] as IDictionary;
+                            string smallBlindData = "0", bigBlindData = "0", minimumBuyin = "0";
+                            if (iDataIgame.Contains("small_blind"))
+                                smallBlindData = data["data"][i]["game_json_data"]["small_blind"].ToString();
+
+                            if (iDataIgame.Contains("big_blind"))
+                                bigBlindData = data["data"][i]["game_json_data"]["big_blind"].ToString();
+
+                            pLobbySitNGo.titleText.text = data["data"][i]["game_json_data"]["room_name"].ToString(); //categoryData;
+
+                            
+
+                            if (iDataIgame.Contains("minimum_buyin"))
+                                minimumBuyin = data["data"][i]["game_json_data"]["minimum_buyin"].ToString();
+
+                            pLobbySitNGo.bagAmountText.text = minimumBuyin;
+
+                            pLobbySitNGo.trophyAmountText.text = data["data"][i]["game_json_data"]["prize_money"].ToString();
+                            pLobbySitNGo.startsText.text = "Starts when " + data["data"][i]["game_json_data"]["maximum_player"].ToString() + " player joins"; //minimum_player
+                            pLobbySitNGo.playersText.text = data["data"][i]["totalPlayers"].ToString() + "/" + data["data"][i]["game_json_data"]["maximum_player"].ToString();
+
+                            float maxPlayers = 0f, totalPlayers = 0f;
+                            if (float.TryParse(data["data"][i]["game_json_data"]["maximum_player"].ToString(), out maxPlayers)) { }
+                            if (float.TryParse(data["data"][i]["totalPlayers"].ToString(), out totalPlayers)) { }
+
+                            try
                             {
-                                IDictionary iDataIgame = data["data"][i]["game_json_data"] as IDictionary;
-                                string smallBlindData = "0", bigBlindData = "0", minimumBuyin = "0";
-                                if (iDataIgame.Contains("small_blind"))
-                                    smallBlindData = data["data"][i]["game_json_data"]["small_blind"].ToString();
-
-                                if (iDataIgame.Contains("big_blind"))
-                                    bigBlindData = data["data"][i]["game_json_data"]["big_blind"].ToString();
-
-                                pLobbySitNGo.titleText.text = data["data"][i]["game_json_data"]["room_name"].ToString(); //categoryData;
-
-                                pLobbySitNGo.registerStatusBtn.onClick.AddListener(() =>
-                                {
-                                    //SecondPrefab("SIT N GO", data["data"][tempI]);
-                                    SecondPrefabSitNGo("SIT N GO", data["data"][tempI]);
-                                });
-
-                                if (iDataIgame.Contains("minimum_buyin"))
-                                    minimumBuyin = data["data"][i]["game_json_data"]["minimum_buyin"].ToString();
-
-                                pLobbySitNGo.bagAmountText.text = minimumBuyin;
-
-                                pLobbySitNGo.trophyAmountText.text = data["data"][i]["game_json_data"]["prize_money"].ToString();
-                                pLobbySitNGo.startsText.text = "Starts when " + data["data"][i]["game_json_data"]["maximum_player"].ToString() + " player joins"; //minimum_player
-                                pLobbySitNGo.playersText.text = data["data"][i]["totalPlayers"].ToString() + "/" + data["data"][i]["game_json_data"]["maximum_player"].ToString();
-
-                                float maxPlayers = 0f, totalPlayers = 0f;
-                                if (float.TryParse(data["data"][i]["game_json_data"]["maximum_player"].ToString(), out maxPlayers)) { }
-                                if (float.TryParse(data["data"][i]["totalPlayers"].ToString(), out totalPlayers)) { }
-
-                                try
-                                {
-                                    pLobbySitNGo.playerLineImage.fillAmount = (totalPlayers / maxPlayers);
-                                }
-                                catch (System.Exception e)
-                                {
-                                    // for division error
-                                    Debug.Log("Division error in players line image");
-                                    pLobbySitNGo.playerLineImage.fillAmount = 0f;
-                                }
+                                pLobbySitNGo.playerLineImage.fillAmount = (totalPlayers / maxPlayers);
                             }
+                            catch (System.Exception e)
+                            {
+                                // for division error
+                                Debug.Log("Division error in players line image");
+                                pLobbySitNGo.playerLineImage.fillAmount = 0f;
+                            }
+
+
+                            //if (data["table"]["table_attributes"]["players"].Count == int.Parse(data["table"]["table_attributes"]["maxPlayers"].ToString()))
+                            //{
+                            //    for (int j = 0; j < data["table"]["table_attributes"]["players"].Count; j++)
+                            //    {
+                            //        if (data["table"]["table_attributes"]["players"][i]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
+                            //        {
+
+                            //        }
+                            //    }
+                            //}
+                            bool isGameStarted = bool.Parse(data["data"][i]["table"]["isGameStarted"].ToString());
+                            bool isGameEnded = bool.Parse(data["data"][i]["table"]["isGameEnded"].ToString());
+                            string registrationStatus = "";
+                            if (isGameStarted && !isGameEnded)
+                            {
+                                pLobbySitNGo.registerStatusBtn.GetComponent<Image>().sprite = pLobbySitNGo.startedSprite;
+                                pLobbySitNGo.registerStatusBtn.transform.GetChild(0).GetComponent<Text>().text = "Started";
+                                registrationStatus = "Started";
+                            }
+                            else if (!isGameStarted && isGameEnded)
+                            {
+                                pLobbySitNGo.registerStatusBtn.GetComponent<Image>().sprite = pLobbySitNGo.finishedSprite;
+                                pLobbySitNGo.registerStatusBtn.transform.GetChild(0).GetComponent<Text>().text = "Finished";
+                                registrationStatus = "Finished";
+                            }
+                            else if (!isGameStarted && !isGameEnded)
+                            {
+                                pLobbySitNGo.registerStatusBtn.GetComponent<Image>().sprite = pLobbySitNGo.registeringSprite;
+                                pLobbySitNGo.registerStatusBtn.transform.GetChild(0).GetComponent<Text>().text = "Registering";
+                                registrationStatus = "Registering";
+                            }
+
+                            pLobbySitNGo.registerStatusBtn.onClick.AddListener(() =>
+                            {
+                                //SecondPrefab("SIT N GO", data["data"][tempI]);
+                                SecondPrefabSitNGo("SIT N GO", data["data"][tempI], registrationStatus);
+                            });
                         }
                     }
                     else
@@ -350,7 +383,6 @@ public class P_Lobby : MonoBehaviour
                                     pLobbyTexas1.bgButton.onClick.AddListener(() =>
                                     {
                                         //SecondPrefab("SIT N GO", data["data"][tempI]);
-                                        SecondPrefabSitNGo("SIT N GO", data["data"][tempI]);
                                     });
                                 }
                                 else if (selectedCategoryStr.Equals("ANONYMOUS"))
@@ -397,16 +429,72 @@ public class P_Lobby : MonoBehaviour
         P_SocketController.instance.lobbySelectedGameType = gameType;
     }
 
-    void SecondPrefabSitNGo(string gameType, JsonData dataOfI)
+    void SecondPrefabSitNGo(string gameType, JsonData dataOfI, string registrationStatus)
     {
         if (P_GameConstant.enableLog)
             Debug.Log(JsonMapper.ToJson(dataOfI));
 
-        P_LobbySceneManager.instance.ShowScreen(P_LobbyScreens.LobbySecondSitNGo);
-
-        if (P_SitNGoDetails.instance != null)
+        bool isGameStart = false;
+        if (dataOfI["table"]["table_attributes"]["players"].Count == int.Parse(dataOfI["table"]["table_attributes"]["maxPlayers"].ToString()))
         {
-            P_SitNGoDetails.instance.OnLoadScrollDetails(dataOfI);
+            for (int i = 0; i < dataOfI["table"]["table_attributes"]["players"].Count; i++)
+            {
+                if (dataOfI["table"]["table_attributes"]["players"][i]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
+                {
+                    // start gameplay
+                    P_SocketController.instance.TABLE_ID = dataOfI["table"]["tableId"].ToString();
+                    P_SocketController.instance.SendJoin(P_SocketController.instance.TABLE_ID, dataOfI["game_json_data"]["minimum_buyin"].ToString());
+                    isGameStart = true;
+
+
+
+                    P_MainSceneManager.instance.ScreenDestroy();
+                    P_MainSceneManager.instance.LoadScene(P_MainScenes.InGame);
+
+                    P_SocketController.instance.gameId = dataOfI["game_id"].ToString();
+                    P_SocketController.instance.SendJoinViewer();
+
+                    //P_SocketController.instance.tableData = roomData;
+                    P_SocketController.instance.gameTableData = dataOfI;
+                    P_SocketController.instance.gameTypeName = dataOfI["game_type"]["name"].ToString();
+                    if (P_InGameManager.instance != null)
+                    {
+                        if (P_SocketController.instance.gameTypeName == "SIT N GO") //for SIT N GO rule: game start ho to join nahi karwana
+                        {
+                            if (dataOfI["table_attributes"]["players"].Count < int.Parse(dataOfI["table_attributes"]["maxPlayers"].ToString()))
+                            {
+                                //SIT N GO Table have empty seat
+                                P_InGameUiManager.instance.AllPlayerPosPlusOn();
+                            }
+                            else
+                            {
+                                //SIT N GO Table is full
+                                P_InGameUiManager.instance.AllPlayerPosPlusOff(true);
+                            }
+                        }
+                        else
+                        {
+                            P_InGameUiManager.instance.AllPlayerPosPlusOn();
+                        }
+                    }
+                    if (P_InGameUiManager.instance != null)
+                        P_InGameUiManager.instance.tableInfoText.text = dataOfI["table_name"].ToString();
+                    if (P_GameConstant.enableLog)
+                        Debug.Log("Get game table click: " + JsonMapper.ToJson(dataOfI));
+
+                    P_SocketController.instance.gameTableMaxPlayers = Int32.Parse(P_SocketController.instance.gameTableData["maxPlayers"].ToString());
+                }
+            }
+        }
+
+        if (!isGameStart)
+        {
+            P_LobbySceneManager.instance.ShowScreen(P_LobbyScreens.LobbySecondSitNGo);
+
+            if (P_SitNGoDetails.instance != null)
+            {
+                P_SitNGoDetails.instance.OnLoadScrollDetails(dataOfI, registrationStatus);
+            }
         }
 
         P_SocketController.instance.lobbySelectedGameType = gameType;
