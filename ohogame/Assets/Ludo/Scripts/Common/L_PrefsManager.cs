@@ -34,7 +34,7 @@ public class L_PrefsManager : MonoBehaviour
             //playerData.password = data["password"].ToString();
             if (data["userName"] != null)
                 playerData.userName = data["userName"].ToString();
-            playerData.mobileNo = data["mobileNo"].ToString();
+            playerData.mobileNo = data["mobile"].ToString();
             playerData.emailId = data["emailId"].ToString();
             playerData.name = data["name"].ToString();
             playerData.token = data["token"].ToString();

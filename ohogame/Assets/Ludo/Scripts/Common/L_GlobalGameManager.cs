@@ -21,6 +21,7 @@ public class L_GlobalGameManager : MonoBehaviour
 
     [SerializeField]
     public L_RoomData currentRoomData = new L_RoomData();
+    public static int totalBalance;
 
     void Awake()
     {

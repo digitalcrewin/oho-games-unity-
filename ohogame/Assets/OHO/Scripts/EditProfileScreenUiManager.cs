@@ -275,7 +275,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
 
     public void GetEmailOTP()
     {
-        //StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_BASE_URL + "user/sendOtpEmailVerification/" + emailText.text, GotEmailOTP));
+        StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/user/email-verification/" + emailText.text, GotEmailOTP));
     }
 
     void GotEmailOTP(string serverResponse, bool isErrorMessage, string errorMessage)
@@ -285,10 +285,11 @@ public class EditProfileScreenUiManager : MonoBehaviour
 
         if (bool.Parse(data["status"].ToString()))
         {
-            emailOTPScreen.SetActive(true);
-            contentObj.GetComponent<VerticalLayoutGroup>().enabled = false;
-            contentObj.GetComponent<VerticalLayoutGroup>().enabled = true;
+            //emailOTPScreen.SetActive(true);
+            //contentObj.GetComponent<VerticalLayoutGroup>().enabled = false;
+            //contentObj.GetComponent<VerticalLayoutGroup>().enabled = true;
         }
+        MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
     }
 
     Dictionary<int, bool> emailOTPList = new Dictionary<int, bool>();
@@ -712,6 +713,12 @@ public class EditProfileScreenUiManager : MonoBehaviour
 
     bool IsValidDate(string date, out string error)
     {
+        error = "";
+        if(string.IsNullOrEmpty(date))
+        {
+            return true;
+        }
+
         error = "Please enter valid date (DD-MM-YYYY)";
         DateTime dt;
         DateTime.TryParseExact(date, "dd-MM-yyyy", null, System.Globalization.DateTimeStyles.None, out dt);

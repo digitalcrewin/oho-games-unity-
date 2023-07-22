@@ -92,7 +92,10 @@ public class WalletScreen : MonoBehaviour
 		if (data["statusCode"].ToString() == "200")
 		{
 			Debug.Log("Real Amount " + data["data"]["real_amount"].ToString());
-			walletBalanceText.text = depositAmountText.text = "<size=21>₹</size> " + data["data"]["real_amount"].ToString();
+			int totalBalance = int.Parse(data["data"]["real_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["bonus_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["win_amount"].ToString().Split('.')[0]);
+			walletBalanceText.text = "<size=21>₹</size> " + totalBalance.ToString();
+			MainDashboardScreen.instance.balanceText.text = totalBalance.ToString();
+			depositAmountText.text = "<size=21>₹</size> " + data["data"]["real_amount"].ToString();
 			winAmountText.text = "<size=21>₹</size> " + (data["data"]["win_amount"]).ToString();
 			bonusAmountText.text = "<size=21>₹</size> " + (data["data"]["bonus_amount"]).ToString();
 			practiceAmountText.text = "<size=21>₹</size> " + data["data"]["practice_amount"].ToString();

@@ -10,7 +10,7 @@ public class Dashboard : MonoBehaviour
 {
     public static Dashboard instance;
 
-    public Text nameText;
+    public Text nameText, walletText;
 
     [Header("-----Game Type GameObject-----")]
     public Transform classicLudoObj;
@@ -185,6 +185,8 @@ public class Dashboard : MonoBehaviour
                     {
                         if (iData1.Contains("data"))
                         {
+                            L_GlobalGameManager.totalBalance = int.Parse(data["data"]["user_wallet"]["real_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["user_wallet"]["bonus_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["user_wallet"]["win_amount"].ToString().Split('.')[0]);
+                            walletText.text = L_GlobalGameManager.totalBalance.ToString();
                             PlayerGameDetails playerData = PlayerManager.instance.GetPlayerGameData();
                             int changeCount = 0;
                             if (data["data"]["username"] != null)

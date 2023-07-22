@@ -30,6 +30,7 @@ public class QuickLudoSelection : MonoBehaviour
     public InputField userIdInput;
     public Text winAmountText;
     public TMP_Text errorTMP;
+    public Text balanceText;
 
     void Awake()
     {
@@ -236,6 +237,7 @@ public class QuickLudoSelection : MonoBehaviour
 
     void Start()
     {
+        balanceText.text = L_GlobalGameManager.totalBalance.ToString();
         if (isClassicLudo)
         {
             titleText.text = "CLASSIC LUDO";

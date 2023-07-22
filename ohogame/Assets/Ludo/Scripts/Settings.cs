@@ -102,8 +102,9 @@ public class Settings : MonoBehaviour
 
             case "quit":
                 Debug.Log("APP QUIT");
-                Application.Quit();
+                //Application.Quit();
                 //MainMenuController.instance.ShowScreen(MainMenuScreens.Dashboard);
+                UnityEngine.SceneManagement.SceneManager.LoadScene("GameScene");
                 break;
         }
     }

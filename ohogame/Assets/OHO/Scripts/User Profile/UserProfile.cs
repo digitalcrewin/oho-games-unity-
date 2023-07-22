@@ -46,8 +46,8 @@ public class UserProfile : MonoBehaviour
 			mobileNumberText.text = data["data"]["mobile"].ToString();
 			emailIdText.text = data["data"]["email"].ToString();
 
-			emailVerifiedTick.SetActive(!(bool)data["data"]["is_email_verified"]);
-			mobileVerifiedTick.SetActive(!(bool)data["data"]["is_mobile_verified"]);
+			emailVerifiedTick.SetActive((bool)data["data"]["is_email_verified"]);
+			mobileVerifiedTick.SetActive((bool)data["data"]["is_mobile_verified"]);
 
 			if (data["data"]["dob"] != null)
 			{

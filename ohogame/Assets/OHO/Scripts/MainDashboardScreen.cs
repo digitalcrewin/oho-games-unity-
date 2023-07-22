@@ -36,7 +36,10 @@ public class MainDashboardScreen : MonoBehaviour
         PrivacyPolicy,
         TermsAndConditions,
         GamePolicy,
-        WithdrawCash
+        WithdrawCash,
+        R_Rules,
+        RummyDashboard,
+        RummyGameplay
     }
 
     public static MainDashboardScreen instance;
@@ -170,7 +173,8 @@ public class MainDashboardScreen : MonoBehaviour
         GlobalGameManager.instance.isKYCDone = bool.Parse(data["data"]["is_kyc_done"].ToString());
         PlayerGameDetails playerData = PlayerManager.instance.GetPlayerGameData();
         playerData.userName = userNameText.text = drawerUsernameText.text = data["data"]["username"].ToString();
-        balanceText.text = data["data"]["user_wallet"]["real_amount"].ToString();
+        int totalBalance = int.Parse(data["data"]["user_wallet"]["real_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["user_wallet"]["bonus_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["user_wallet"]["win_amount"].ToString().Split('.')[0]);
+        balanceText.text = totalBalance.ToString(); //data["data"]["user_wallet"]["real_amount"].ToString();
 
         /*for (int i = 0; i < data["getData"].Count; i++)
         {
@@ -367,7 +371,7 @@ public class MainDashboardScreen : MonoBehaviour
                 //MainDashboardScreen.instance.ShowScreen(MainDashboardScreens.Loading);
                 //gameObject.transform.Find("Canvas/LAYER_5/Loading(Clone)/Image").GetComponent<Image>().enabled = false;
                 //GlobalGameManager.instance.LoadScene(Scenes.RummyController);
-                ////SceneManager.LoadScene("Rummy");
+                SceneManager.LoadScene("Rummy");
                 break;
             case "Fantasy":
                 LoginIntoFantasyGame();

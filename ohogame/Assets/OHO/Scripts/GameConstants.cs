@@ -112,7 +112,7 @@ public class GameConstants : MonoBehaviour
         API_URL+"/readNotification",
         API_URL+"/getPendingClubJoinRequest",
         API_URL+"/rateClub",
-        API_URL+"/emailVerified",
+        API_URL+"/user/email-verification/",
         API_URL+"/unlinkEmail",
         API_URL+"/changePassword",
         API_URL+"/redeemCoupon",

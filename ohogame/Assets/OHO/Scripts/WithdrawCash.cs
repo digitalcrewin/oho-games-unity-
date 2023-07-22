@@ -29,7 +29,8 @@ public class WithdrawCash : MonoBehaviour
 
 		if (data["statusCode"].ToString() == "200")
 		{
-			walletBalanceText.text = "<size=21>₹</size> " + (data["data"]["real_amount"]).ToString();
+			int totalBalance = int.Parse(data["data"]["real_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["bonus_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["win_amount"].ToString().Split('.')[0]);
+			walletBalanceText.text = "<size=21>₹</size> " + (totalBalance).ToString();
 			walletGameEvent.RaiseEvent(serverResponse);
 		}
 		else
