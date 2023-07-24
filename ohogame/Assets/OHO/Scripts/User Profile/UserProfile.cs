@@ -13,6 +13,8 @@ public class UserProfile : MonoBehaviour
 	{
 		if (SceneManager.GetActiveScene().name == "MainScene")
 			editBtn.SetActive(false);
+		else if (P_InGameUiManager.instance != null)
+			editBtn.SetActive(false);
 
 		GetUserProfileDetails();
 	}
@@ -115,7 +117,10 @@ public class UserProfile : MonoBehaviour
 		else
 		{
 			//Debug.LogError(data["error"].ToString());
-			MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
+			if (MainDashboardScreen.instance != null)
+				MainDashboardScreen.instance.ShowMessage(data["message"].ToString());
+			else
+				Debug.LogError(data["message"].ToString());
 		}
 	}
 
@@ -127,8 +132,15 @@ public class UserProfile : MonoBehaviour
 		}
 		else
 		{
-			MainDashboardScreen.instance.DestroyScreen(MainDashboardScreen.MainDashboardScreens.UserProfile);
-			MainDashboardScreen.instance.bottomMenu.SetActive(true);
+			if (P_InGameUiManager.instance != null)
+			{
+				P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.Profile);
+			}
+			else
+			{
+				MainDashboardScreen.instance.DestroyScreen(MainDashboardScreen.MainDashboardScreens.UserProfile);
+				MainDashboardScreen.instance.bottomMenu.SetActive(true);
+			}
 		}
 	}
 

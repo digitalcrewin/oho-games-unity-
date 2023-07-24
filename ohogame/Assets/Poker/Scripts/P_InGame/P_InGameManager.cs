@@ -1751,24 +1751,24 @@ public class P_InGameManager : MonoBehaviour
             }
         }
 
-        if (P_SocketController.instance.gameTypeName == "SIT N GO")
-        {
-            StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(5f, () =>
-            {
-                P_InGameUiManager.instance.ShowScreen(P_InGameScreens.SitNGoWinnerLooser);
-                if (P_SitNGoWinnerLooser.instance != null)
-                {
-                    if (isLoginWinner)
-                    {
-                        P_SitNGoWinnerLooser.instance.SetWinner(winLoseAmount);
-                    }
-                    else
-                    {
-                        P_SitNGoWinnerLooser.instance.SetLooser("");
-                    }
-                }
-            }));
-        }
+        //if (P_SocketController.instance.gameTypeName == "SIT N GO")
+        //{
+        //    StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(5f, () =>
+        //    {
+        //        P_InGameUiManager.instance.ShowScreen(P_InGameScreens.SitNGoWinnerLooser);
+        //        if (P_SitNGoWinnerLooser.instance != null)
+        //        {
+        //            if (isLoginWinner)
+        //            {
+        //                P_SitNGoWinnerLooser.instance.SetWinner(winLoseAmount);
+        //            }
+        //            else
+        //            {
+        //                P_SitNGoWinnerLooser.instance.SetLooser("");
+        //            }
+        //        }
+        //    }));
+        //}
     }
 
     #endregion

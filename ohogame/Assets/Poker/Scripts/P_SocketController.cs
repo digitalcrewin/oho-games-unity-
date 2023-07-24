@@ -291,6 +291,7 @@ public class P_SocketController : MonoBehaviour
         socketManager.Socket.On<string>("CHAT_RES", OnChatReceived);
         socketManager.Socket.On<string>("GET_CHAT_RES", OnGetChatReceived);
         socketManager.Socket.On<string>("SNG_GAME_STARTED", OnSNGGameStartReceived);
+        socketManager.Socket.On<string>("SNG_WIN_LOSS", OnSNGWinLossReceived);
 
         socketManager.Open();
     }
@@ -599,9 +600,13 @@ public class P_SocketController : MonoBehaviour
     private void OnGetGamesResp(string str)
     {
         if (P_GameConstant.enableLog)
-            Debug.Log("<color=yellow>OnGetGamesResp</color>: " + str);
+            Debug.Log("<color=yellow>GET_GAMES_RES</color>: " + str);
 
-        if (P_LobbySceneManager.instance != null)
+        if (P_SitNGoDetails.instance != null)
+        {
+            P_SitNGoDetails.instance.NewGetRoomsData(str);
+        }
+        else if (P_LobbySceneManager.instance != null)
         {
             P_Lobby.instance.CreateLobby1Data(str);
         }
@@ -621,7 +626,7 @@ public class P_SocketController : MonoBehaviour
     private void OnChatReceived(string str)
     {
         if (P_GameConstant.enableLog)
-            Debug.Log("<color=yellow>OnChatReceived</color>: " + str);
+            Debug.Log("<color=yellow>CHAT_RES</color>: " + str);
 
         if (P_ChatManager.instance != null)
             P_ChatManager.instance.OnChatMessageReceived(str);
@@ -632,7 +637,7 @@ public class P_SocketController : MonoBehaviour
     private void OnGetChatReceived(string str)
     {
         if (P_GameConstant.enableLog)
-            Debug.Log("<color=yellow>OnGetChatReceived</color>: " + str);
+            Debug.Log("<color=yellow>GET_CHAT_RES</color>: " + str);
 
         if (P_ChatManager.instance != null)
             P_ChatManager.instance.OnChatMessageReceived(str);
@@ -641,7 +646,7 @@ public class P_SocketController : MonoBehaviour
     private void OnSNGGameStartReceived(string str)
     {
         if (P_GameConstant.enableLog)
-            Debug.Log("<color=yellow>OnSNGGameStartReceived</color>: " + str);
+            Debug.Log("<color=yellow>SNG_GAME_STARTED</color>: " + str);
 
         //{"tableId":3131,"isGameStarted":true}
 
@@ -657,6 +662,15 @@ public class P_SocketController : MonoBehaviour
         //SendGetRooms();
         //P_SocketController.instance.gameId = roomData["game_id"].ToString();
         //P_SocketController.instance.tableData = roomData;
+    }
+
+    private void OnSNGWinLossReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>SNG_WIN_LOSS</color>: " + str);
+
+        if (P_InGameUiManager.instance != null)
+            P_InGameUiManager.instance.OnSitNGoWinLoss(str);
     }
 
     void OnSocketError(SocketCustomError args)

@@ -62,6 +62,9 @@ public class P_EmojiUIScreenManager : MonoBehaviour
     public GameObject dealerBtn;
 
 
+    P_PlayerData playerDataLocal;
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -93,10 +96,11 @@ public class P_EmojiUIScreenManager : MonoBehaviour
         //    P_InGameUiManager.instance.ShowScreen(P_InGameScreens.DealerImageScreen);
     }
 
-    public void GetUserDetails(string playerid)
+    public void GetUserDetails(P_PlayerData playerData) // string playerid, string username, float balance
     {
-        Debug.Log("Emoji playerid: " + playerid);
-        StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/poker/poker-profile/?user_id=" + playerid, UserDetailsResponse));
+        Debug.Log("Emoji playerid: " + playerData.userId + ", " + playerData.userName + ", " + playerData.balance);
+        playerDataLocal = playerData;
+        StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/poker/poker-profile/?user_id=" + playerData.userId, UserDetailsResponse));
         //StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_BASE_URL + "user/" + playerid, UserDetailsResponse));
     }
 
@@ -107,56 +111,33 @@ public class P_EmojiUIScreenManager : MonoBehaviour
 
         if (data["statusCode"].ToString() == "200")  //(bool.Parse(data["status"].ToString()))
         {
-            userName.text = (data["data"]["name"]==null) ? "" : data["data"]["name"].ToString();
+            userName.text = (data["data"]["name"]==null) ? ( (!string.IsNullOrEmpty(playerDataLocal.userName)) ? playerDataLocal.userName : "" ) : data["data"]["name"].ToString();
+            
+            balanceTxt.text = "";
+            if (!string.IsNullOrEmpty(playerDataLocal.balance.ToString()))
+            {
+                balanceTxt.text = playerDataLocal.balance.ToString();
+                ruppeIconOfBalance.gameObject.SetActive(true);
+            }
+            
             deviceTxt.text = "Device: <color=yellow>" + data["data"]["device_type"].ToString() + "</color>";
 
-            float betPreflopCountFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["bet_preflop_count"].ToString() , out betPreflopCountFloat)) { }
-            vpipTxt.text = Math.Round(betPreflopCountFloat, 2) + "%";
 
-            float preflopRaiseCountFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["preflop_raise_count"].ToString(), out preflopRaiseCountFloat)) { }
-            pfrTxt.text = Math.Round(preflopRaiseCountFloat, 2) + "%";
+            float betPreflopCountFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["bet_preflop_count"].ToString(), vpipTxt);
+            float preflopRaiseCountFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["preflop_raise_count"].ToString(), pfrTxt);
+            float thirdBetPreflopCountFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["third_bet_preflop_count"].ToString(), bet3Txt);
+            float foldOn3betPreflopCountInt = UserDetailsFloatDataHelper(data["data"]["stats"]["fold_on_3bet_preflop_count"].ToString(), foldto3Txt);
 
-            float thirdBetPreflopCountFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["third_bet_preflop_count"].ToString(), out thirdBetPreflopCountFloat)) { }
-            bet3Txt.text = Math.Round(thirdBetPreflopCountFloat, 2) + "%";
+            float continuationBetCountFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["continuation_bet_count"].ToString(), cbetTxt);
+            float foldOnContinuationBetCountFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["fold_on_continuation_bet_count"].ToString(), foldToCbetTxt);
+            float raiseAtLastPositionOnTableCountFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["raise_at_last_position_on_table_count"].ToString(), stealTxt);
+            float checkRaiseFlopCountFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["check_raise_flop_count"].ToString(), checkRaiseTxt);
 
-            float foldOn3betPreflopCountInt = 0F;
-            if (float.TryParse(data["data"]["stats"]["fold_on_3bet_preflop_count"].ToString(), out foldOn3betPreflopCountInt)) { }
-            foldto3Txt.text = Math.Round(foldOn3betPreflopCountInt, 2) + "%";
+            float showdownCountAfterFlopFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["showdown_count_after_flop"].ToString(), wtsTxt);
+            float wonAtShowdownCountFloat = UserDetailsFloatDataHelper(data["data"]["stats"]["won_at_showdown_count"].ToString(), wsdTxt);
 
-
-
-            float continuationBetCountFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["continuation_bet_count"].ToString(), out continuationBetCountFloat)) { }
-            cbetTxt.text = Math.Round(continuationBetCountFloat, 2) + "%";
-
-            float foldOnContinuationBetCountFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["fold_on_continuation_bet_count"].ToString(), out foldOnContinuationBetCountFloat)) { }
-            foldToCbetTxt.text = Math.Round(foldOnContinuationBetCountFloat, 2) + "%";
-
-            float raiseAtLastPositionOnTableCountFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["raise_at_last_position_on_table_count"].ToString(), out raiseAtLastPositionOnTableCountFloat)) { }
-            stealTxt.text = Math.Round(raiseAtLastPositionOnTableCountFloat, 2) + "%";
-
-            float checkRaiseFlopCountFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["check_raise_flop_count"].ToString(), out checkRaiseFlopCountFloat)) { }
-            checkRaiseTxt.text = Math.Round(checkRaiseFlopCountFloat, 2) + "%";
-
-
-
-            float showdownCountAfterFlopFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["showdown_count_after_flop"].ToString(), out showdownCountAfterFlopFloat)) { }
-            wtsTxt.text = Math.Round(showdownCountAfterFlopFloat, 2) + "%";
-
-            float wonAtShowdownCountFloat = 0F;
-            if (float.TryParse(data["data"]["stats"]["won_at_showdown_count"].ToString(), out wonAtShowdownCountFloat)) { }
-            wsdTxt.text = Math.Round(wonAtShowdownCountFloat, 2) + "%";
-
-
-            //wtsSlider;
-            //wsdSlider;
+            wtsSlider.value = (showdownCountAfterFlopFloat / 100);
+            wsdSlider.value = (wonAtShowdownCountFloat / 100);
 
 
 
@@ -167,6 +148,14 @@ public class P_EmojiUIScreenManager : MonoBehaviour
             //Debug.LogError(data["error"].ToString());
             Debug.LogError(data["message"].ToString());
         }
+    }
+
+    float UserDetailsFloatDataHelper(string data, Text txt)
+    {
+        float varRef = 0F;
+        if (float.TryParse(data, out varRef)) { }
+        txt.text = Math.Round(varRef, 2) + "%";
+        return varRef;
     }
 
     public void OnServerResponseFound(RequestType requestType, string serverResponse, bool isShowErrorMessage, string errorMessage)

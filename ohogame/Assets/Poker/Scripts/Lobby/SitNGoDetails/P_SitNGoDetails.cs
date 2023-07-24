@@ -56,6 +56,8 @@ public class P_SitNGoDetails : MonoBehaviour
 
     JsonData roomData;
 
+    Coroutine sitNGoTimerCo;
+
     void Awake()
     {
         instance = this;
@@ -92,18 +94,49 @@ public class P_SitNGoDetails : MonoBehaviour
             detailsPlayersLineImg.fillAmount = 0f;
         }
 
-        Debug.Log("upTime: " + roomData["table"]["uptime"].ToString());
-        string upTime = roomData["table"]["uptime"].ToString();
-        TimeSpan t = TimeSpan.FromSeconds(Double.Parse(upTime));
-        string answer = string.Format("{0:D1}h:{1:D1}m:{2:D1}s",
-           t.Hours,
-           t.Minutes,
-           t.Seconds);
-        //t.Milliseconds
-        //{0:D2}h:{1:D2}m:{2:D2}s
-        //:{3:D3}ms
-        blindsUpTxt.text = answer;
-        // if timer then ref: ludo Panel_Controller.cs -> IdleTimer()
+        //double upTimeDouble = 0D;
+        //if (Double.TryParse(roomData["table"]["uptime"].ToString(), out upTimeDouble)) { }
+        //if (upTimeDouble > 0)
+        //    StartUpTimeTimer(upTimeDouble);
+    }
+
+    void StartUpTimeTimer(Double upTime)
+    {
+        //Debug.Log("upTime: " + upTime);
+        TimeSpan t = TimeSpan.FromSeconds(upTime);
+        //string answer = string.Format("{0:D1}h:{1:D1}m:{2:D1}s", t.Hours, t.Minutes, t.Seconds);
+        //blindsUpTxt.text = answer;
+        sitNGoTimerCo = StartCoroutine(StartSitNGoClock(t));
+    }
+
+    IEnumerator StartSitNGoClock(TimeSpan t)
+    {
+        while (t.TotalSeconds > 0)
+        {
+            t = t.Add(TimeSpan.FromSeconds(1));
+            //Debug.Log(t.ToString());
+            if (t.Hours > 0)
+            {
+                blindsUpTxt.text = t.Hours + "h:" + t.Minutes + "m:" + t.Seconds + "s";
+            }
+            else
+            {
+                if (t.Minutes > 0)
+                    blindsUpTxt.text = t.Minutes + "m:" + t.Seconds + "s";
+                else
+                    blindsUpTxt.text = t.Seconds + "s";
+            }
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    void OnDestroy()
+    {
+        if (sitNGoTimerCo != null)
+        {
+            StopCoroutine(sitNGoTimerCo);
+            Debug.Log("Sit n Go coroutine stoped Details");
+        }
     }
 
     void GameTypeButtonClickSetImageNColor(Button buttonSelected, string gameTypeSelected)
@@ -184,6 +217,13 @@ public class P_SitNGoDetails : MonoBehaviour
                         //Image entriesRegisterBtnImage
                     }
                 }
+
+                float maxPlayers = 0f;
+                if (float.TryParse(roomData["game_json_data"]["maximum_player"].ToString(), out maxPlayers)) { }
+                if (data["data"].Count == maxPlayers)
+                    entriesRegisterBtn.interactable = false;
+                else
+                    entriesRegisterBtn.interactable = true;
             }
             else
             {
@@ -292,8 +332,30 @@ public class P_SitNGoDetails : MonoBehaviour
         P_SocketController.instance.TABLE_ID = roomData["table"]["tableId"].ToString();
 
         P_SocketController.instance.SendGetTables(roomData["game_id"].ToString());
+
+        P_SocketController.instance.SendGetRooms();
     }
 
+    public void NewGetRoomsData(string responseData)
+    {
+        JsonData data = JsonMapper.ToObject(responseData);
+
+        if (data["data"].Count > 0)
+        {
+            for (int i = 0; i < data["data"].Count; i++)
+            {
+                if (data["data"][i]["game_id"].ToString() == roomData["game_id"].ToString())
+                {
+                    int tempI = i;
+                    //Debug.Log("NewGetRoomsData Table found");
+                    double upTimeDouble = 0D;
+                    if (Double.TryParse(data["data"][tempI]["table"]["uptime"].ToString(), out upTimeDouble)) { }
+                    if (upTimeDouble > 0)
+                        StartUpTimeTimer(upTimeDouble);
+                }
+            }
+        }
+    }
 
     void GameStarted()
     {

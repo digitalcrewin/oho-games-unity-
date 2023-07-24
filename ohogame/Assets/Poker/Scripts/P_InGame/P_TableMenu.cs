@@ -47,6 +47,13 @@ public class P_TableMenu : MonoBehaviour
                 }
                 break;
 
+            case "openProfile":
+                {
+                    if (P_InGameUiManager.instance != null)
+                        P_InGameUiManager.instance.ShowScreen(P_InGameScreens.Profile);
+                }
+                break;
+
             case "backtolobby":
                 {
                     P_MainSceneManager.instance.LoadScene(P_MainScenes.LobbyScene);

@@ -276,7 +276,7 @@ public class P_Players : MonoBehaviour
     {
         P_InGameUiManager.instance.ShowScreen(P_InGameScreens.EmojiScreen);
         if (P_EmojiUIScreenManager.instance != null)
-            P_EmojiUIScreenManager.instance.GetUserDetails(GetPlayerData().userId);
+            P_EmojiUIScreenManager.instance.GetUserDetails(GetPlayerData());
     }
 }
 

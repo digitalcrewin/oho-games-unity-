@@ -108,7 +108,7 @@ public class P_InGameUiManager : MonoBehaviour
                 P_HandHistory.instance.OnGetTableHandHistoryDetails(1);
                 break;
             case "real_time_result":
-                if (P_SocketController.instance.gameTypeName == "SIT N GO")
+                if (P_SocketController.instance.lobbySelectedGameType == "SIT N GO")
                     ShowScreen(P_InGameScreens.RealTimeResultSitNGo);
                 else
                     ShowScreen(P_InGameScreens.RealTimeResult);
@@ -225,6 +225,7 @@ public class P_InGameUiManager : MonoBehaviour
             case P_InGameScreens.EmojiScreen:
             case P_InGameScreens.Leaderboard:
             case P_InGameScreens.SitNGoWinnerLooser:
+            case P_InGameScreens.Profile:
                 return P_IGScreenLayer.LAYER3;
             //case P_InGameScreens.:
                 //return P_IGScreenLayer.LAYER4;
@@ -450,6 +451,28 @@ public class P_InGameUiManager : MonoBehaviour
             if (diceTimerCo != null)
             {
                 StopCoroutine(diceTimerCo);
+            }
+        }
+    }
+
+    public void OnSitNGoWinLoss(string str)
+    {
+        JsonData data = JsonMapper.ToObject(str);
+
+        ShowScreen(P_InGameScreens.SitNGoWinnerLooser);
+
+        if (data["isWinner"].ToString() == "true")
+        {
+            if (P_SitNGoWinnerLooser.instance != null)
+            {
+                P_SitNGoWinnerLooser.instance.SetWinner(data["amount"].ToString());
+            }
+        }
+        else
+        {
+            if (P_SitNGoWinnerLooser.instance != null)
+            {
+                P_SitNGoWinnerLooser.instance.SetLooser(data["amount"].ToString());
             }
         }
     }
@@ -1028,6 +1051,7 @@ public enum P_InGameScreens
     EmojiScreen,
     Leaderboard,
     SitNGoWinnerLooser,
+    Profile,
     //InGameShop,
     //HandRanking,
     //Missions,
@@ -1039,7 +1063,6 @@ public enum P_InGameScreens
     //TableList,
     //PrivateTableList,
     //CreatePrivateTable,
-    //Profile,
     //EditProfile,
     //MaineMenuScreen
 }

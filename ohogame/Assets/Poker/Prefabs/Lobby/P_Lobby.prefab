@@ -119,7 +119,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1382272218569121488}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7712604969560207118}
+        m_TargetAssemblyTypeName: P_Lobby, Assembly-CSharp
+        m_MethodName: OnClickOnButton
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: wallet
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &3427000978327134796
 GameObject:
   m_ObjectHideFlags: 0
@@ -408,6 +420,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2717b8a15d0b0394fa24b0c5cbb22dbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameTypeStr:
+  - TEXAS
+  - PLO
+  - SIT N GO
+  - ANONYMOUS
+  - PRACTICE
+  - TOURNAMENT
   gameTypeContent: {fileID: 2571927369285606043}
   mainScrollViewContent: {fileID: 2821822049627514372}
   gameTypePrefab: {fileID: 1161138266150802765, guid: 97aa9e6b64baac049bca220659be9c1e, type: 3}
@@ -421,6 +440,7 @@ MonoBehaviour:
   nonSelectedGameTypeColor: {r: 1, g: 1, b: 1, a: 1}
   selectedGameTypeColor: {r: 1, g: 0.73333335, b: 0.14901961, a: 1}
   errorText: {fileID: 2450884678360081838}
+  currentCategory: TEXAS
 --- !u!1 &4244340141937495417
 GameObject:
   m_ObjectHideFlags: 0

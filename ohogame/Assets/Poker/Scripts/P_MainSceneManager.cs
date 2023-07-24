@@ -87,16 +87,25 @@ public class P_MainSceneManager : MonoBehaviour
     //    return false;
     //}
 
-    //public void DestroyScreen(MainMenuScreens screenName)
+    public void DestroyCurrentScreen()
+    {
+        if (previousScene != null)
+        {
+            StartCoroutine(WaitAndDestroyOldScreen(previousScene));
+        }
+    }
+
+
+    //public void DestroyScreen(P_MainScenes screenName)
     //{
-    //    for (int i = 0; i < gameScens.Count; i++)
-    //    {
-    //        if (gameScens[i].screenName == screenName)
-    //        {
-    //            Destroy(gameScens[i].gameObject);
-    //            gameScens.RemoveAt(i);
-    //        }
-    //    }
+        //for (int i = 0; i < gameScens.Count; i++)
+        //{
+        //    if (gameScens[i].screenName == screenName)
+        //    {
+        //        Destroy(gameScens[i].gameObject);
+        //        gameScens.RemoveAt(i);
+        //    }
+        //}
     //}
 
     public IEnumerator RunAfterDelay(float delay, Action action)

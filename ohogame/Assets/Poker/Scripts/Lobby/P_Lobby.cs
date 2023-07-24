@@ -29,6 +29,9 @@ public class P_Lobby : MonoBehaviour
 
     public string currentCategory = "TEXAS";
 
+
+    List<Coroutine> sitNGoTimerCoList = new List<Coroutine>();
+
     void Awake()
     {
         instance = this;
@@ -49,6 +52,14 @@ public class P_Lobby : MonoBehaviour
 
                 //P_SocketController.instance.ExitGamePlay();
                 P_SocketController.instance.lobbySelectedGameType = "";
+                break;
+
+            case "wallet":
+                //P_MainSceneManager.instance.DestroyScreen(P_MainScenes.LobbyScene);
+                P_MainSceneManager.instance.DestroyCurrentScreen();
+                GlobalGameManager.instance.LoadScene(Scenes.MainDashboard);
+                if (MainDashboardScreen.instance != null)
+                    MainDashboardScreen.instance.MenuSelection(1);
                 break;
         }
     }
@@ -117,6 +128,7 @@ public class P_Lobby : MonoBehaviour
             currentCategory = "TOURNAMENT";
         }
         P_SocketController.instance.SendGetRooms();
+        StopSitNGoClockCoList();
     }
 
     public void CreateLobby1Data(string responseData)
@@ -155,7 +167,7 @@ public class P_Lobby : MonoBehaviour
 
                             pLobbySitNGo.titleText.text = data["data"][i]["game_json_data"]["room_name"].ToString(); //categoryData;
 
-                            
+
 
                             if (iDataIgame.Contains("minimum_buyin"))
                                 minimumBuyin = data["data"][i]["game_json_data"]["minimum_buyin"].ToString();
@@ -163,8 +175,9 @@ public class P_Lobby : MonoBehaviour
                             pLobbySitNGo.bagAmountText.text = minimumBuyin;
 
                             pLobbySitNGo.trophyAmountText.text = data["data"][i]["game_json_data"]["prize_money"].ToString();
-                            pLobbySitNGo.startsText.text = "Starts when " + data["data"][i]["game_json_data"]["maximum_player"].ToString() + " player joins"; //minimum_player
+                            //pLobbySitNGo.startsText.text = "Starts when " + data["data"][i]["game_json_data"]["maximum_player"].ToString() + " player joins"; //minimum_player
                             pLobbySitNGo.playersText.text = data["data"][i]["totalPlayers"].ToString() + "/" + data["data"][i]["game_json_data"]["maximum_player"].ToString();
+                            pLobbySitNGo.firstAmountText.text = data["data"][i]["table"]["prize_money_first"].ToString();
 
                             float maxPlayers = 0f, totalPlayers = 0f;
                             if (float.TryParse(data["data"][i]["game_json_data"]["maximum_player"].ToString(), out maxPlayers)) { }
@@ -182,19 +195,21 @@ public class P_Lobby : MonoBehaviour
                             }
 
 
-                            //if (data["table"]["table_attributes"]["players"].Count == int.Parse(data["table"]["table_attributes"]["maxPlayers"].ToString()))
-                            //{
-                            //    for (int j = 0; j < data["table"]["table_attributes"]["players"].Count; j++)
-                            //    {
-                            //        if (data["table"]["table_attributes"]["players"][i]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
-                            //        {
-
-                            //        }
-                            //    }
-                            //}
                             bool isGameStarted = bool.Parse(data["data"][i]["table"]["isGameStarted"].ToString());
                             bool isGameEnded = bool.Parse(data["data"][i]["table"]["isGameEnded"].ToString());
                             string registrationStatus = "";
+                            bool isMyPlayerFind = false;
+                            //if (data["table"]["table_attributes"]["players"].Count == int.Parse(data["table"]["table_attributes"]["maxPlayers"].ToString()))
+                            //{
+                            for (int j = 0; j < data["data"][i]["table"]["table_attributes"]["players"].Count; j++)
+                            {
+                                if (data["data"][i]["table"]["table_attributes"]["players"][j]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
+                                {
+                                    isMyPlayerFind = true;
+                                }
+                            }
+                            //}
+
                             if (isGameStarted && !isGameEnded)
                             {
                                 pLobbySitNGo.registerStatusBtn.GetComponent<Image>().sprite = pLobbySitNGo.startedSprite;
@@ -207,12 +222,45 @@ public class P_Lobby : MonoBehaviour
                                 pLobbySitNGo.registerStatusBtn.transform.GetChild(0).GetComponent<Text>().text = "Finished";
                                 registrationStatus = "Finished";
                             }
-                            else if (!isGameStarted && !isGameEnded)
+                            else if (isMyPlayerFind)
                             {
+                                // Registered
+                                pLobbySitNGo.registerStatusBtn.GetComponent<Image>().sprite = pLobbySitNGo.registeringSprite;
+                                pLobbySitNGo.registerStatusBtn.transform.GetChild(0).GetComponent<Text>().text = "Registered";
+                                registrationStatus = "Registered";
+                            }
+                            else
+                            {
+                                // Not Register
                                 pLobbySitNGo.registerStatusBtn.GetComponent<Image>().sprite = pLobbySitNGo.registeringSprite;
                                 pLobbySitNGo.registerStatusBtn.transform.GetChild(0).GetComponent<Text>().text = "Registering";
                                 registrationStatus = "Registering";
                             }
+
+                            //else if (!isGameStarted && !isGameEnded)
+                            //{
+                            //    pLobbySitNGo.registerStatusBtn.GetComponent<Image>().sprite = pLobbySitNGo.registeringSprite;
+                            //    pLobbySitNGo.registerStatusBtn.transform.GetChild(0).GetComponent<Text>().text = "Registering";
+                            //    registrationStatus = "Registering";
+                            //}
+
+                            
+                            Text sitNGoTimerText = pLobbySitNGo.startsText;
+                            //Debug.Log("uptime: " + data["data"][i]["table"]["uptime"]);
+                            if (totalPlayers == maxPlayers)
+                            {
+                                //Debug.Log("uptime if");
+                                string upTime = data["data"][i]["table"]["uptime"].ToString();
+                                TimeSpan t = TimeSpan.FromSeconds(Double.Parse(upTime));
+                                //string answer = string.Format("{0:D1}h:{1:D1}m:{2:D1}s", t.Hours, t.Minutes, t.Seconds); //Debug.Log("answer: " + answer);
+                                sitNGoTimerCoList.Add(StartCoroutine(StartSitNGoClock(t, sitNGoTimerText)));
+                                //Debug.Log("Sit n Go coroutine added to list");
+                            }
+                            else
+                            {
+                                //Debug.Log("uptime else");
+                                pLobbySitNGo.startsText.text = "Starts when " + data["data"][i]["game_json_data"]["maximum_player"].ToString() + " player joins"; //minimum_player
+                            }    
 
                             pLobbySitNGo.registerStatusBtn.onClick.AddListener(() =>
                             {
@@ -295,6 +343,43 @@ public class P_Lobby : MonoBehaviour
             errorText.text = "Data not found from server";
             errorText.gameObject.SetActive(true);
         }
+    }
+
+    IEnumerator StartSitNGoClock(TimeSpan t, Text sitNGoTimerText)
+    {
+        while (t.TotalSeconds > 0)
+        {
+            t = t.Add(TimeSpan.FromSeconds(1));
+            //Debug.Log(t.ToString());
+            if (sitNGoTimerText != null)
+            {
+                if (t.Hours > 0)
+                {
+                    sitNGoTimerText.text = "Running Since " + t.Hours + "h:" + t.Minutes + "m:" + t.Seconds + "s";
+                }
+                else
+                {
+                    if (t.Minutes > 0)
+                        sitNGoTimerText.text = "Running Since " + t.Minutes + "m:" + t.Seconds + "s";
+                    else
+                        sitNGoTimerText.text = "Running Since " + t.Seconds + "s";
+                }
+            }
+            yield return new WaitForSeconds(1);
+        }
+    }
+
+    void StopSitNGoClockCoList()
+    {
+        for (int i = 0; i < sitNGoTimerCoList.Count; i++)
+        {
+            if (sitNGoTimerCoList[i] != null)
+            {
+                StopCoroutine(sitNGoTimerCoList[i]);
+                Debug.Log("Sit n Go coroutine stoped i:" + i);
+            }
+        }
+        sitNGoTimerCoList.Clear();
     }
 
     // old method: when used API
