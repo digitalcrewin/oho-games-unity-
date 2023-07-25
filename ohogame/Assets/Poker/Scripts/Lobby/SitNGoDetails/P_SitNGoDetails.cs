@@ -53,6 +53,7 @@ public class P_SitNGoDetails : MonoBehaviour
     [SerializeField] Button entriesRegisterBtn;
     [SerializeField] Text entriesRegisterBtnText;
     [SerializeField] Image entriesRegisterBtnImage;
+    [SerializeField] Text entriesRegisterErrorText;
 
     JsonData roomData;
 
@@ -65,10 +66,16 @@ public class P_SitNGoDetails : MonoBehaviour
 
     void Start()
     {
+        SetIntialData();
+    }
+
+    void SetIntialData()
+    {
         for (int i = 0; i < gameTypeContent.childCount; i++)
         {
             Button gameTypeBtn = gameTypeContent.GetChild(i).GetComponent<Button>();
-            gameTypeBtn.onClick.AddListener(() => {
+            gameTypeBtn.onClick.AddListener(() =>
+            {
                 GameTypeButtonClickSetImageNColor(gameTypeBtn, gameTypeBtn.gameObject.name);
             });
         }
@@ -90,7 +97,8 @@ public class P_SitNGoDetails : MonoBehaviour
         catch (System.Exception e)
         {
             // for division error
-            Debug.Log("Division error in players line image");
+            if (P_GameConstant.enableErrorLog)
+                Debug.Log("Division error in players line image");
             detailsPlayersLineImg.fillAmount = 0f;
         }
 
@@ -135,7 +143,6 @@ public class P_SitNGoDetails : MonoBehaviour
         if (sitNGoTimerCo != null)
         {
             StopCoroutine(sitNGoTimerCo);
-            Debug.Log("Sit n Go coroutine stoped Details");
         }
     }
 
@@ -312,7 +319,6 @@ public class P_SitNGoDetails : MonoBehaviour
 
                     StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.3f, () =>
                     {
-                        Debug.Log("gameId: " + roomData["game_id"].ToString());
                         if (!string.IsNullOrEmpty(roomData["game_id"].ToString()))
                             StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/poker/games/" + roomData["game_id"].ToString() + "/players", PlayersResponse));
                         
@@ -322,6 +328,30 @@ public class P_SitNGoDetails : MonoBehaviour
                 break;
         }
     }
+
+
+    public void OnErrorSet(string str)
+    {
+        JsonData data = JsonMapper.ToObject(str);
+        IDictionary iData = data as IDictionary;
+        if (iData.Contains("message") && iData.Contains("type"))
+        {
+            if (data["type"].ToString() == "JOIN")
+            {
+                if (P_SocketController.instance.isJoinSended) P_SocketController.instance.isJoinSended = false;
+
+                entriesRegisterErrorText.text = data["message"].ToString();
+                entriesRegisterErrorText.gameObject.SetActive(true);
+
+                StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(2f, () =>
+                {
+                    entriesRegisterErrorText.text = "";
+                    entriesRegisterErrorText.gameObject.SetActive(false);
+                }));
+            }
+        }
+    }
+
 
     public void OnLoadScrollDetails(JsonData dataOfI, string registrationStatus)
     {
@@ -361,18 +391,15 @@ public class P_SitNGoDetails : MonoBehaviour
     {
         bool isGameStart = false;
 
-        Debug.Log("GameStarted players.Count:" + roomData["table"]["table_attributes"]["players"].Count + ", maxPlayers:" + int.Parse(roomData["table"]["table_attributes"]["maxPlayers"].ToString()));
-        Debug.Log("GameStarted my userId:" + PlayerManager.instance.GetPlayerGameData().userId);
+        //Debug.Log("GameStarted players.Count:" + roomData["table"]["table_attributes"]["players"].Count + ", maxPlayers:" + int.Parse(roomData["table"]["table_attributes"]["maxPlayers"].ToString()));
+        //Debug.Log("GameStarted my userId:" + PlayerManager.instance.GetPlayerGameData().userId);
 
         if (roomData["table"]["table_attributes"]["players"].Count == int.Parse(roomData["table"]["table_attributes"]["maxPlayers"].ToString()))
         {
-            Debug.Log("GameStarted 2");
             for (int i = 0; i < roomData["table"]["table_attributes"]["players"].Count; i++)
             {
-                Debug.Log("GameStarted 3");
                 if (roomData["table"]["table_attributes"]["players"][i]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
                 {
-                    Debug.Log("GameStarted 4");
                     // start gameplay
                     P_SocketController.instance.TABLE_ID = roomData["table"]["tableId"].ToString();
                     P_SocketController.instance.SendJoin(P_SocketController.instance.TABLE_ID, roomData["game_json_data"]["minimum_buyin"].ToString());
@@ -423,16 +450,14 @@ public class P_SitNGoDetails : MonoBehaviour
     {
         JsonData data = JsonMapper.ToObject(responseData);
 
-        Debug.Log("OnSitNGoTableData: " + data.ToJson());
-
         IDictionary iData = data as IDictionary;
 
         if (iData.Contains("data"))
         {
             //for (int i = 0; i < data["data"].Count; i++)
             //{
-            Debug.Log("players count: " + data["data"][0]["table_attributes"]["players"].Count);
-            Debug.Log("maxPlayers " + data["data"][0]["table_attributes"]["maxPlayers"]);
+            //Debug.Log("players count: " + data["data"][0]["table_attributes"]["players"].Count);
+            //Debug.Log("maxPlayers " + data["data"][0]["table_attributes"]["maxPlayers"]);
 
             P_SocketController.instance.gameTableData = data["data"][0];
 

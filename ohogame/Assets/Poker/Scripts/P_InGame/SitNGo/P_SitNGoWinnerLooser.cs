@@ -80,16 +80,14 @@ public class P_SitNGoWinnerLooser : MonoBehaviour
         P_MainSceneManager.instance.LoadScene(P_MainScenes.LobbyScene);
 
         // back to selected lobby
-        StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.4f, () =>
+        StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.5f, () =>
         {
-            Debug.Log("P_Lobby RunAfterDelay");
             if (P_Lobby.instance != null)
             {
-                Debug.Log("P_Lobby.instance != null");
                 for (int i = 0; i < P_Lobby.instance.gameTypeStr.Length; i++)
                 {
                     int tempI = i;
-                    Debug.Log("P_Lobby gameTypeStr[i]: " + P_Lobby.instance.gameTypeStr[i] + ", lobbySelectedGameType: P_SocketController.instance.lobbySelectedGameType");
+                    //Debug.Log("P_Lobby gameTypeStr[i]: " + P_Lobby.instance.gameTypeStr[i] + ", lobbySelectedGameType: P_SocketController.instance.lobbySelectedGameType");
                     if (P_Lobby.instance.gameTypeStr[i] == P_SocketController.instance.lobbySelectedGameType)
                     {
                         P_Lobby.instance.OnGameTypeButtonClick(tempI, P_SocketController.instance.lobbySelectedGameType);

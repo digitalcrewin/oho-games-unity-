@@ -461,7 +461,7 @@ public class P_InGameUiManager : MonoBehaviour
 
         ShowScreen(P_InGameScreens.SitNGoWinnerLooser);
 
-        if (data["isWinner"].ToString() == "true")
+        if ((bool) data["isWinner"] == true)
         {
             if (P_SitNGoWinnerLooser.instance != null)
             {
@@ -941,7 +941,7 @@ public class P_InGameUiManager : MonoBehaviour
         {
             handRankMeterIcons[i].gameObject.SetActive(false);
         }
-        Debug.Log("handTypeData: " + handTypeData);
+        //Debug.Log("handTypeData: " + handTypeData);
         int needToShow = 1;
         switch (handTypeData)
         {

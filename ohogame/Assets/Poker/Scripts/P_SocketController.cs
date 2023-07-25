@@ -292,6 +292,7 @@ public class P_SocketController : MonoBehaviour
         socketManager.Socket.On<string>("GET_CHAT_RES", OnGetChatReceived);
         socketManager.Socket.On<string>("SNG_GAME_STARTED", OnSNGGameStartReceived);
         socketManager.Socket.On<string>("SNG_WIN_LOSS", OnSNGWinLossReceived);
+        socketManager.Socket.On<string>("GAME_RESULT_RES", OnGameResultResReceived);
 
         socketManager.Open();
     }
@@ -557,7 +558,9 @@ public class P_SocketController : MonoBehaviour
         if (P_GameConstant.enableLog)
             Debug.Log("<color=red>ERROR_EVENT</color>:" + str);
 
-        if (P_InGameManager.instance != null)
+        if (P_SitNGoDetails.instance != null)
+            P_SitNGoDetails.instance.OnErrorSet(str);
+        else if (P_InGameManager.instance != null)
             P_InGameManager.instance.OnErrorSet(str);
     }
     
@@ -671,6 +674,15 @@ public class P_SocketController : MonoBehaviour
 
         if (P_InGameUiManager.instance != null)
             P_InGameUiManager.instance.OnSitNGoWinLoss(str);
+    }
+
+    private void OnGameResultResReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>GAME_RESULT_RES</color>: " + str);
+
+        if (P_RealTimeResultSitNGo.instance != null)
+            P_RealTimeResultSitNGo.instance.OnGameResultRes(str);
     }
 
     void OnSocketError(SocketCustomError args)
@@ -1021,6 +1033,20 @@ public class P_SocketController : MonoBehaviour
         object requestObjectData = Json.Decode(requestStringData);
         P_SocketRequest request = new P_SocketRequest();
         request.emitEvent = "TOGGLE_MUCK";
+        request.plainDataToBeSend = null;
+        request.jsonDataToBeSend = requestObjectData;
+        request.requestDataStructure = requestStringData;
+        P_SocketRequest.Add(request);
+    }
+
+    public void SendGameResult()
+    {
+        string requestStringData = "{\"tableId\":" + TABLE_ID + ", \"userId\":" + gamePlayerId + "}";
+        if (P_GameConstant.enableLog)
+            Debug.Log("SendGameResult ---> " + requestStringData);
+        object requestObjectData = Json.Decode(requestStringData);
+        P_SocketRequest request = new P_SocketRequest();
+        request.emitEvent = "GAME_RESULT";
         request.plainDataToBeSend = null;
         request.jsonDataToBeSend = requestObjectData;
         request.requestDataStructure = requestStringData;

@@ -28,7 +28,7 @@ public class P_RealTimeResult : MonoBehaviour
         TimeText.text = System.DateTime.Now.ToLocalTime().ToShortTimeString();
 
         tableId = tId;
-        Debug.Log("Table ID --> " + tableId);
+        //Debug.Log("Table ID --> " + tableId);
 
         string requestData = "{\"tableId\":\"" + tableId + "\"}";
 
@@ -69,7 +69,7 @@ public class P_RealTimeResult : MonoBehaviour
                         gm.transform.Find("BuyIn").GetComponent<TMPro.TextMeshProUGUI>().text = "-";
 
                     float amt = float.Parse(data["data"]["result"][i]["winnings"].ToString());
-                    Debug.Log(PrefsManager.GetPlayerData().userName + " = " + data["data"]["result"][i]["username"].ToString() + " - " + amt);
+                    //Debug.Log(PrefsManager.GetPlayerData().userName + " = " + data["data"]["result"][i]["username"].ToString() + " - " + amt);
 
                     if (amt > 0)
                         gm.transform.Find("Winnings").GetComponent<TMPro.TextMeshProUGUI>().text = "+" + amt;

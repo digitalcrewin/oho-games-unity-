@@ -190,7 +190,8 @@ public class P_Lobby : MonoBehaviour
                             catch (System.Exception e)
                             {
                                 // for division error
-                                Debug.Log("Division error in players line image");
+                                if (P_GameConstant.enableErrorLog)
+                                    Debug.Log("Division error in players line image");
                                 pLobbySitNGo.playerLineImage.fillAmount = 0f;
                             }
 
@@ -376,7 +377,6 @@ public class P_Lobby : MonoBehaviour
             if (sitNGoTimerCoList[i] != null)
             {
                 StopCoroutine(sitNGoTimerCoList[i]);
-                Debug.Log("Sit n Go coroutine stoped i:" + i);
             }
         }
         sitNGoTimerCoList.Clear();
