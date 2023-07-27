@@ -439,6 +439,7 @@ MonoBehaviour:
   secondTexasPrefab: {fileID: 1757535186383050890, guid: 217eed5ab75f5e84985980516d526ebc, type: 3}
   nonSelectedGameTypeColor: {r: 1, g: 1, b: 1, a: 1}
   selectedGameTypeColor: {r: 1, g: 0.73333335, b: 0.14901961, a: 1}
+  titleText: {fileID: 8870226612853075538}
   errorText: {fileID: 2450884678360081838}
   currentCategory: TEXAS
 --- !u!1 &4244340141937495417
@@ -632,7 +633,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: -14.6}
-  m_SizeDelta: {x: 160, y: 30}
+  m_SizeDelta: {x: 250, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6516101427987196262
 CanvasRenderer:
