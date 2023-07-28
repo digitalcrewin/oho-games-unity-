@@ -26,10 +26,10 @@ public class P_SocketController : MonoBehaviour
     public string gameId;
     public string gamePlayerId; // user id
     public string gamePlayerName; // user name
-    public string gamePlayerToken;
-    public string myColor;
-    public int swapIndex;
-    int isGameObjectFirstTime = 0;
+    //public string gamePlayerToken;
+    //public string myColor;
+    //public int swapIndex;
+    //int isGameObjectFirstTime = 0;
     public JsonData tableData;
     public string smallBlindTableData = "0", bigBlindTableData = "0", minimumBuyinTableData = "0";
     public JsonData gameTableData;
@@ -40,29 +40,29 @@ public class P_SocketController : MonoBehaviour
     public string lobbySelectedGameType = string.Empty;
 
 
-    public int playerTurnIndex = 0, lastPlayerTurnIndex = -1, oneTokenOpenPos, totalPlayersInGame = 0, myPlayerIndex = -1;
+    //public int playerTurnIndex = 0, lastPlayerTurnIndex = -1, oneTokenOpenPos, totalPlayersInGame = 0, myPlayerIndex = -1;
 
 
-    [HideInInspector]
-    public string winnerName;
+    //[HideInInspector]
+    //public string winnerName;
 
-    float timeRemaining, userServerTimer;
+    float timeRemaining; //, userServerTimer;
     bool isStartTime = false;
-    [HideInInspector]
-    public bool needToFetchLobby = false;
+    //[HideInInspector]
+    //public bool needToFetchLobby = false;
     int turnValue = 0;
 
-    public JsonData ReturnToStartPoint = null;
-    [HideInInspector]
+    //public JsonData ReturnToStartPoint = null;
+    //[HideInInspector]
 
 
-    Coroutine applicationQuitCo;
+    //Coroutine applicationQuitCo;
 
-    GameObject go;
+    //GameObject go;
 
     bool isClose = false;
 
-    public string[] communityCardsRank, communityCardsSuit;
+    //public string[] communityCardsRank, communityCardsSuit;
     public string idleTimeout;
     public string turnTimerStr;
     public string currentTurnUserId;
@@ -73,10 +73,10 @@ public class P_SocketController : MonoBehaviour
     public bool isJoinSended = false;
     public bool isTopUpSended = false;
     public bool isGameCounterStart = true;
-    public bool isTopUpSend = false;
+    //public bool isTopUpSend = false;
     public bool isCheckForInternet = false;
     public bool isLeaveSeatSended;
-    bool isSNGGameStartReceived = false;
+    //bool isSNGGameStartReceived = false;
 
     void Awake()
     {
@@ -656,15 +656,66 @@ public class P_SocketController : MonoBehaviour
 
         JsonData data = JsonMapper.ToObject(str);
         TABLE_ID = data["tableId"].ToString();
+        lobbySelectedGameType = "SIT N GO";
 
         if (!P_MainSceneManager.instance.IsInGameSceneActive())
         {
             P_MainSceneManager.instance.ScreenDestroy();
             P_MainSceneManager.instance.LoadScene(P_MainScenes.InGame);
         }
+
         //SendGetRooms();
         //P_SocketController.instance.gameId = roomData["game_id"].ToString();
         //P_SocketController.instance.tableData = roomData;
+
+
+        //Debug.Log("gameTableMaxPlayers: " + gameTableMaxPlayers);
+        // remaining: seat hide according to lobby maxPlayers
+        if (gameTableMaxPlayers == 6)
+        {
+            for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+            {
+                if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "2" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "6")
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+            }
+        }
+        else if (gameTableMaxPlayers == 4)
+        {
+            for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+            {
+                if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "7" ||
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "5")
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+            }
+        }
+        else if (gameTableMaxPlayers == 2)
+        {
+            for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+            {
+                if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "2" ||
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "5" ||
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.name == "6" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "7")
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+            }
+        }
+
+        int counterPos = 1;
+        for (int i = P_InGameManager.instance.allPlayerPos.Count - 1; i >= 0; i--)
+        {
+            if (P_InGameManager.instance.allPlayerPos[i].gameObject.activeSelf)
+            {
+                P_InGameManager.instance.allPlayerPos[i].transform.GetChild(0).GetComponent<P_PlayerSeat>().seatNo = counterPos.ToString();
+                counterPos++;
+            }
+            else
+            {
+                Destroy(P_InGameManager.instance.allPlayerPos[i].gameObject);
+                Destroy(P_InGameManager.instance.playersScript[i].gameObject);
+                P_InGameManager.instance.allPlayerPos.Remove(P_InGameManager.instance.allPlayerPos[i]);
+                P_InGameManager.instance.playersScript.Remove(P_InGameManager.instance.playersScript[i]);
+                P_InGameManager.instance.players.Remove(P_InGameManager.instance.players[i]);
+            }
+        }
     }
 
     private void OnSNGWinLossReceived(string str)
@@ -1061,7 +1112,7 @@ public class P_SocketController : MonoBehaviour
     {
         if (P_InGameManager.instance != null)
         {
-            for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+            for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
             {
                 if (gamePlayerId == currentTurnUserId)
                 {

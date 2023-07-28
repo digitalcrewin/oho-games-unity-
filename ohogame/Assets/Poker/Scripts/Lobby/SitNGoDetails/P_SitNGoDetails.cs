@@ -30,6 +30,7 @@ public class P_SitNGoDetails : MonoBehaviour
     [SerializeField] Text detailsBuyInTxt;
     [SerializeField] Text detailsPrizeTxt;
     [SerializeField] Text blindsUpTxt;
+    [SerializeField] Text avgStackTxt;
 
 
     [Space(10)]
@@ -89,6 +90,7 @@ public class P_SitNGoDetails : MonoBehaviour
 
         detailsBuyInTxt.text = roomData["game_json_data"]["minimum_buyin"].ToString();
         detailsPrizeTxt.text = roomData["game_json_data"]["prize_money"].ToString();
+        avgStackTxt.text = roomData["game_json_data"]["default_stack"].ToString();
 
         try
         {
@@ -101,6 +103,8 @@ public class P_SitNGoDetails : MonoBehaviour
                 Debug.Log("Division error in players line image");
             detailsPlayersLineImg.fillAmount = 0f;
         }
+
+        P_SocketController.instance.gameTableMaxPlayers = (int) maxPlayers;
 
         //double upTimeDouble = 0D;
         //if (Double.TryParse(roomData["table"]["uptime"].ToString(), out upTimeDouble)) { }
@@ -228,9 +232,15 @@ public class P_SitNGoDetails : MonoBehaviour
                 float maxPlayers = 0f;
                 if (float.TryParse(roomData["game_json_data"]["maximum_player"].ToString(), out maxPlayers)) { }
                 if (data["data"].Count == maxPlayers)
+                {
                     entriesRegisterBtn.interactable = false;
+                }
                 else
-                    entriesRegisterBtn.interactable = true;
+                {
+                    //entriesRegisterBtn.interactable = true;
+                    if (P_GameConstant.enableErrorLog)
+                        Debug.Log("entriesRegisterBtn false 2 else");
+                }
             }
             else
             {
@@ -321,8 +331,8 @@ public class P_SitNGoDetails : MonoBehaviour
                     {
                         if (!string.IsNullOrEmpty(roomData["game_id"].ToString()))
                             StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/poker/games/" + roomData["game_id"].ToString() + "/players", PlayersResponse));
-                        
-                        GameStarted();
+
+                        //GameStarted();
                     }));
                 }
                 break;
@@ -387,63 +397,120 @@ public class P_SitNGoDetails : MonoBehaviour
         }
     }
 
-    void GameStarted()
-    {
-        bool isGameStart = false;
+    //void GameStarted()
+    //{
+    //    Debug.Log("registerBtn 4");
+    //    bool isGameStart = false;
 
-        //Debug.Log("GameStarted players.Count:" + roomData["table"]["table_attributes"]["players"].Count + ", maxPlayers:" + int.Parse(roomData["table"]["table_attributes"]["maxPlayers"].ToString()));
-        //Debug.Log("GameStarted my userId:" + PlayerManager.instance.GetPlayerGameData().userId);
+    //    //Debug.Log("GameStarted players.Count:" + roomData["table"]["table_attributes"]["players"].Count + ", maxPlayers:" + int.Parse(roomData["table"]["table_attributes"]["maxPlayers"].ToString()));
+    //    //Debug.Log("GameStarted my userId:" + PlayerManager.instance.GetPlayerGameData().userId);
 
-        if (roomData["table"]["table_attributes"]["players"].Count == int.Parse(roomData["table"]["table_attributes"]["maxPlayers"].ToString()))
-        {
-            for (int i = 0; i < roomData["table"]["table_attributes"]["players"].Count; i++)
-            {
-                if (roomData["table"]["table_attributes"]["players"][i]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
-                {
-                    // start gameplay
-                    P_SocketController.instance.TABLE_ID = roomData["table"]["tableId"].ToString();
-                    P_SocketController.instance.SendJoin(P_SocketController.instance.TABLE_ID, roomData["game_json_data"]["minimum_buyin"].ToString());
-                    isGameStart = true;
+    //    if (roomData["table"]["table_attributes"]["players"].Count == int.Parse(roomData["table"]["table_attributes"]["maxPlayers"].ToString()))
+    //    {
+    //        Debug.Log("registerBtn 5");
+    //        for (int i = 0; i < roomData["table"]["table_attributes"]["players"].Count; i++)
+    //        {
+    //            Debug.Log("registerBtn 6");
+    //            if (roomData["table"]["table_attributes"]["players"][i]["userId"].ToString() == PlayerManager.instance.GetPlayerGameData().userId)
+    //            {
+    //                Debug.Log("registerBtn 7");
+    //                // start gameplay
+    //                P_SocketController.instance.TABLE_ID = roomData["table"]["tableId"].ToString();
+    //                P_SocketController.instance.SendJoin(P_SocketController.instance.TABLE_ID, roomData["game_json_data"]["minimum_buyin"].ToString());
+    //                isGameStart = true;
 
-                    P_MainSceneManager.instance.ScreenDestroy();
-                    P_MainSceneManager.instance.LoadScene(P_MainScenes.InGame);
+    //                P_MainSceneManager.instance.ScreenDestroy();
+    //                P_MainSceneManager.instance.LoadScene(P_MainScenes.InGame);
 
-                    P_SocketController.instance.gameId = roomData["game_id"].ToString();
-                    P_SocketController.instance.SendJoinViewer();
+    //                P_SocketController.instance.gameId = roomData["game_id"].ToString();
+    //                P_SocketController.instance.SendJoinViewer();
 
-                    P_SocketController.instance.tableData = roomData;
-                    //P_SocketController.instance.gameTableData = roomData;
-                    P_SocketController.instance.gameTypeName = roomData["game_type"]["name"].ToString();
-                    if (P_InGameManager.instance != null)
-                    {
-                        if (P_SocketController.instance.gameTypeName == "SIT N GO") //for SIT N GO rule: game start ho to join nahi karwana
-                        {
-                            if (roomData["table_attributes"]["players"].Count < int.Parse(roomData["table_attributes"]["maxPlayers"].ToString()))
-                            {
-                                //SIT N GO Table have empty seat
-                                P_InGameUiManager.instance.AllPlayerPosPlusOn();
-                            }
-                            else
-                            {
-                                //SIT N GO Table is full
-                                P_InGameUiManager.instance.AllPlayerPosPlusOff(true);
-                            }
-                        }
-                        else
-                        {
-                            P_InGameUiManager.instance.AllPlayerPosPlusOn();
-                        }
-                    }
-                    if (P_InGameUiManager.instance != null)
-                        P_InGameUiManager.instance.tableInfoText.text = roomData["table_name"].ToString();
-                    if (P_GameConstant.enableLog)
-                        Debug.Log("Get game table click: " + JsonMapper.ToJson(roomData));
+    //                P_SocketController.instance.tableData = roomData;
+    //                //P_SocketController.instance.gameTableData = roomData;
+    //                P_SocketController.instance.gameTypeName = roomData["game_type"]["name"].ToString();
+    //                if (P_InGameManager.instance != null)
+    //                {
+    //                    if (P_SocketController.instance.gameTypeName == "SIT N GO") //for SIT N GO rule: game start ho to join nahi karwana
+    //                    {
+    //                        if (roomData["table_attributes"]["players"].Count < int.Parse(roomData["table_attributes"]["maxPlayers"].ToString()))
+    //                        {
+    //                            //SIT N GO Table have empty seat
+    //                            P_InGameUiManager.instance.AllPlayerPosPlusOn();
+    //                        }
+    //                        else
+    //                        {
+    //                            //SIT N GO Table is full
+    //                            P_InGameUiManager.instance.AllPlayerPosPlusOff(true);
+    //                        }
+    //                    }
+    //                    else
+    //                    {
+    //                        P_InGameUiManager.instance.AllPlayerPosPlusOn();
+    //                    }
+    //                }
+    //                Debug.Log("registerBtn 8 table_name: " + roomData["table_name"].ToString());
+    //                Debug.Log("registerBtn 9 maxPlayers: " + P_SocketController.instance.gameTableData["maxPlayers"].ToString());
+    //                if (P_InGameUiManager.instance != null)
+    //                    P_InGameUiManager.instance.tableInfoText.text = roomData["table_name"].ToString();
+    //                if (P_GameConstant.enableLog)
+    //                    Debug.Log("Get game table click: " + JsonMapper.ToJson(roomData));
 
-                    P_SocketController.instance.gameTableMaxPlayers = Int32.Parse(P_SocketController.instance.gameTableData["maxPlayers"].ToString());
-                }
-            }
-        }
-    }
+    //                P_SocketController.instance.gameTableMaxPlayers = Int32.Parse(P_SocketController.instance.gameTableData["maxPlayers"].ToString());
+
+
+
+
+
+    //                // remaining: seat hide according to lobby maxPlayers
+    //                if (P_SocketController.instance.gameTableMaxPlayers == 6)
+    //                {
+    //                    for (int j = 0; j < P_InGameManager.instance.allPlayerPos.Count; j++)
+    //                    {
+    //                        if (P_InGameManager.instance.allPlayerPos[j].gameObject.name == "2" || P_InGameManager.instance.allPlayerPos[j].gameObject.name == "6")
+    //                            P_InGameManager.instance.allPlayerPos[j].gameObject.SetActive(false);
+    //                    }
+    //                }
+    //                else if (P_SocketController.instance.gameTableMaxPlayers == 4)
+    //                {
+    //                    for (int j = 0; j < P_InGameManager.instance.allPlayerPos.Count; j++)
+    //                    {
+    //                        if (P_InGameManager.instance.allPlayerPos[j].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[j].gameObject.name == "7" ||
+    //                            P_InGameManager.instance.allPlayerPos[j].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[j].gameObject.name == "5")
+    //                            P_InGameManager.instance.allPlayerPos[j].gameObject.SetActive(false);
+    //                    }
+    //                }
+    //                else if (P_SocketController.instance.gameTableMaxPlayers == 2)
+    //                {
+    //                    for (int j = 0; j < P_InGameManager.instance.allPlayerPos.Count; j++)
+    //                    {
+    //                        if (P_InGameManager.instance.allPlayerPos[j].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[j].gameObject.name == "2" ||
+    //                            P_InGameManager.instance.allPlayerPos[j].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[j].gameObject.name == "5" ||
+    //                            P_InGameManager.instance.allPlayerPos[j].gameObject.name == "6" || P_InGameManager.instance.allPlayerPos[j].gameObject.name == "7")
+    //                            P_InGameManager.instance.allPlayerPos[j].gameObject.SetActive(false);
+    //                    }
+    //                }
+
+    //                int counterPos = 1;
+    //                for (int j = P_InGameManager.instance.allPlayerPos.Count - 1; j >= 0; j--)
+    //                {
+    //                    if (P_InGameManager.instance.allPlayerPos[j].gameObject.activeSelf)
+    //                    {
+    //                        P_InGameManager.instance.allPlayerPos[j].transform.GetChild(0).GetComponent<P_PlayerSeat>().seatNo = counterPos.ToString();
+    //                        counterPos++;
+    //                    }
+    //                    else
+    //                    {
+    //                        Destroy(P_InGameManager.instance.allPlayerPos[j].gameObject);
+    //                        Destroy(P_InGameManager.instance.playersScript[j].gameObject);
+    //                        P_InGameManager.instance.allPlayerPos.Remove(P_InGameManager.instance.allPlayerPos[j]);
+    //                        P_InGameManager.instance.playersScript.Remove(P_InGameManager.instance.playersScript[j]);
+    //                        P_InGameManager.instance.players.Remove(P_InGameManager.instance.players[j]);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //}
 
 
     public void OnSitNGoTableData(string responseData)

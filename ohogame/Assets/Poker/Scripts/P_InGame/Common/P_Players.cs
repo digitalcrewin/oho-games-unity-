@@ -172,32 +172,102 @@ public class P_Players : MonoBehaviour
                 break;
 
             case "2":
-                betAmount.transform.localPosition = new Vector2(114.2f, 13f);
-                dealer.transform.localPosition = new Vector2(70.702f, -29.5f);
+                //betAmount.transform.localPosition = new Vector2(114.2f, 13f);
+                //dealer.transform.localPosition = new Vector2(70.702f, -29.5f);
+                //SixCardsManage();
+
+
+                if (P_SocketController.instance.gameTableMaxPlayers == 6 || P_SocketController.instance.gameTableMaxPlayers == 8)
+                {
+                    betAmount.transform.localPosition = new Vector2(114.2f, 13f);
+                    dealer.transform.localPosition = new Vector2(70.702f, -29.5f);
+                }
+                else if (P_SocketController.instance.gameTableMaxPlayers == 4)
+                {
+                    betAmount.transform.localPosition = new Vector2(113.9f, -64.5f);
+                    dealer.transform.localPosition = new Vector2(70.702f, -98.1f);
+                }
+                else if (P_SocketController.instance.gameTableMaxPlayers == 2)
+                {
+                    betAmount.transform.localPosition = new Vector2(0f, -108f);
+                    dealer.transform.localPosition = new Vector2(-71f, -67f);
+                }
                 SixCardsManage();
                 break;
 
             case "3":
-                betAmount.transform.localPosition = new Vector2(113.9f, -64.5f);
-                dealer.transform.localPosition = new Vector2(70.702f, -98.1f);
+                //betAmount.transform.localPosition = new Vector2(113.9f, -64.5f);
+                //dealer.transform.localPosition = new Vector2(70.702f, -98.1f);
+                //SixCardsManage();
+
+
+                if (P_SocketController.instance.gameTableMaxPlayers == 6 || P_SocketController.instance.gameTableMaxPlayers == 8)
+                {
+                    betAmount.transform.localPosition = new Vector2(113.9f, -64.5f);
+                    dealer.transform.localPosition = new Vector2(70.702f, -98.1f);
+                }
+                else if (P_SocketController.instance.gameTableMaxPlayers == 4)
+                {
+                    betAmount.transform.localPosition = new Vector2(0f, -108f);
+                    dealer.transform.localPosition = new Vector2(-71f, -67f);
+                }
                 SixCardsManage();
                 break;
 
             case "4":
-                betAmount.transform.localPosition = new Vector2(113.9f, -64.5f);
-                dealer.transform.localPosition = new Vector2(70.702f, -98.1f);
+                //betAmount.transform.localPosition = new Vector2(113.9f, -64.5f);
+                //dealer.transform.localPosition = new Vector2(70.702f, -98.1f);
+                //SixCardsManage();
+
+
+                if (P_SocketController.instance.gameTableMaxPlayers == 6)
+                {
+                    betAmount.transform.localPosition = new Vector2(0f, -108f);
+                    dealer.transform.localPosition = new Vector2(-71f, -67f);
+                }
+                else if (P_SocketController.instance.gameTableMaxPlayers == 4 || P_SocketController.instance.gameTableMaxPlayers == 8)
+                {
+                    betAmount.transform.localPosition = new Vector2(113.9f, -64.5f);
+                    dealer.transform.localPosition = new Vector2(70.702f, -98.1f);
+                }
                 SixCardsManage();
                 break;
 
             case "5":
-                betAmount.transform.localPosition = new Vector2(0f, -108f);
-                dealer.transform.localPosition = new Vector2(-71f, -67f);
+                //betAmount.transform.localPosition = new Vector2(0f, -108f);
+                //dealer.transform.localPosition = new Vector2(-71f, -67f);
+                //SixCardsManage();
+
+
+                if (P_SocketController.instance.gameTableMaxPlayers == 6)
+                {
+                    betAmount.transform.localPosition = new Vector2(-113.9f, -64.5f);
+                    dealer.transform.localPosition = new Vector2(-69.1f, -98.1f);
+                }
+                else if (P_SocketController.instance.gameTableMaxPlayers == 8)
+                {
+                    betAmount.transform.localPosition = new Vector2(0f, -108f);
+                    dealer.transform.localPosition = new Vector2(-71f, -67f);
+                }
                 SixCardsManage();
                 break;
 
             case "6":
-                betAmount.transform.localPosition = new Vector2(-113.9f, -64.5f);
-                dealer.transform.localPosition = new Vector2(-69.1f, -98.1f);
+                //betAmount.transform.localPosition = new Vector2(-113.9f, -64.5f);
+                //dealer.transform.localPosition = new Vector2(-69.1f, -98.1f);
+                //SixCardsManage();
+
+
+                if (P_SocketController.instance.gameTableMaxPlayers == 6)
+                {
+                    betAmount.transform.localPosition = new Vector2(-104.88f, 13f);
+                    dealer.transform.localPosition = new Vector2(-70.702f, -98.1f);
+                }
+                else if (P_SocketController.instance.gameTableMaxPlayers == 8)
+                {
+                    betAmount.transform.localPosition = new Vector2(-113.9f, -64.5f);
+                    dealer.transform.localPosition = new Vector2(-69.1f, -98.1f);
+                }
                 SixCardsManage();
                 break;
 
@@ -216,19 +286,19 @@ public class P_Players : MonoBehaviour
     }
 
     //when rotation occurs twocards rotation, pos, sizedelta manage.
-    void TwoCardsManage()
-    {
-        playerData.twoCards[0].transform.parent.localPosition = new Vector2(30f, 5f);  //26, 38
-        playerData.twoCards[0].rectTransform.sizeDelta = new Vector3(26f, 38f);
+    //void TwoCardsManage()
+    //{
+    //    playerData.twoCards[0].transform.parent.localPosition = new Vector2(30f, 5f);  //26, 38
+    //    playerData.twoCards[0].rectTransform.sizeDelta = new Vector3(26f, 38f);
 
-        playerData.twoCards[0].transform.localPosition = new Vector2(0f, 0f);
-        playerData.twoCards[0].rectTransform.sizeDelta = new Vector3(26f, 38f);
-        playerData.twoCards[0].transform.localScale = new Vector3(1f, 1f, 1f);
-        playerData.twoCards[1].transform.localPosition = new Vector2(10f, 0f);
-        playerData.twoCards[1].rectTransform.sizeDelta = new Vector3(26f, 38f);
-        playerData.twoCards[1].transform.localEulerAngles = new Vector3(0f, 0f, -16f);
-        playerData.twoCards[1].transform.localScale = new Vector3(1f, 1f, 1f);
-    }
+    //    playerData.twoCards[0].transform.localPosition = new Vector2(0f, 0f);
+    //    playerData.twoCards[0].rectTransform.sizeDelta = new Vector3(26f, 38f);
+    //    playerData.twoCards[0].transform.localScale = new Vector3(1f, 1f, 1f);
+    //    playerData.twoCards[1].transform.localPosition = new Vector2(10f, 0f);
+    //    playerData.twoCards[1].rectTransform.sizeDelta = new Vector3(26f, 38f);
+    //    playerData.twoCards[1].transform.localEulerAngles = new Vector3(0f, 0f, -16f);
+    //    playerData.twoCards[1].transform.localScale = new Vector3(1f, 1f, 1f);
+    //}
 
     void SixCardsManage()
     {

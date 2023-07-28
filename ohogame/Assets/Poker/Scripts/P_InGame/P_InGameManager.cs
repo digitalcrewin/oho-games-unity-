@@ -11,13 +11,16 @@ public class P_InGameManager : MonoBehaviour
 {
     public static P_InGameManager instance;
 
-    public GameObject[] players;
+    //public GameObject[] players;
+    public List<GameObject> players;
 
-    public P_Players[] playersScript;
+    //public P_Players[] playersScript;
+    public List<P_Players> playersScript;
     public P_Players[] onlinePlayersScripts = null;
 
     public Image[] communityCards;
-    public Transform[] allPlayerPos;
+    //public Transform[] allPlayerPos;
+    public List<Transform> allPlayerPos;
     public GameObject[] allPots;
 
     private P_Players myPlayerObject = null;
@@ -349,7 +352,7 @@ public class P_InGameManager : MonoBehaviour
 
     public P_Players GetPlayerObject(string userId)
     {
-        for (int i = 0; i < playersScript.Length; i++)
+        for (int i = 0; i < playersScript.Count; i++)
         {
             if (playersScript[i].GetPlayerData().userId == userId)
             {
@@ -362,7 +365,7 @@ public class P_InGameManager : MonoBehaviour
 
     public void PlayerTimerReset()
     {
-        for (int i = 0; i < playersScript.Length; i++)
+        for (int i = 0; i < playersScript.Count; i++)
         {
             playersScript[i].ResetTurn();
         }
@@ -1003,7 +1006,7 @@ public class P_InGameManager : MonoBehaviour
         if (!isSeatRotation)
         {
             isSeatRotation = true;
-            int seatPos = 7;  //newMatchMakingPlayerData.Count
+            int seatPos = P_SocketController.instance.gameTableMaxPlayers - 1;  //7
             playersScript[mySeatIndex].transform.DOMove(allPlayerPos[0].transform.position, 0.5f);
             playersScript[mySeatIndex].GetComponent<P_Players>().currentSeat = (0 + 1).ToString();
             allPlayerPos[0].transform.GetChild(0).GetComponent<P_PlayerSeat>().seatNo = mySeatIndex.ToString();
@@ -1015,7 +1018,7 @@ public class P_InGameManager : MonoBehaviour
                 allPlayerPos[seatPos].transform.GetChild(0).GetComponent<P_PlayerSeat>().seatNo = playersScript[i].GetComponent<P_Players>().seat;
                 seatPos--;
             }
-            for (int i = 7; i >= mySeatIndex; i--)
+            for (int i = P_SocketController.instance.gameTableMaxPlayers - 1; i >= mySeatIndex; i--)  //7
             {
                 playersScript[i].transform.DOMove(allPlayerPos[seatPos].transform.position, 0.5f);
                 playersScript[i].GetComponent<P_Players>().currentSeat = (seatPos + 1).ToString();
@@ -1024,7 +1027,7 @@ public class P_InGameManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < playersScript.Length; i++)
+        for (int i = 0; i < playersScript.Count; i++)
         {
             playersScript[i].LocalBetRotateManage();
         }
@@ -1046,7 +1049,7 @@ public class P_InGameManager : MonoBehaviour
         holeCardsTemp = new Sprite[holeCardCount];
         List<GameObject> animatedCards = new List<GameObject>();
 
-        for (int i = 0; i < playersScript.Length; i++)
+        for (int i = 0; i < playersScript.Count; i++)
         {
             int tempI = i;
 
@@ -1170,7 +1173,7 @@ public class P_InGameManager : MonoBehaviour
         }
 
         StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(1f, () => {
-            for (int i = 0; i < playersScript.Length; i++)
+            for (int i = 0; i < playersScript.Count; i++)
             {
                 if (playersScript[i].playerData.isFold != true)
                 {
@@ -1256,7 +1259,7 @@ public class P_InGameManager : MonoBehaviour
         {
             if (data[i] != null)
             {
-                for (int j = 0; j < playersScript.Length; j++)
+                for (int j = 0; j < playersScript.Count; j++)
                 {
                     P_Players pl = playersScript[j];
 
@@ -1297,7 +1300,7 @@ public class P_InGameManager : MonoBehaviour
         if (iData.Contains("userId") && iData.Contains("action"))
         {
 
-            for (int j = 0; j < playersScript.Length; j++)
+            for (int j = 0; j < playersScript.Count; j++)
             {
                 if (playersScript[j].GetPlayerData().userId == data["userId"].ToString())
                 {
@@ -1598,7 +1601,7 @@ public class P_InGameManager : MonoBehaviour
             int tempI = i;
             if (data["winners"][i] != null)
             {
-                for (int j = 0; j < playersScript.Length; j++)
+                for (int j = 0; j < playersScript.Count; j++)
                 {
                     int tempJ = j;
                     P_Players pl = playersScript[tempJ];
@@ -1672,7 +1675,7 @@ public class P_InGameManager : MonoBehaviour
         {
             if (data["other"][i] != null)
             {
-                for (int j = 0; j < playersScript.Length; j++)
+                for (int j = 0; j < playersScript.Count; j++)
                 {
                     int tempJ = j;
                     P_Players pl = playersScript[tempJ];
@@ -1799,7 +1802,7 @@ public class P_InGameManager : MonoBehaviour
 
         JsonData data = JsonMapper.ToObject(dataStr);
 
-        for (int i = 0; i < playersScript.Length; i++)
+        for (int i = 0; i < playersScript.Count; i++)
         {
             if (playersScript[i].playerData.userId == data["userId"].ToString())
             {
@@ -1810,7 +1813,7 @@ public class P_InGameManager : MonoBehaviour
 
     public void BestHandText(string dataStr)
     {
-        for (int i = 0; i < playersScript.Length; i++)
+        for (int i = 0; i < playersScript.Count; i++)
         {
             if (playersScript[i].GetPlayerData().userId == PlayerManager.instance.GetPlayerGameData().userId)
             {
@@ -1908,7 +1911,7 @@ public class P_InGameManager : MonoBehaviour
     public void ShowChatOnPlayer(string serverResponse)
     {
         JsonData jsonData = JsonMapper.ToObject(serverResponse);
-        for (int i = 0; i < playersScript.Length; i++)
+        for (int i = 0; i < playersScript.Count; i++)
         {
             if (playersScript[i].playerData.userId == jsonData[0]["userId"].ToString())
             {

@@ -160,6 +160,56 @@ public class P_Lobby_Second : MonoBehaviour
                         Debug.Log("Get game table click: " + JsonMapper.ToJson(data["data"][tempI]));
 
                     P_SocketController.instance.gameTableMaxPlayers = Int32.Parse(P_SocketController.instance.gameTableData["maxPlayers"].ToString());
+
+
+
+
+                    // remaining: seat hide according to lobby maxPlayers
+                    if (P_SocketController.instance.gameTableMaxPlayers == 6)
+                    {
+                        for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+                        {
+                            if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "2" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "6")
+                                P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+                        }
+                    }
+                    else if (P_SocketController.instance.gameTableMaxPlayers == 4)
+                    {
+                        for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+                        {
+                            if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "7" ||
+                                P_InGameManager.instance.allPlayerPos[i].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "5")
+                                P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+                        }
+                    }
+                    else if (P_SocketController.instance.gameTableMaxPlayers == 2)
+                    {
+                        for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+                        {
+                            if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "2" ||
+                                P_InGameManager.instance.allPlayerPos[i].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "5" ||
+                                P_InGameManager.instance.allPlayerPos[i].gameObject.name == "6" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "7")
+                                P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+                        }
+                    }
+
+                    int counterPos = 1;
+                    for (int i = P_InGameManager.instance.allPlayerPos.Count - 1; i >= 0; i--)
+                    {
+                        if (P_InGameManager.instance.allPlayerPos[i].gameObject.activeSelf)
+                        {
+                            P_InGameManager.instance.allPlayerPos[i].transform.GetChild(0).GetComponent<P_PlayerSeat>().seatNo = counterPos.ToString();
+                            counterPos++;
+                        }
+                        else
+                        {
+                            Destroy(P_InGameManager.instance.allPlayerPos[i].gameObject);
+                            Destroy(P_InGameManager.instance.playersScript[i].gameObject);
+                            P_InGameManager.instance.allPlayerPos.Remove(P_InGameManager.instance.allPlayerPos[i]);
+                            P_InGameManager.instance.playersScript.Remove(P_InGameManager.instance.playersScript[i]);
+                            P_InGameManager.instance.players.Remove(P_InGameManager.instance.players[i]);
+                        }
+                    }
                 });
             }
             playerCountText.text = totalPlayingUsers.ToString();

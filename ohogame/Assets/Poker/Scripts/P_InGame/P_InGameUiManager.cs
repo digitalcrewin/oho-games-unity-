@@ -439,7 +439,7 @@ public class P_InGameUiManager : MonoBehaviour
     {
         GameObject[] activeBetAmount;
 
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_Players pl = P_InGameManager.instance.playersScript[i];
             // timer
@@ -511,7 +511,7 @@ public class P_InGameUiManager : MonoBehaviour
         Image timerRing = null;   /* = timerImages[0]*/   //null
         Transform fx_holder = null;
 
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_Players pl = P_InGameManager.instance.playersScript[i];
             if (pl.GetPlayerData().userId == playerTurn.ToString())
@@ -598,7 +598,7 @@ public class P_InGameUiManager : MonoBehaviour
     {
         Image timerRing = null;
 
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_Players pl = P_InGameManager.instance.playersScript[i];
             if (pl.userName.text == turnTimerPlayerTurn)
@@ -634,7 +634,7 @@ public class P_InGameUiManager : MonoBehaviour
         {
             StopCoroutine(diceTimerCo);
 
-            for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+            for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
             {
                 P_InGameManager.instance.playersScript[i].timerImage.fillAmount = 0f;
                 //inGameManager.instance.players[i].GetComponent<Players>().timerImage.gameObject.SetActive(false);
@@ -666,7 +666,7 @@ public class P_InGameUiManager : MonoBehaviour
 
     public void FoldLoginPlayers(string id)
     {
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_Players pl = P_InGameManager.instance.playersScript[i];
             if (pl.playerData.userId == id)
@@ -690,13 +690,13 @@ public class P_InGameUiManager : MonoBehaviour
 
     public void DealerIconAllFalse()
     {
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
             P_InGameManager.instance.playersScript[i].dealer.SetActive(false);
     }
 
     public void AllPlayerPosPlusOn()
     {
-        for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
         {
             P_InGameManager.instance.allPlayerPos[i].GetChild(0).gameObject.SetActive(false);
             P_InGameManager.instance.allPlayerPos[i].GetChild(1).gameObject.SetActive(true);
@@ -710,7 +710,7 @@ public class P_InGameUiManager : MonoBehaviour
 
     public void AllPlayerPosPlusOff(bool isActive)
     {
-        for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
         {
             P_InGameManager.instance.allPlayerPos[i].GetChild(0).gameObject.SetActive(isActive);
             P_InGameManager.instance.allPlayerPos[i].GetChild(1).gameObject.SetActive(!isActive);
@@ -726,7 +726,7 @@ public class P_InGameUiManager : MonoBehaviour
      */
     public void ResetPlayersUI()
     {
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_Players pl = P_InGameManager.instance.playersScript[i];
 
@@ -755,7 +755,7 @@ public class P_InGameUiManager : MonoBehaviour
 
     public void ResetPlayerAllData()
     {
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_Players pl = P_InGameManager.instance.playersScript[i];
 
@@ -767,7 +767,7 @@ public class P_InGameUiManager : MonoBehaviour
 
     public void ResetLastAction()
     {
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_InGameManager.instance.playersScript[i].UpdateLastAction("");
             P_InGameManager.instance.playersScript[i].betAmount.SetActive(false);
@@ -792,7 +792,7 @@ public class P_InGameUiManager : MonoBehaviour
 
     public void HideHoleCards()
     {
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             int tempi = i;
             P_Players pl = P_InGameManager.instance.playersScript[i];
@@ -887,7 +887,7 @@ public class P_InGameUiManager : MonoBehaviour
 
     public void HidefoldSprites()
     {
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_Players pl = P_InGameManager.instance.playersScript[i];
             
@@ -918,7 +918,7 @@ public class P_InGameUiManager : MonoBehaviour
 
     public void HidePlayersOnNewGame()
     {
-        for (int i = 0; i < P_InGameManager.instance.playersScript.Length; i++)
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
         {
             P_InGameManager.instance.playersScript[i].gameObject.SetActive(false);
         }
