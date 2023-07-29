@@ -173,7 +173,18 @@ public class MainDashboardScreen : MonoBehaviour
         GlobalGameManager.instance.isKYCDone = bool.Parse(data["data"]["is_kyc_done"].ToString());
         PlayerGameDetails playerData = PlayerManager.instance.GetPlayerGameData();
         playerData.userName = userNameText.text = drawerUsernameText.text = data["data"]["username"].ToString();
-        int totalBalance = int.Parse(data["data"]["user_wallet"]["real_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["user_wallet"]["bonus_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["user_wallet"]["win_amount"].ToString().Split('.')[0]);
+        int bonusAmount = 0;
+        int userWallet = 0;
+        if (data["data"]["user_wallet"]["bonus_amount"] != null)
+            bonusAmount = int.Parse(data["data"]["user_wallet"]["bonus_amount"].ToString().Split('.')[0]);
+
+        if (data["data"]["user_wallet"]["win_amount"] != null)
+            userWallet = int.Parse(data["data"]["user_wallet"]["win_amount"].ToString().Split('.')[0]);
+
+        int totalBalance = int.Parse(data["data"]["user_wallet"]["real_amount"].ToString().Split('.')[0]);
+        totalBalance += bonusAmount;
+        totalBalance += userWallet;
+        Debug.Log(totalBalance);
         balanceText.text = totalBalance.ToString(); //data["data"]["user_wallet"]["real_amount"].ToString();
 
         /*for (int i = 0; i < data["getData"].Count; i++)

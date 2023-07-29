@@ -135,6 +135,8 @@ public class RegistrationManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        storeNumber = registrationMobileNumber.text;
+
         /*if(forgotPassword.activeInHierarchy)
         {
             if (timer > 1)
@@ -1355,11 +1357,18 @@ public class RegistrationManager : MonoBehaviour
         }
     }
 
+    string storeNumber;
     public void ShowPrefixInInputField(InputField inputField)
     {
+        if (inputField.wasCanceled)
+        {
+            //Do stuff
+            return;
+        }
         //Debug.Log("AA " + inputField.text.Length);
         if (inputField.text.Length > 0)
         {
+            storeNumber = inputField.text;
             inputField.transform.GetChild(1).GetComponent<RectTransform>().anchoredPosition = new Vector2(55f, 0f);
             inputField.transform.GetChild(2).gameObject.SetActive(true);
         }
@@ -1367,6 +1376,18 @@ public class RegistrationManager : MonoBehaviour
         {
             inputField.transform.GetChild(1).GetComponent<RectTransform>().anchoredPosition = new Vector2(12.5f, 0f);
             inputField.transform.GetChild(2).gameObject.SetActive(false);
+        }
+    }
+
+    public void OnEditEnd()
+    {
+        if (registrationMobileNumber.wasCanceled)
+        {
+            //Do stuff
+            registrationMobileNumber.text = storeNumber;
+            registrationMobileNumber.transform.GetChild(1).GetComponent<RectTransform>().anchoredPosition = new Vector2(55f, 0f);
+            registrationMobileNumber.transform.GetChild(2).gameObject.SetActive(true);
+            return;
         }
     }
 
