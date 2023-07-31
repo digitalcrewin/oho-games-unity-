@@ -11,7 +11,6 @@ public class HelpDesk : MonoBehaviour
         switch (buttonName)
         {
             case "close":
-                //MainMenuController.instance.ShowScreen(MainMenuScreens.Dashboard);
                 L_MainMenuController.instance.DestroyScreen(MainMenuScreens.HelpDesk);
                 break;
 

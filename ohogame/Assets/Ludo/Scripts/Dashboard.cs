@@ -33,9 +33,6 @@ public class Dashboard : MonoBehaviour
         switch (buttonName)
         {
             case "wallet":
-                //MainMenuController.instance.DestroyScreen(MainMenuScreens.Dashboard);
-
-                //L_MainMenuController.instance.ShowScreen(MainMenuScreens.Wallet);
                 SceneManager.LoadScene("GameScene");
                 break;
 
@@ -44,8 +41,6 @@ public class Dashboard : MonoBehaviour
                 break;
 
             case "classic_ludo":
-                //PathManager.instance.currentScreenPathList.Add("Dashboard_ClassicLudo");
-                //MainMenuController.instance.ShowScreen(MainMenuScreens.PlayerFinding);
                 L_MainMenuController.instance.ShowScreen(MainMenuScreens.QuickLudoSelection);
                 QuickLudoSelection.instance.isClassicLudo = true;
                 QuickLudoSelection.instance.isQuickLudo = false;
@@ -88,10 +83,6 @@ public class Dashboard : MonoBehaviour
     void Start()
     {
         logoBG.GetComponent<Animator>().SetBool("tokenAnim", true);
-
-        //nameText.text = L_PlayerManager.instance.GetPlayerGameData().name;
-
-        //StartCoroutine(L_WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameType], (serverResponse, errorBool, error) =>
         StartCoroutine(WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameType], (serverResponse, errorBool, error) =>
         {
             if (errorBool)
@@ -113,10 +104,6 @@ public class Dashboard : MonoBehaviour
                         {
                             for (int i = 0; i < data["data"].Count; i++)
                             {
-                                //Debug.Log(data["data"][i]["name"]);
-                                //Debug.Log(data["data"][i]["status"]);
-                                //Debug.Log(data["data"][i]["description"]);
-
                                 if (data["data"][i]["status"].ToString() == "1")
                                 {
                                     if (data["data"][i]["name"].ToString() == "CLASSIC LUDO")
@@ -164,8 +151,6 @@ public class Dashboard : MonoBehaviour
     public void GetProfile(string callFrom)
     {
         // callFrom: dashboard, myprofile
-
-        //StartCoroutine(L_WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.Profile], (serverResponse, errorBool, error) =>
         StartCoroutine(WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.Profile], (serverResponse, errorBool, error) =>
         {
             if (errorBool)

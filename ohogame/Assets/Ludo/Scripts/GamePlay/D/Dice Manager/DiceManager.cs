@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,6 +50,7 @@ public class DiceManager : MonoBehaviour
 
         for (int i = 0; i < Dice.Length; i++)
         {
+            rend.transform.DOLocalRotate(new Vector3(0, 0, 360), 0.1f, RotateMode.LocalAxisAdd).SetRelative(true).SetEase(Ease.Linear);
             rend.sprite = Dice[i];
             yield return new WaitForSeconds(0.1f);
             randomDiceSide = diceValue - 1; //Random.Range(0, maxNumOnDice);  //0 default  //for testing 4 thi 5 k 6 avse 

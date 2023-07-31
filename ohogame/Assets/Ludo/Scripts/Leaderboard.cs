@@ -162,12 +162,6 @@ public class Leaderboard : MonoBehaviour
 
                             for (int i = 0; i < data["data"].Count; i++)
                             {
-                                //Debug.Log("Leaderboard: " + data["data"][i]["rank"].ToString());
-                                //Debug.Log("Leaderboard: " + data["data"][i]["name"].ToString());
-                                //Debug.Log("Leaderboard: " + data["data"][i]["amount"].ToString());
-                                //Debug.Log("Leaderboard: " + data["data"][i]["gamePlayed"].ToString());
-                                //Debug.Log("Leaderboard:-----------");
-
                                 GameObject dailyGo = Instantiate(scrollItem, content);
                                 dailyGo.GetComponent<LeaderboardScrollItem>().rankText.text = data["data"][i]["rank"].ToString();
                                 dailyGo.GetComponent<LeaderboardScrollItem>().nameText.text = data["data"][i]["name"].ToString();
@@ -216,7 +210,6 @@ public class Leaderboard : MonoBehaviour
                 noDataText.gameObject.SetActive(true);
                 noDataText.text = "No Data";
             }
-
         }));
     }
 }

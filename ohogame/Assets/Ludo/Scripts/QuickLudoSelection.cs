@@ -37,7 +37,6 @@ public class QuickLudoSelection : MonoBehaviour
         instance = this;
     }
 
-
     public void OnClickOnButton(string buttonName)
     {
         L_MainMenuController.instance.PlayButtonSound();
@@ -62,96 +61,90 @@ public class QuickLudoSelection : MonoBehaviour
                 break;
 
             case "play":
-                //if (string.IsNullOrEmpty(userIdInput.text))
-                //{
-                //    StartCoroutine(GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter user id", "red", 2f));
-                //}
-                //else
-                //{
-                    playButton.enabled = false;
-                    Toggle toggleAmount = GetSelectedToggle(amountItemToggleGroup);
-                    gameAmount = toggleAmount.transform.GetChild(0).GetChild(1).GetComponent<Text>().text.Substring(1);
-                    Debug.Log("selected amount: " + gameAmount);
-                    gameVarientId = toggleAmount.transform.GetChild(0).GetChild(2).GetComponent<Text>().text;
-                    Debug.Log("selected goti id: " + toggleAmount.transform.GetChild(0).GetChild(2).GetComponent<Text>().text);
+                playButton.enabled = false;
+                Toggle toggleAmount = GetSelectedToggle(amountItemToggleGroup);
+                gameAmount = toggleAmount.transform.GetChild(0).GetChild(1).GetComponent<Text>().text.Substring(1);
+                Debug.Log("selected amount: " + gameAmount);
+                gameVarientId = toggleAmount.transform.GetChild(0).GetChild(2).GetComponent<Text>().text;
+                Debug.Log("selected goti id: " + toggleAmount.transform.GetChild(0).GetChild(2).GetComponent<Text>().text);
 
-                    Toggle toggleGotiColor = GetSelectedToggle(gotiColorToggleGroup);
-                    Debug.Log("selected goti color: " + toggleGotiColor.name);
+                Toggle toggleGotiColor = GetSelectedToggle(gotiColorToggleGroup);
+                Debug.Log("selected goti color: " + toggleGotiColor.name);
 
 
-                    if (isClassicLudo)
+                if (isClassicLudo)
+                {
+                    StartCoroutine(WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameVarientForGameId] + "?type=" + gameTypeId + "&varient=" + gameVarientId, (serverResponse, errorBool, error) =>
                     {
-                        //StartCoroutine(L_WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameVarientForGameId] + "?type="+ gameTypeId +"&varient="+ gameVarientId, (serverResponse, errorBool, error) => {
-                        StartCoroutine(WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameVarientForGameId] + "?type="+ gameTypeId +"&varient="+ gameVarientId, (serverResponse, errorBool, error) => {
-                            if (errorBool)
-                            {
-                                Debug.Log("Error in Game Varient: " + error);
-                                StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response", "red", 2f));
-                                playButton.enabled = true;
-                            }
-                            else
-                            {
-                                Debug.Log("Game Id response: " + serverResponse);
-                                JsonData data = JsonMapper.ToObject(serverResponse);
+                        if (errorBool)
+                        {
+                            Debug.Log("Error in Game Varient: " + error);
+                            StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response", "red", 2f));
+                            playButton.enabled = true;
+                        }
+                        else
+                        {
+                            Debug.Log("Game Id response: " + serverResponse);
+                            JsonData data = JsonMapper.ToObject(serverResponse);
 
-                                IDictionary iData1 = data as IDictionary;
+                            IDictionary iData1 = data as IDictionary;
 
-                                if (iData1.Contains("code"))
+                            if (iData1.Contains("code"))
+                            {
+                                if (data["code"].ToString() == "200")
                                 {
-                                    if (data["code"].ToString() == "200")
+                                    if (data["data"].Count == 1)
                                     {
-                                        if (data["data"].Count == 1)
+                                        string gameId = data["data"][0]["id"].ToString();
+                                        if (!string.IsNullOrEmpty(gameId))
                                         {
-                                            string gameId = data["data"][0]["id"].ToString();
-                                            if (!string.IsNullOrEmpty(gameId))
-                                            {
-                                                L_GlobalGameManager.instance.socketController.enabled = true;
-                                                L_GlobalGameManager.instance.socketController.gameObject.SetActive(true);
+                                            L_GlobalGameManager.instance.socketController.enabled = true;
+                                            L_GlobalGameManager.instance.socketController.gameObject.SetActive(true);
 
-                                                L_SocketController.instance.selectedGotiColor = toggleGotiColor.name;
-                                                L_SocketController.instance.isClassicLudo = true;
-                                                L_SocketController.instance.isQuickLudo = false;
-                                                L_SocketController.instance.gameAmount = gameAmount;
-                                                L_SocketController.instance.gameTypeId = gameTypeId;
-                                                L_SocketController.instance.gameVarientId = gameVarientId;
+                                            L_SocketController.instance.selectedGotiColor = toggleGotiColor.name;
+                                            L_SocketController.instance.isClassicLudo = true;
+                                            L_SocketController.instance.isQuickLudo = false;
+                                            L_SocketController.instance.gameAmount = gameAmount;
+                                            L_SocketController.instance.gameTypeId = gameTypeId;
+                                            L_SocketController.instance.gameVarientId = gameVarientId;
 
-                                                L_GlobalGameManager.instance.socketController.RequestRegisterForGame(gameId, gameVarientId); //userIdInput.text
-                                                L_GlobalGameManager.instance.currentScreenPathList.Add("ClassicLudoSelection");
-                                            }
-                                            else
-                                            {
-                                                Debug.Log("Enter in game response...");
-                                                StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response...", "red", 2f));
-                                                playButton.enabled = true;
-                                            }
+                                            L_GlobalGameManager.instance.socketController.RequestRegisterForGame(gameId, gameVarientId); //userIdInput.text
+                                            L_GlobalGameManager.instance.currentScreenPathList.Add("ClassicLudoSelection");
                                         }
                                         else
                                         {
-                                            Debug.Log("Enter in game response!");
-                                            StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response!", "red", 2f));
+                                            Debug.Log("Enter in game response...");
+                                            StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response...", "red", 2f));
                                             playButton.enabled = true;
                                         }
                                     }
                                     else
                                     {
-                                        Debug.Log("Enter in game response!!");
-                                        StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response!!", "red", 2f));
+                                        Debug.Log("Enter in game response!");
+                                        StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response!", "red", 2f));
                                         playButton.enabled = true;
                                     }
                                 }
                                 else
                                 {
-                                    Debug.Log("Enter in game response!!!");
-                                    StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response!!!", "red", 2f));
+                                    Debug.Log("Enter in game response!!");
+                                    StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response!!", "red", 2f));
                                     playButton.enabled = true;
                                 }
                             }
-                        }));
-                    }
-                    else
+                            else
+                            {
+                                Debug.Log("Enter in game response!!!");
+                                StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorTMP, "Enter in game response!!!", "red", 2f));
+                                playButton.enabled = true;
+                            }
+                        }
+                    }));
+                }
+                else
+                {
+                    StartCoroutine(WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameVarientForGameId] + "?type=" + gameTypeId + "&varient=" + gameVarientId, (serverResponse, errorBool, error) =>
                     {
-                        //StartCoroutine(L_WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameVarientForGameId] + "?type=" + gameTypeId + "&varient=" + gameVarientId, (serverResponse, errorBool, error) => {
-                        StartCoroutine(WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameVarientForGameId] + "?type=" + gameTypeId + "&varient=" + gameVarientId, (serverResponse, errorBool, error) => {
                         if (errorBool)
                         {
                             Debug.Log("Error in Game Varient: " + error);
@@ -216,10 +209,7 @@ public class QuickLudoSelection : MonoBehaviour
                             }
                         }
                     }));
-                    //GlobalGameManager.instance.currentScreenPathList.Add("QuickLudoSelection");
-                    //    MainMenuController.instance.ShowScreen(MainMenuScreens.PlayerFinding);
-                    }
-                //}
+                }
                 break;
         }
     }
@@ -229,9 +219,6 @@ public class QuickLudoSelection : MonoBehaviour
     {
         L_MainMenuController.instance.ShowScreen(MainMenuScreens.PlayerFinding);
         PlayerFinding.instance.enterAmount.text = gameAmount;
-        //int amountInt = 0;
-        //if (int.TryParse(gameAmount, out amountInt))
-        //    PlayerFinding.instance.priceMoney.text = "$"+amountInt.ToString();
         PlayerFinding.instance.priceMoney.text = "₹" + gameAmount;  //now priceMoney set as enter amount (entry fees)
     }
 
@@ -242,22 +229,13 @@ public class QuickLudoSelection : MonoBehaviour
         {
             titleText.text = "CLASSIC LUDO";
             info1Text.text = "IN CLASSIC LUDO, TAKE YOUR 4 GOTIS/PAWNS HOME";
-            //info1Text.text = "IN CLASSIC LUDO, TAKE YOUR 4 GOTIS/\nPAWNS HOME";
-
-            //GlobalGameManager.instance.socketController.enabled = true;
-            //GlobalGameManager.instance.socketController.gameObject.SetActive(true);
         }
         else
         {
             titleText.text = "QUICK LUDO";
             info1Text.text = "IN QUICK LUDO, TAKE ONLY 2 GOTIS/PAWNS HOME";
-            //info1Text.text = "IN QUICK LUDO, TAKE ONLY 2 GOTIS/\nPAWNS HOME";
-
-            //GlobalGameManager.instance.socketController.enabled = true;
-            //GlobalGameManager.instance.socketController.gameObject.SetActive(true);
         }
 
-        //StartCoroutine(L_WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameVarient], (serverResponse, errorBool, error) =>
         StartCoroutine(WebServices.instance.GETRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.GameVarient], (serverResponse, errorBool, error) =>
         {
             if (errorBool)
@@ -295,7 +273,6 @@ public class QuickLudoSelection : MonoBehaviour
                                 obj.GetComponent<Toggle>().isOn = true;
                         }
                     }
-                    //winAmountText.text = "$" + AmountDoubleFunc(data["data"][0]["value"].ToString()).ToString();
                 }
             }
         }));
@@ -313,9 +290,6 @@ public class QuickLudoSelection : MonoBehaviour
     {
         if (change.isOn)
         {
-            //Debug.Log("New Value : " + change.transform.GetChild(0).GetChild(1).GetComponent<Text>().text);
-            //Debug.Log("Value : " + value);
-            //winAmountText.text = "$" + AmountDoubleFunc(value).ToString();
         }
     }
 

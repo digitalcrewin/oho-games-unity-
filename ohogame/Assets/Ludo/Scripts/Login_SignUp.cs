@@ -95,9 +95,7 @@ public class Login_SignUp : MonoBehaviour
 
     void Start()
     {
-        //coroutineRsendOTP = StartCoroutine(OtpExipreCo()); //to test otp screen
-
-        confirmOTPBtn.GetComponent<Button>().onClick.AddListener(OtpVerifyProcess); //onclick_verify_otp
+        confirmOTPBtn.GetComponent<Button>().onClick.AddListener(OtpVerifyProcess);
     }
 
     void Update()
@@ -151,12 +149,10 @@ public class Login_SignUp : MonoBehaviour
                 break;
 
             case "onclick_signUp":
-                //ShowOtpScreen();
                 SignUpProcess();
                 break;
 
             case "onclick_verify_otp":
-                //MainMenuController.instance.ShowScreen(MainMenuScreens.ReferralConfirm);
                 OtpVerifyProcess();
                 break;
 
@@ -204,8 +200,6 @@ public class Login_SignUp : MonoBehaviour
                 {
                     Debug.Log("Check User Exist response: " + serverResponse);
                     JsonData data = JsonMapper.ToObject(serverResponse);
-                    //{"code":200,"data":{"message":"User available"},"success":true}
-                    //{ "code":500,"errorMessage":{ "message":"User exist"},"error":{ },"data":null,"success":false}
 
                     IDictionary iData1 = data as IDictionary;
 
@@ -228,26 +222,6 @@ public class Login_SignUp : MonoBehaviour
                     {
                         Debug.Log("Success in Check User Exist");
                     }
-
-
-                    //if ((bool)data["success"] == false)
-                    //{
-                    //    IDictionary iData = data as IDictionary;
-                    //    if (iData.Contains("errorMessage"))
-                    //    {
-                    //        IDictionary iDataM = data["errorMessage"] as IDictionary;
-                    //        if (iDataM.Contains("message"))
-                    //        {
-                    //            StartCoroutine(GlobalGameManager.instance.ShowPopUpTMP(errorSignUpText, data["errorMessage"]["message"].ToString(), "red", 2f));
-                    //        }
-                    //        else
-                    //            Debug.Log("Error in Check User Exist 2");
-                    //    }
-                    //    else
-                    //        Debug.Log("Error in Check User Exist 3");
-                    //}
-                    //else
-                    //    Debug.Log("Success in Check User Exist");
                 }
             }));
         }

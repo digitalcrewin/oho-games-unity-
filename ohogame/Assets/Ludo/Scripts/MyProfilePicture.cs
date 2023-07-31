@@ -86,21 +86,6 @@ public class MyProfilePicture : MonoBehaviour
         if (profileImagePath.Length > 0)
             requestData.Add(new MultipartFormFileSection("image", profileImg, profileImagePath, "image/png"));
 
-        //if (fullName.text.Length > 0)
-        //    requestData.Add(new MultipartFormDataSection("name", fullName.text));
-
-        //if (dob.text.Length > 0)
-        //{
-        //    string dobDateStr = dob.text;
-        //    string[] dtStr = dobDateStr.Split('-');
-        //    string utcstr = dtStr[2] + "-" + dtStr[0] + "-" + dtStr[1];
-        //    DateTime dt = DateTimeOffset.Parse(utcstr).DateTime;
-        //    string dtText = dt.ToString(@"yyyy'-'MM'-'dd");
-
-        //    if (dtText.Length > 0)
-        //        requestData.Add(new MultipartFormDataSection("dob", dtText));
-        //}
-
         Debug.Log("Request => UpdateProfile: " + requestData);
 
         UnityWebRequest www = UnityWebRequest.Post(L_GameConstant.GAME_URLS[(int)L_RequestType.UploadProfilePicture], requestData);
@@ -141,10 +126,8 @@ public class MyProfilePicture : MonoBehaviour
                 if (jsonData["code"].ToString() == "200")
                 {
                     Debug.Log("url: " + jsonData["data"]["key"].ToString());
-                    //StartCoroutine(GlobalGameManager.instance.ShowPopUpTMP(MyProfile.instance.errorText, "Picture Uploaded Successfully", "green", 10f));
                     stepSuccessCountForMsg++;
                     UpdateUserProfilePic(jsonData["data"]["key"].ToString());
-                    //UpdateUserProfilePic("{\"profilePic\": \"" + jsonData["data"]["url"].ToString() + "\"}", "Profile Picture");
                 }
                 else
                 {
@@ -311,9 +294,4 @@ public class MyProfilePicture : MonoBehaviour
             }));
         }
     }
-
-
-
-    
-
 }

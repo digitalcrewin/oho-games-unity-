@@ -52,13 +52,6 @@ public class MyProfile : MonoBehaviour
     [Header("-----OTP input fields-----")]
     public InputField[] otpInputsArr;
 
-    //[Header("-----for image-----")]
-    //public Image profileImage;
-    //public Button profileImageButton;
-    //private string profileImagePath = "";
-    //private bool isChangingProfile = false;
-    //private byte[] newProfilePic;
-
     Coroutine coroutineRsendOTP;
 
     bool isEmailVerified;
@@ -87,7 +80,6 @@ public class MyProfile : MonoBehaviour
         switch (buttonName)
         {
             case "close":
-                //MainMenuController.instance.DestroyScreen(MainMenuScreens.Profile);
                 L_MainMenuController.instance.ShowScreen(MainMenuScreens.Dashboard);
                 break;
 
@@ -130,9 +122,7 @@ public class MyProfile : MonoBehaviour
                 SendOtpToEmail();
                 break;
 
-
             //otp screen object
-
             case "close_verify_email_otp":  
                 if (coroutineRsendOTP != null)
                     StopCoroutine(coroutineRsendOTP);
@@ -208,15 +198,13 @@ public class MyProfile : MonoBehaviour
                         {
                             verificationText.gameObject.SetActive(true);
                             isEmailVerified = false;
-                            //verifyEmailButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "Verify";
-                            verifyEmailButtonText.text = "Verify";
+                          verifyEmailButtonText.text = "Verify";
                             verifyEmailButton.interactable = true;
                         }
                         else
                         {
                             verificationText.gameObject.SetActive(false);
                             isEmailVerified = true;
-                            //verifyEmailButton.transform.GetChild(0).GetComponent<TMP_Text>().text = "Verified";
                             verifyEmailButtonText.text = "Verified";
                             verifyEmailButton.interactable = false;
                         }
@@ -225,11 +213,6 @@ public class MyProfile : MonoBehaviour
                         oldInteractableEmail = verifyEmailButton.interactable;
                         oldVerificationTextActive = verificationText.gameObject.activeSelf;
                         oldIsEmailVerifiedBtnText = verifyEmailButton.transform.GetChild(0).GetComponent<TMP_Text>().text;
-
-                        //if (data["data"]["userData"]["kyc"].ToString() == "No")
-                        //    kycPendingText.gameObject.SetActive(true);
-                        //else
-                        //    kycPendingText.gameObject.SetActive(false);
 
                         try
                         {
@@ -314,34 +297,6 @@ public class MyProfile : MonoBehaviour
         inputMaskImage.enabled = true;
         updateButton.interactable = false;
 
-        //bool isUsernameChanged, isNameChanged, isEmailChanged;
-
-        //if (!string.IsNullOrEmpty(apiUsername))
-        //{
-        //    if (!apiUsername.Equals(usernameInput.text))
-        //    {
-        //        isUsernameChanged = true;
-        //    }
-        //}
-        //if (!string.IsNullOrEmpty(apiName))
-        //{
-        //    if (!apiName.Equals(nameInput.text))
-        //    {
-        //        isNameChanged = true;
-        //    }
-        //}
-        //if (!isEmailVerified)
-        //{
-        //    if(!string.IsNullOrEmpty(apiEmail))
-        //    {
-        //        if (!apiEmail.Equals(emailInput.text))
-        //        {
-        //            isEmailChanged = true;
-        //        }
-        //    }
-        //}
-
-
         if (string.IsNullOrEmpty(usernameInput.text))
         {
             StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorText, "Enter Username", "red", 2f));
@@ -350,30 +305,13 @@ public class MyProfile : MonoBehaviour
         {
             StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorText, "Enter Name", "red", 2f));
         }
-        //else if (string.IsNullOrEmpty(emailInput.text))
-        //{
-        //    StartCoroutine(GlobalGameManager.instance.ShowPopUpTMP(errorText, "Enter Email", "red", 2f));
-        //}
         else
         {
             string jsonData = string.Empty;
-            //if (isEmailVerified)
-            //{
-                jsonData = "{" +
-                "\"username\":\"" + usernameInput.text + "\"," +
-                "\"name\":\"" + nameInput.text + "\"" +
-                "}";
-            //}
-            //else
-            //{
-            //    jsonData = "{" +
-            //    "\"username\":\"" + usernameInput.text + "\"," +
-            //    "\"name\":\"" + nameInput.text + "\"," +
-            //    "\"email\":\"" + emailInput.text + "\"" +
-            //    "}";
-            //}
-            Debug.Log("User Update json: " + jsonData);
+            jsonData = "{" + "\"username\":\"" + usernameInput.text + "\"," +
+            "\"name\":\"" + nameInput.text + "\"" + "}";
 
+            Debug.Log("User Update json: " + jsonData);
 
             StartCoroutine(L_WebServices.instance.PUTRequestData(L_GameConstant.GAME_URLS[(int)L_RequestType.UpdateUser] + L_PlayerManager.instance.GetPlayerGameData().userId, jsonData, (serverResponse, errorBool, error) =>
             {
@@ -453,8 +391,6 @@ public class MyProfile : MonoBehaviour
                         if (data["code"].ToString() == "200")
                         {
                             StartCoroutine(L_GlobalGameManager.instance.ShowPopUpTMP(errorText, data["data"]["message"].ToString(), "green", 2f));
-                            //if (Dashboard.instance != null)
-                            //    Dashboard.instance.GetProfile();
                             L_MainMenuController.instance.ShowScreen(MainMenuScreens.Profile);
                         }
                         else if (iData1.Contains("errorMessage"))

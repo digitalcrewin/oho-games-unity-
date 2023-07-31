@@ -11,7 +11,6 @@ public class Wallet : MonoBehaviour
         switch (buttonName)
         {
             case "close":
-                //MainMenuController.instance.DestroyScreen(MainMenuScreens.Wallet);
                 L_MainMenuController.instance.ShowScreen(MainMenuScreens.Dashboard);
                 break;
 

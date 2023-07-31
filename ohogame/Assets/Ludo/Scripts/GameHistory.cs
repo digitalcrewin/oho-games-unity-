@@ -7,8 +7,6 @@ using System;
 
 public class GameHistory : MonoBehaviour
 {
-    //public static GameHistory instance;
-
     public GameObject noDataTextObject;
     public GameObject gameHistoryItem;
     public Transform scrollContent;

@@ -65,34 +65,11 @@ public class PlayerFinding : MonoBehaviour
         L_MainMenuController.instance.ShowScreen(MainMenuScreens.QuitConfirm);
         if (QuitConfirm.instance != null)
             QuitConfirm.instance.isQuitApp = false;
-
-        //if (L_SocketController.instance != null)
-        //{
-        //    if (L_SocketController.instance.IsSocketOpen())
-        //    {
-        //        if (L_SocketController.instance.isRegisterSend)
-        //        {
-        //            L_SocketController.instance.RemovePlayerFromGame();
-        //        }
-        //    }
-        //}
     }
 
     public void OnGameObjectFirstTime(string opponentNameData)
     {
         opponentName.text = opponentNameData;
-
-        //JsonData data = JsonMapper.ToObject(responseText);
-        
-        //IDictionary idata = data as IDictionary;
-        //if (idata.Contains("players"))
-        //{
-            //Debug.Log("player count=" + data["players"].Count);
-            //for (int i = 0; i < data["players"].Count; i++)
-            //{
-            //    Debug.Log("player i=" + i + ", id=" + data["players"]["playerId"] + ", name=" + data["players"]["playerName"]);
-            //}
-        //}
     }
 
     public void OnGameStart(string unixTimestampStr)

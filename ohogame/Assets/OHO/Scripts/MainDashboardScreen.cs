@@ -82,6 +82,12 @@ public class MainDashboardScreen : MonoBehaviour
             GlobalGameManager.token = PrefsManager.GetPlayerData().token;
             GetUserDetails();
             bottomMenu.SetActive(true);
+
+            if (PlayerPrefs.GetString("ShowWalletScreen") == "Yes")
+            {
+                PlayerPrefs.DeleteKey("ShowWalletScreen");
+                MenuSelection(1);
+            }
         }
         else
         {
