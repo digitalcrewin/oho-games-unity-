@@ -1,0 +1,54 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class R_GameConstants : MonoBehaviour
+{
+    public static bool enableLog = true;
+    public static bool enableErrorLog = true;
+    public static bool isSeparateGame = true;
+    
+    public static int TURN_TIME = 20;
+    public static int timerStart = 0;
+    public static int playerbetAmount = 0;
+
+#region WEB
+    public const float NETWORK_CHECK_DELAY = 2f;
+    public const int API_RETRY_LIMIT = 5;
+    public const int API_TIME_OUT_LIMIT = 50;
+
+    public const string BASE_URL = "https://vikistestapi.herokuapp.com"; // = "http://18.217.69.152";
+    public const string URL = BASE_URL; // + ":3001";
+    public const string API_URL = URL + "/api"; //"/rummy/api/v1";
+
+    //public const string SOCKET_URL_FLASH = "http://3.17.201.78" + ":8888";
+    public const string SOCKET_URL = URL;
+    //public const string CLUB_SOCKET_URL = BASE_URL + ":3334";
+    //public const string TOURNAMENT_SOCKET_URL = BASE_URL + ":3335";
+    //public const string GAME_PORTAL_URL = BASE_URL;
+
+    public static string[] GAME_URLS =
+    {
+        API_URL +"/users/",
+        API_URL +"/users/login",
+        API_URL +"/users/me",
+        API_URL +"/rooms"
+    };
+#endregion
+
+#region ANIMATIONS
+    public const float CARD_ANIMATION_DURATION = 0.27f;
+    public const float BET_PLACE_ANIMATION_DURATION = 0.5f;
+    public const float LOCAL_BET_ANIMATION_DURATION = 1f;
+
+#endregion
+}
+
+[System.Serializable]
+public enum R_RequestType
+{
+    Register,
+    Login,
+    Profile,
+    Rooms
+}
