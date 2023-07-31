@@ -33,6 +33,7 @@ public class Dashboard : MonoBehaviour
         switch (buttonName)
         {
             case "wallet":
+                PlayerPrefs.SetString("ShowWalletScreen", "Yes");
                 SceneManager.LoadScene("GameScene");
                 break;
 

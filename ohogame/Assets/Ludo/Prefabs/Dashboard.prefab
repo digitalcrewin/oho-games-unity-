@@ -5716,6 +5716,7 @@ MonoBehaviour:
   userIdInput: {fileID: 8393822324684222264}
   winAmountText: {fileID: 8132238497793369548}
   errorTMP: {fileID: 90144195642503464}
+  balanceText: {fileID: 0}
 --- !u!1 &3260723159284510195
 GameObject:
   m_ObjectHideFlags: 0
@@ -9451,7 +9452,7 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: wallet
           m_BoolArgument: 0
-        m_CallState: 0
+        m_CallState: 2
 --- !u!1 &5643298500243953651
 GameObject:
   m_ObjectHideFlags: 0

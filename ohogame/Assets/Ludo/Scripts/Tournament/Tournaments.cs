@@ -5,10 +5,14 @@ using UnityEngine.UI;
 using TMPro;
 using LitJson;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Tournaments : MonoBehaviour
 {
     public static Tournaments instance;
+
+    [Header("-----Wallet Text-----")]
+    public Text walletText;
 
     [Header("-----Main Tab Toggles-----")]
     public Text upcomingTabText;
@@ -77,6 +81,7 @@ public class Tournaments : MonoBehaviour
     void Start()
     {
         Debug.Log("tournament list start() socket on");
+        walletText.text = L_GlobalGameManager.totalBalance.ToString();
 
         L_GlobalGameManager.instance.tournamentSocketController.enabled = true;
         //GlobalGameManager.instance.tournamentSocketController.isFromTournament = true;
@@ -97,7 +102,9 @@ public class Tournaments : MonoBehaviour
                 break;
 
             case "wallet":
-                L_MainMenuController.instance.ShowScreen(MainMenuScreens.Wallet);
+                PlayerPrefs.SetString("ShowWalletScreen", "Yes");
+                SceneManager.LoadScene("GameScene");
+                //L_MainMenuController.instance.ShowScreen(MainMenuScreens.Wallet);
                 break;
 
             case "rules":
