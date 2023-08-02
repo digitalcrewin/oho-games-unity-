@@ -1447,7 +1447,8 @@ string tempFinishTimerPlayerId = string.Empty;
         Debug.Log("isDropByMe="+isDropByMe);
         if (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped)
         {
-            Rummy_InGameUiManager.instance.ShowTableMessage(data[1]["message"].ToString());
+            //Rummy_InGameUiManager.instance.ShowTableMessage(data[1]["message"].ToString());
+            StartCoroutine(Rummy_InGameUiManager.instance.SetTableText(data[1]["message"].ToString(), 2f));
         }
     }
 
@@ -1600,7 +1601,8 @@ string tempFinishTimerPlayerId = string.Empty;
                     Rummy_InGameUiManager.instance.OnClickOnBack();
                 }));
             }
-            resultMinChipsInfoOnTop.text = R_SocketController.instance.selectedRow["minChips"].ToString();
+            //resultMinChipsInfoOnTop.text = R_SocketController.instance.selectedRow["minChips"].ToString();
+            resultMinChipsInfoOnTop.text = R_SocketController.instance.selectedRow["entry_fee"].ToString();
         }
     }
 
