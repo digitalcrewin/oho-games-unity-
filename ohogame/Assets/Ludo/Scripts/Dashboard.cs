@@ -36,6 +36,10 @@ public class Dashboard : MonoBehaviour
                 PlayerPrefs.SetString("ShowWalletScreen", "Yes");
                 SceneManager.LoadScene("GameScene");
                 break;
+            
+            case "back":
+                SceneManager.LoadScene("GameScene");
+                break;
 
             case "profile":
                 L_MainMenuController.instance.ShowScreen(MainMenuScreens.Profile);

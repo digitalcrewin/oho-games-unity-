@@ -114,7 +114,7 @@ public class Rummy_InGameManager : MonoBehaviour
     public bool isPlayerSubmitTimerReceived;
     public Sprite defaultCardSprite;
     public GameObject cardPulledByMe;
-    
+
     public int sittingCount;
 
     // timer
@@ -186,8 +186,8 @@ public class Rummy_InGameManager : MonoBehaviour
         TableName.text = "";// GlobalGameManager.instance.GetRoomData().title;
 
         // for player sitting position
-        Pos_3Player = new int[] {0,2,4};
-        Pos_4Player = new int[] {0,2,3,4};
+        Pos_3Player = new int[] { 0, 2, 4 };
+        Pos_4Player = new int[] { 0, 2, 3, 4 };
         Pos_5Player = new int[] { 0, 1, 2, 3, 4 };
         Pos_6Player = new int[] { 0, 1, 2, 3, 4, 5 };
         // string tossedcarddataTest = "[\"TOSSED_CARDS\",[{\"playerId\":\"502\",\"card\":\"JJ\",\"rank\":0},{\"playerId\":\"503\",\"card\":\"AH\",\"rank\":1},{\"playerId\":\"504\",\"card\":\"JS\",\"rank\":0}]]";
@@ -199,14 +199,14 @@ public class Rummy_InGameManager : MonoBehaviour
         // OnSetSeating("[\"SEATING\",{\"seats\":[\"501\",\"472\"],\"turnTimer\":30,\"finishTimer\":15}]");
         // AnimOpponentCardPicked("[\"OPPONENT_CARD_PICKED\",\"479\"]");
         // StartCoroutine(R_GlobalGameManager.instance.RunAfterDelay(1f, () => {
-            // SetTossedCardsMultiPlayer("[\"SetTossedCards\",[{\"playerId\":\"472\",\"card\":\"JJ\",\"rank\":0},{\"playerId\":\"501\",\"card\":\"AH\",\"rank\":1},{\"playerId\":\"502\",\"card\":\"2H\",\"rank\":2},{\"playerId\":\"503\",\"card\":\"3H\",\"rank\":3},{\"playerId\":\"504\",\"card\":\"4H\",\"rank\":4},{\"playerId\":\"505\",\"card\":\"5H\",\"rank\":5}]]");
-            // SetTossedCardsMultiPlayer("[\"SetTossedCards\",[{\"playerId\":\"472\",\"card\":\"JJ\",\"rank\":0},{\"playerId\":\"501\",\"card\":\"AH\",\"rank\":1},{\"playerId\":\"502\",\"card\":\"2H\",\"rank\":2},{\"playerId\":\"503\",\"card\":\"3H\",\"rank\":3}]]");
-            // SetTossedCardsMultiPlayer("[\"SetTossedCards\",[{\"playerId\":\"472\",\"card\":\"JJ\",\"rank\":0},{\"playerId\":\"501\",\"card\":\"AH\",\"rank\":1}]]");
+        // SetTossedCardsMultiPlayer("[\"SetTossedCards\",[{\"playerId\":\"472\",\"card\":\"JJ\",\"rank\":0},{\"playerId\":\"501\",\"card\":\"AH\",\"rank\":1},{\"playerId\":\"502\",\"card\":\"2H\",\"rank\":2},{\"playerId\":\"503\",\"card\":\"3H\",\"rank\":3},{\"playerId\":\"504\",\"card\":\"4H\",\"rank\":4},{\"playerId\":\"505\",\"card\":\"5H\",\"rank\":5}]]");
+        // SetTossedCardsMultiPlayer("[\"SetTossedCards\",[{\"playerId\":\"472\",\"card\":\"JJ\",\"rank\":0},{\"playerId\":\"501\",\"card\":\"AH\",\"rank\":1},{\"playerId\":\"502\",\"card\":\"2H\",\"rank\":2},{\"playerId\":\"503\",\"card\":\"3H\",\"rank\":3}]]");
+        // SetTossedCardsMultiPlayer("[\"SetTossedCards\",[{\"playerId\":\"472\",\"card\":\"JJ\",\"rank\":0},{\"playerId\":\"501\",\"card\":\"AH\",\"rank\":1}]]");
         // }));
 
         allPlayersScript[0].nameText.text = R_PlayerManager.instance.GetPlayerGameData().userName; //PlayerManager.instance
         allPlayersScript[0].balanceText.text = R_PlayerManager.instance.GetPlayerGameData().coins.ToString();
-        if (R_PlayerManager.instance.GetPlayerGameData().avatarURL!=null)
+        if (R_PlayerManager.instance.GetPlayerGameData().avatarURL != null)
         {
             StartCoroutine(R_WebServices.instance.LoadImageFromUrl(R_PlayerManager.instance.GetPlayerGameData().avatarURL, allPlayersScript[0].avtar));
             RectTransform allPlayer0Rt = allPlayersScript[0].avtar.GetComponent<RectTransform>();
@@ -229,7 +229,7 @@ public class Rummy_InGameManager : MonoBehaviour
             case "fromDeck":  //R_CardManager GetNewCard()
                 // Debug.Log("isMyTurn="+isMyTurn);
                 // Debug.Log("isCardPulledByMe="+isCardPulledByMe);
-                if (isMyTurn==true && R_SocketController.instance!=null)
+                if (isMyTurn == true && R_SocketController.instance != null)
                 {
                     if (!isCardPulledByMe)
                     {
@@ -274,12 +274,12 @@ public class Rummy_InGameManager : MonoBehaviour
                 // else 
                 if (R_CardManager.Instance.dropArea.GetComponent<Image>().sprite.name.Equals("JJ"))
                 {
-                    if (isMyTurn==true)
+                    if (isMyTurn == true)
                     {
                         StartCoroutine(Rummy_InGameUiManager.instance.SetTableText("Joker card selection is not allowed", 2f));
                     }
                 }
-                else if (isMyTurn==true && R_SocketController.instance!=null)
+                else if (isMyTurn == true && R_SocketController.instance != null)
                 {
                     if (!isCardPulledByMe)
                     {
@@ -294,7 +294,7 @@ public class Rummy_InGameManager : MonoBehaviour
                 break;
 
             case "dropBtn":
-                if (R_SocketController.instance!=null)
+                if (R_SocketController.instance != null)
                 {
                     R_CardManager.Instance.SendArrangedCard();
                     R_SocketController.instance.SendDrop();
@@ -307,25 +307,26 @@ public class Rummy_InGameManager : MonoBehaviour
                 break;
 
             case "submitBtn":
-                    // if (!isFinishSend)
-                    // {
-                        R_CardManager.Instance.DragOnShowCard();
-                    // }
-                    // else
-                    // {
-                    //     R_CardManager.Instance.SendArrangedCard();
-                    // }
-                    sortingBtn.SetActive(false);
-                    submitBtn.SetActive(false);
-                    dropBtn.SetActive(false);
-                    Rummy_InGameUiManager.instance.exitButton.interactable = false;
-                    timerFinishRing.fillAmount = 0f;
-                    //StartCoroutine(R_CardManager.Instance.ShowNotification("Waiting for Result"));
+                // if (!isFinishSend)
+                // {
+                R_CardManager.Instance.DragOnShowCard();
+                // }
+                // else
+                // {
+                //     R_CardManager.Instance.SendArrangedCard();
+                // }
+                sortingBtn.SetActive(false);
+                submitBtn.SetActive(false);
+                dropBtn.SetActive(false);
+                Rummy_InGameUiManager.instance.exitButton.interactable = false;
+                timerFinishRing.fillAmount = 0f;
+                //StartCoroutine(R_CardManager.Instance.ShowNotification("Waiting for Result"));
 
-                    if ((sittingCount==2) || (sittingCount > 2 && !isWrongShowByMe)){
-                        Rummy_InGameUiManager.instance.ShowTableMessage("Waiting for Result");
-                    }
-                    isClickedSubmit = true;
+                if ((sittingCount == 2) || (sittingCount > 2 && !isWrongShowByMe))
+                {
+                    Rummy_InGameUiManager.instance.ShowTableMessage("Waiting for Result");
+                }
+                isClickedSubmit = true;
                 break;
 
             case "yesAutoDropBtn":
@@ -334,7 +335,7 @@ public class Rummy_InGameManager : MonoBehaviour
                 DisplayDropMsg();
                 DisableControlsAndHideHandCards();
                 break;
-            
+
             case "setToggleOff":
                 autoDropToggle.GetComponent<Toggle>().isOn = false;
                 break;
@@ -390,20 +391,22 @@ public class Rummy_InGameManager : MonoBehaviour
                 delayTime = 3f;
             }
             R_Task hideCardsButtonsForMultiplayer = new R_Task(R_GlobalGameManager.instance.WaitForDelay(delayTime));
-            hideCardsButtonsForMultiplayer.Finished += delegate(bool manual) {
+            hideCardsButtonsForMultiplayer.Finished += delegate (bool manual)
+            {
                 if (!manual)
                 {
                     for (int i = 0; i < allPlayersScript.Length; i++)
                     {
-                        if (allPlayersScript[i].playerData.userId==R_PlayerManager.instance.GetPlayerGameData().userId)
+                        if (allPlayersScript[i].playerData.userId == R_PlayerManager.instance.GetPlayerGameData().userId)
                         {
                             allPlayersScript[i].timerBarImg.fillAmount = 0f;
                         }
                     }
                     DisableAllGameControlButtons();
                     R_CardManager.Instance.handCards.gameObject.AddComponent<Image>();
-                    R_CardManager.Instance.handCards.gameObject.GetComponent<Image>().color =  new Color32(0, 0, 0, 0);
-                    R_CardManager.Instance.handCards.gameObject.AddComponent<Button>().onClick.AddListener(() => {
+                    R_CardManager.Instance.handCards.gameObject.GetComponent<Image>().color = new Color32(0, 0, 0, 0);
+                    R_CardManager.Instance.handCards.gameObject.AddComponent<Button>().onClick.AddListener(() =>
+                    {
                         R_CardManager.Instance.handCards.gameObject.SetActive(false);
                         forDropOrSkipTurn.SetActive(true);
                     });
@@ -411,7 +414,7 @@ public class Rummy_InGameManager : MonoBehaviour
                     autoDropMsgPanel.SetActive(false);
                     forDropOrSkipTurn.SetActive(true);
                     R_CardManager.Instance.SetCardNotInteractable();
-                    hideCardsButtonsForMultiplayer.Finished -= delegate(bool manual){};
+                    hideCardsButtonsForMultiplayer.Finished -= delegate (bool manual) { };
                 }
             };
         }
@@ -419,7 +422,7 @@ public class Rummy_InGameManager : MonoBehaviour
 
 
 
-#region socket_response
+    #region socket_response
     public void OnSetSeating(string socketPacket)
     {
         //["SEATING",{"seats":["501","459"],"turnTimer":30,"finishTimer":15}]
@@ -432,8 +435,8 @@ public class Rummy_InGameManager : MonoBehaviour
         // Debug.Log("SetSeating = turnTimer =" + data[1]["turnTimer"]);
         // Debug.Log("SetSeating = finishTimer =" + data[1]["finishTimer"]);
 
-        if(!float.TryParse(data[1]["turnTimer"].ToString(), out turnTimer)) { } else { turnTimer -= 1; }
-        if(!float.TryParse(data[1]["finishTimer"].ToString(), out finishTimer)) { }
+        if (!float.TryParse(data[1]["turnTimer"].ToString(), out turnTimer)) { } else { turnTimer -= 1; }
+        if (!float.TryParse(data[1]["finishTimer"].ToString(), out finishTimer)) { }
 
         // Debug.Log("turnTimer="+turnTimer);
         // Debug.Log("finishTimer="+finishTimer);
@@ -501,7 +504,7 @@ public class Rummy_InGameManager : MonoBehaviour
                         setSitting_1(Pos_5Player, data[1]["seats"], playerIndex);
                     }
                 }
-                else if(sittingCount == 6)
+                else if (sittingCount == 6)
                 {
                     if (playerData.userId == R_PlayerManager.instance.GetPlayerGameData().userId)
                     {
@@ -533,7 +536,7 @@ public class Rummy_InGameManager : MonoBehaviour
                         allPlayersScript[j].balanceText.text = allPlayersScript[j].playerData.balance.ToString();
                         int currentIndex = j;
                         try
-                        {   
+                        {
                             allPlayersScript[currentIndex].playerData.profileImage = data[1]["playerDetails"][i]["profileImage"].ToString();
                             RectTransform allPlayer0Rt = allPlayersScript[currentIndex].avtar.GetComponent<RectTransform>();
                             allPlayer0Rt.offsetMin = new Vector2(0f, allPlayer0Rt.offsetMin.y);  //left
@@ -558,7 +561,7 @@ public class Rummy_InGameManager : MonoBehaviour
     public void SetTossedCardsMultiPlayer(string socketPacket)
     {
         // Debug.Log("SetTossedCards");
-// Debug.Log("socketPacket="+socketPacket);
+        // Debug.Log("socketPacket="+socketPacket);
         JsonData data = JsonMapper.ToObject(socketPacket);
         int userCount = data[1].Count;
         int playerIndex = -1;
@@ -570,10 +573,10 @@ public class Rummy_InGameManager : MonoBehaviour
             {
                 for (int i = 0; i < userCount; i++)
                 {
-                    Debug.Log("i="+i);
-                    Debug.Log("playerId="+data[1][i]["playerId"].ToString());
-                    Debug.Log("card="+data[1][i]["card"].ToString());
-                    Debug.Log("rank="+data[1][i]["rank"].ToString());
+                    Debug.Log("i=" + i);
+                    Debug.Log("playerId=" + data[1][i]["playerId"].ToString());
+                    Debug.Log("card=" + data[1][i]["card"].ToString());
+                    Debug.Log("rank=" + data[1][i]["rank"].ToString());
 
                     string currentCard = data[1][i]["card"].ToString();
                     // R_PlayerData playerData = new R_PlayerData();
@@ -581,24 +584,24 @@ public class Rummy_InGameManager : MonoBehaviour
 
                     // if (userCount == 2)
                     // {
-                        if (data[1][i]["playerId"].ToString() == R_PlayerManager.instance.GetPlayerGameData().userId)
-                        {
-                            print("IFFFFFFFFFFFF ME : " + data[1][i]["playerId"].ToString());
-                            playerIndex = i;
-                            //Debug.Log("dataCount timer img FOUND ", allPlayersScript[playerIndex].timerBarImg);
-                            allPlayersScript[0].firstCardImage.sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(currentCard);
-                            //allPlayersScript[0].firstCardImage.gameObject.SetActive(true);
-                            firstCardForAnimation.Add(allPlayersScript[0].firstCardImage.gameObject);
-                            // allPlayersScript[0].InitPlayerData(playerData);
-                        }
-                        else
-                        {
-                            allPlayersScript[3].firstCardImage.sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(currentCard);
-                            //allPlayersScript[3].firstCardImage.gameObject.SetActive(true);
-                            firstCardForAnimation.Add(allPlayersScript[3].firstCardImage.gameObject);
-                            allPlayersScript[3].gameObject.SetActive(true);
-                        }
-                        // allPlayersScript[3].InitPlayerData(playerData);
+                    if (data[1][i]["playerId"].ToString() == R_PlayerManager.instance.GetPlayerGameData().userId)
+                    {
+                        print("IFFFFFFFFFFFF ME : " + data[1][i]["playerId"].ToString());
+                        playerIndex = i;
+                        //Debug.Log("dataCount timer img FOUND ", allPlayersScript[playerIndex].timerBarImg);
+                        allPlayersScript[0].firstCardImage.sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(currentCard);
+                        //allPlayersScript[0].firstCardImage.gameObject.SetActive(true);
+                        firstCardForAnimation.Add(allPlayersScript[0].firstCardImage.gameObject);
+                        // allPlayersScript[0].InitPlayerData(playerData);
+                    }
+                    else
+                    {
+                        allPlayersScript[3].firstCardImage.sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(currentCard);
+                        //allPlayersScript[3].firstCardImage.gameObject.SetActive(true);
+                        firstCardForAnimation.Add(allPlayersScript[3].firstCardImage.gameObject);
+                        allPlayersScript[3].gameObject.SetActive(true);
+                    }
+                    // allPlayersScript[3].InitPlayerData(playerData);
                     // }
                     // else
                     // {
@@ -647,29 +650,32 @@ public class Rummy_InGameManager : MonoBehaviour
             int index = i;
 
             var animSequence = firstCardForAnimation[i].transform.DOLocalMove(endPosition, 0.5f)
-            .OnComplete(() => {
-                
-                if (index == (loopCount-1))
+            .OnComplete(() =>
+            {
+
+                if (index == (loopCount - 1))
                 {
-                    Debug.Log("isFirstPlayerSend="+isFirstPlayerSend);
+                    Debug.Log("isFirstPlayerSend=" + isFirstPlayerSend);
                     isFirstPlayerSend = true;
                     if (isFirstPlayerSend)
                     {
                         // SetFirstPlayer("[\"FIRST_PLAYER\",{\"playerId\":\"472\",\"card\":\"JJ\",\"rank\":0}]");
                         if (!string.IsNullOrEmpty(R_SocketController.instance.firstPlayerData))
                         {
-                            StartCoroutine(R_GlobalGameManager.instance.RunAfterDelay(1.5f, () => {
+                            StartCoroutine(R_GlobalGameManager.instance.RunAfterDelay(1.5f, () =>
+                            {
                                 SetFirstPlayer(R_SocketController.instance.firstPlayerData);
                             }));
-                            StartCoroutine(R_GlobalGameManager.instance.RunAfterDelay(5f, () => {
+                            StartCoroutine(R_GlobalGameManager.instance.RunAfterDelay(5f, () =>
+                            {
                                 HideFirstCards();
                             }));
                         }
                     }
-                    Debug.Log("isFirstPlayerSend2="+isFirstPlayerSend);
+                    Debug.Log("isFirstPlayerSend2=" + isFirstPlayerSend);
                 }
             });
-            
+
         }
     }
 
@@ -701,7 +707,7 @@ public class Rummy_InGameManager : MonoBehaviour
         ShowFirstCardAnimation(firstCardForAnimationMulti);
     }
 
-    public void setSitting_1(int[] playerPos, JsonData data,int playerIndex)
+    public void setSitting_1(int[] playerPos, JsonData data, int playerIndex)
     {
         //string currentCard = "";
         if (playerIndex == 0)
@@ -720,7 +726,7 @@ public class Rummy_InGameManager : MonoBehaviour
                 d = null;
             }
         }
-        else if(playerIndex == playerPos.Length-1)
+        else if (playerIndex == playerPos.Length - 1)
         {
             for (int p = 1; p < playerPos.Length; p++)
             {
@@ -743,7 +749,7 @@ public class Rummy_InGameManager : MonoBehaviour
                 string playerId = "";
                 R_PlayerData d = new R_PlayerData();
 
-                print("Modulo : "+((p+playerIndex) % data.Count));
+                print("Modulo : " + ((p + playerIndex) % data.Count));
                 int pos = ((p + playerIndex) % data.Count);
                 playerId = data[pos] + "";
                 d.userId = playerId;
@@ -790,12 +796,12 @@ public class Rummy_InGameManager : MonoBehaviour
                 d = null;
             }
         }
-        else if(playerIndex == playerPos.Length)
+        else if (playerIndex == playerPos.Length)
         {
             for (int p = (playerPos.Length - 1); p > 0; p--)
             {
                 R_PlayerData d = new R_PlayerData();
-                d.userId = data[p-1].ToString();
+                d.userId = data[p - 1].ToString();
                 allPlayersScript[playerPos[p]].nameText.text = d.userId;
                 // currentCard = data[1][p - 1]["card"].ToString();
                 // allPlayersScript[playerPos[p]].firstCardImage.sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(currentCard);
@@ -813,8 +819,8 @@ public class Rummy_InGameManager : MonoBehaviour
                 if (p <= playerIndex)
                 {
                     // currentCard = data[1][p-1]["card"].ToString();
-                    d.userId = data[p-1].ToString();
-Debug.Log("setsetting 1: "+p);
+                    d.userId = data[p - 1].ToString();
+                    Debug.Log("setsetting 1: " + p);
                     allPlayersScript[playerPos[p]].nameText.text = d.userId;
                     // allPlayersScript[playerPos[p]].firstCardImage.sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(currentCard);
                     // allPlayersScript[playerPos[p]].firstCardImage.gameObject.SetActive(true);
@@ -826,7 +832,7 @@ Debug.Log("setsetting 1: "+p);
                 {
                     // currentCard = data[1][p]["card"].ToString();
                     d.userId = data[p].ToString();
-Debug.Log("setsetting 2: "+p);
+                    Debug.Log("setsetting 2: " + p);
                     allPlayersScript[playerPos[p]].nameText.text = d.userId;
                     // allPlayersScript[playerPos[p]].firstCardImage.sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(currentCard);
                     // allPlayersScript[playerPos[p]].firstCardImage.gameObject.SetActive(true);
@@ -834,7 +840,7 @@ Debug.Log("setsetting 2: "+p);
                     allPlayersScript[playerPos[p]].InitPlayerData(d);
                     d = null;
                 }
-Debug.Log("setsetting 3: "+p);
+                Debug.Log("setsetting 3: " + p);
                 // allPlayersScript[playerPos[p]].nameText.text = d.userId;
                 // // allPlayersScript[playerPos[p]].firstCardImage.sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(currentCard);
                 // // allPlayersScript[playerPos[p]].firstCardImage.gameObject.SetActive(true);
@@ -882,20 +888,21 @@ Debug.Log("setsetting 3: "+p);
             //         firstCardWinSequence.OnComplete(() => {HideFirstCards();});
             //     }
             // }
-            
+
             R_Task coFirstPlayer;
-//             if (R_SocketController.instance.rummyUserId==data[1]["playerId"].ToString())
-//             {
-// // Debug.Log("Self TURN");
-//                 coFirstPlayer = new R_Task(Rummy_InGameUiManager.instance.SetTableText("Your Turn", 1.5f, CallbackAfterFirstPlayerMsg));
-//             }
-//             else
-//             {
-// // Debug.Log("Opponent TURN");
-//                 coFirstPlayer = new R_Task(Rummy_InGameUiManager.instance.SetTableText("Opponent Turn", 1.5f, CallbackAfterFirstPlayerMsg));
-//             }
+            //             if (R_SocketController.instance.rummyUserId==data[1]["playerId"].ToString())
+            //             {
+            // // Debug.Log("Self TURN");
+            //                 coFirstPlayer = new R_Task(Rummy_InGameUiManager.instance.SetTableText("Your Turn", 1.5f, CallbackAfterFirstPlayerMsg));
+            //             }
+            //             else
+            //             {
+            // // Debug.Log("Opponent TURN");
+            //                 coFirstPlayer = new R_Task(Rummy_InGameUiManager.instance.SetTableText("Opponent Turn", 1.5f, CallbackAfterFirstPlayerMsg));
+            //             }
             coFirstPlayer = new R_Task(Rummy_InGameUiManager.instance.SetTableText(data[1]["playerName"].ToString() + " has won Cut for Seat, and will start the hand", 3.5f, CallbackAfterFirstPlayerMsg));
-            coFirstPlayer.Finished += delegate(bool manual) {
+            coFirstPlayer.Finished += delegate (bool manual)
+            {
                 if (!manual)
                 {
                     // if (!string.IsNullOrEmpty(R_SocketController.instance.handCardsData))
@@ -907,7 +914,7 @@ Debug.Log("setsetting 3: "+p);
                     //     R_CardManager.Instance.SetDeckInfo(R_SocketController.instance.deckInfoData);
                     // }
                     Rummy_InGameUiManager.instance.ShowTableMessage("Waiting for Hand Cards");
-                    coFirstPlayer.Finished -= delegate(bool manual){};
+                    coFirstPlayer.Finished -= delegate (bool manual) { };
                 }
             };
         }
@@ -918,9 +925,9 @@ Debug.Log("setsetting 3: "+p);
         // SetHandCards("[\"HAND_CARDS\",[\"4H\",\"JH\",\"6S\",\"QS\",\"9D\",\"AS\",\"JC\",\"5S\",\"4H\",\"9C\",\"5D\",\"3D\",\"JS\"] ]");
     }
 
-string tempTimerPlayerId = string.Empty;
-// string tempTimerSec = string.Empty;
-Image timerRing = null;
+    string tempTimerPlayerId = string.Empty;
+    // string tempTimerSec = string.Empty;
+    Image timerRing = null;
     public void StartPlayerTimer(string socketPacket)
     {
         JsonData data = JsonMapper.ToObject(socketPacket);
@@ -931,11 +938,11 @@ Image timerRing = null;
             {
                 startPlayerTimerReceived++;
             }
-            else if (startPlayerTimerReceived==10)
+            else if (startPlayerTimerReceived == 10)
             {
-                Debug.Log("startPlayerTimerReceived=10, "+startPlayerTimerReceived);
+                Debug.Log("startPlayerTimerReceived=10, " + startPlayerTimerReceived);
                 startPlayerTimerReceived++;
-                Debug.Log("startPlayerTimerReceived="+startPlayerTimerReceived);
+                Debug.Log("startPlayerTimerReceived=" + startPlayerTimerReceived);
                 exitBtn.interactable = true;
             }
 
@@ -944,7 +951,7 @@ Image timerRing = null;
             string timerSec = data[1]["timmer"].ToString();
 
             // sound for last 10 seconds
-            if ((timerPlayerId==R_PlayerManager.instance.GetPlayerGameData().userId) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped))
+            if ((timerPlayerId == R_PlayerManager.instance.GetPlayerGameData().userId) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped))
             {
                 int timerSecInt = 30;
                 if (Int32.TryParse(timerSec, out timerSecInt))
@@ -954,7 +961,7 @@ Image timerRing = null;
                         R_SoundManager.instance.PlaySound(R_SoundType.TIMER_LAST_10_SEC);
                     }
                 }
-                if (timerSec==turnTimer.ToString())
+                if (timerSec == turnTimer.ToString())
                 {
                     R_SoundManager.instance.PlaySound(R_SoundType.TIMER_ON);
                 }
@@ -979,7 +986,7 @@ Image timerRing = null;
 
             // Debug.Log("timerSec: " + timerSec+", float.Parse(timerSec): " + float.Parse(tempTimerSec));
             // Debug.Log("isTossedCardReceived="+R_SocketController.instance.isTossedCardReceived);
-            if ((timerSec==turnTimer.ToString()) || !R_SocketController.instance.isTossedCardReceived)
+            if ((timerSec == turnTimer.ToString()) || !R_SocketController.instance.isTossedCardReceived)
             {
                 // Debug.Log("from 44");
                 tempTimerPlayerId = timerPlayerId;
@@ -987,7 +994,7 @@ Image timerRing = null;
                 for (int i = 0; i < countScript; i++)
                 {
                     R_PlayerData playerData = allPlayersScript[i].playerData;
-                    if (playerData.userId==timerPlayerId)
+                    if (playerData.userId == timerPlayerId)
                     {
                         playerIndex = i;
                         // Debug.Log("dataCount timer img FOUND ", allPlayersScript[playerIndex].timerBarImg);
@@ -1001,7 +1008,7 @@ Image timerRing = null;
                         playerData.isTurn = false;
                     }
                 }
-                if ((tempTimerPlayerId==R_PlayerManager.instance.GetPlayerGameData().userId) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped))
+                if ((tempTimerPlayerId == R_PlayerManager.instance.GetPlayerGameData().userId) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped))
                 {
                     // R_SoundManager.instance.PlaySound(R_SoundType.TIMER_ON);
                     isMyTurn = true;
@@ -1018,24 +1025,25 @@ Image timerRing = null;
                 else
                 {
                     isMyTurn = false;
-                    isCardPulledByMe=false;
+                    isCardPulledByMe = false;
                     dropBtn.SetActive(false);
 
                     // auto-discard logic
-                    if(!isCardDicardByMe && cardPulledByMe!=null)
+                    if (!isCardDicardByMe && cardPulledByMe != null)
                     {
                         R_CardManager.Instance.Player_1_Card.Remove(cardPulledByMe);
                         Destroy(cardPulledByMe);
                         R_CardManager.Instance.ResetSelectedCard();
 
                         R_Task runAfterWait = new R_Task(R_GlobalGameManager.instance.WaitForDelay(0.1f));
-                        runAfterWait.Finished += delegate(bool manual) {
+                        runAfterWait.Finished += delegate (bool manual)
+                        {
                             R_CardManager.Instance.SendArrangedCard();
-                            runAfterWait.Finished -= delegate(bool manual){};
+                            runAfterWait.Finished -= delegate (bool manual) { };
                         };
                     }
                     cardPulledByMe = null;
-                    isCardDicardByMe=false;
+                    isCardDicardByMe = false;
                     confirmationPanel.SetActive(false);
 
                     if ((!isMyFirstTurnTaked && !autoDropToggle.activeSelf && !isClickedSubmit) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped))
@@ -1046,9 +1054,9 @@ Image timerRing = null;
                 PlayerTimerReset();
                 if (!R_SocketController.instance.isTossedCardReceived)
                 {
-                    float divideAmtR = (1f / (turnTimer+0.5f));//1/29 == 0.034
-                // Debug.Log("turnTimer="+turnTimer);
-                // Debug.Log("divideAmtRR="+divideAmtR);
+                    float divideAmtR = (1f / (turnTimer + 0.5f));//1/29 == 0.034
+                                                                 // Debug.Log("turnTimer="+turnTimer);
+                                                                 // Debug.Log("divideAmtRR="+divideAmtR);
                     timerRing.fillAmount = (float.Parse(timerSec) * divideAmtR);//divideAmt;  //1-0.51=0.49
                     // R_SocketController.instance.isReconnectForTimer = false;
                 }
@@ -1058,18 +1066,19 @@ Image timerRing = null;
                 }
             }
 
-            if (timerSec=="1")
+            if (timerSec == "1")
             {
                 // for auto-discard mismatch
                 R_Task runAfterWait2 = new R_Task(R_GlobalGameManager.instance.WaitForDelay(0.5f));
-                runAfterWait2.Finished += delegate(bool manual) {
+                runAfterWait2.Finished += delegate (bool manual)
+                {
                     R_CardManager.Instance.discard_Btn.SetActive(false);
                     R_CardManager.Instance.showArea.SetActive(false);
-                    runAfterWait2.Finished -= delegate(bool manual){};
+                    runAfterWait2.Finished -= delegate (bool manual) { };
                 };
             }
 
-            if (timerSec=="0")
+            if (timerSec == "0")
             {
                 // Debug.Log("from 0");
                 PlayerTimerReset();
@@ -1082,9 +1091,9 @@ Image timerRing = null;
                 //     }));
                 // }
 
-                
+
                 // when turn skip
-                if(!isCardPulledByMe && !isCardDicardByMe && !isMyTurnSkipped && (timerPlayerId==R_PlayerManager.instance.GetPlayerGameData().userId))
+                if (!isCardPulledByMe && !isCardDicardByMe && !isMyTurnSkipped && (timerPlayerId == R_PlayerManager.instance.GetPlayerGameData().userId))
                 {
                     isMyTurnSkipped = true;
                     Debug.Log("1st. You SKIP your TURN");
@@ -1094,7 +1103,7 @@ Image timerRing = null;
             }
 
             // if ((timerRing!=null) && (((float.Parse(tempTimerSec))-1f))>=float.Parse(timerSec))//13 >= 14
-            if ((timerRing!=null) && (((turnTimer)-1f)>=float.Parse(timerSec)))//28 >= 29
+            if ((timerRing != null) && (((turnTimer) - 1f) >= float.Parse(timerSec)))//28 >= 29
             {
                 float divideAmt = (1f / (turnTimer));
                 // Debug.Log("divideAmt: "+divideAmt);
@@ -1115,15 +1124,15 @@ Image timerRing = null;
         JsonData data = JsonMapper.ToObject(socketPacket);
         string playerId = data[1]["playerId"].ToString();
         string from = data[1]["from"].ToString();
-        Debug.Log("playerId="+playerId);
-        Debug.Log("from="+from);
+        Debug.Log("playerId=" + playerId);
+        Debug.Log("from=" + from);
         Sprite oldOpenDeckSprite = R_CardManager.Instance.dropArea.GetComponent<Image>().sprite;
 
         IDictionary iResult = data[1] as IDictionary;
         if (iResult.Contains("nextCardOnTop"))
         {
             string nextCardOnTop = data[1]["nextCardOnTop"].ToString();
-            Debug.Log("nextCardOnTop="+nextCardOnTop);
+            Debug.Log("nextCardOnTop=" + nextCardOnTop);
             R_CardManager.Instance.dropArea.GetComponent<Image>().sprite = R_CardManager.Instance.GetSpriteFromSpriteArray(data[1]["nextCardOnTop"].ToString());
         }
 
@@ -1135,10 +1144,11 @@ Image timerRing = null;
                 for (int i = 0; i < allPlayersScript.Count(); i++)
                 {
                     if ((playerId != R_PlayerManager.instance.GetPlayerGameData().userId) && (allPlayersScript[i].playerData.userId == playerId))
-                    {   
+                    {
                         closeCardForAnimOtherPicked.gameObject.SetActive(true);
                         closeCardForAnimOtherPicked.DOMove(allPlayersScript[i].transform.GetChild(0).GetChild(1).GetChild(6).position, 0.5f);
-                        closeCardForAnimOtherPicked.DOScale(new Vector2(0.37f, 0.37f), 0.5f).OnComplete(()=>{
+                        closeCardForAnimOtherPicked.DOScale(new Vector2(0.37f, 0.37f), 0.5f).OnComplete(() =>
+                        {
                             closeCardForAnimOtherPicked.gameObject.SetActive(false);
                             closeCardForAnimOtherPicked.position = oldPosition;
                             closeCardForAnimOtherPicked.localScale = Vector3.one;
@@ -1158,7 +1168,8 @@ Image timerRing = null;
                         closeCardForAnimOtherPicked.GetComponent<Image>().sprite = oldOpenDeckSprite;
                         closeCardForAnimOtherPicked.gameObject.SetActive(true);
                         closeCardForAnimOtherPicked.DOMove(allPlayersScript[i].transform.GetChild(0).GetChild(1).GetChild(6).position, 0.5f);
-                        closeCardForAnimOtherPicked.DOScale(new Vector2(0.37f, 0.37f), 0.5f).OnComplete(()=>{
+                        closeCardForAnimOtherPicked.DOScale(new Vector2(0.37f, 0.37f), 0.5f).OnComplete(() =>
+                        {
                             closeCardForAnimOtherPicked.gameObject.SetActive(false);
                             closeCardForAnimOtherPicked.position = oldPosition;
                             closeCardForAnimOtherPicked.GetComponent<Image>().sprite = oldSprite;
@@ -1197,7 +1208,8 @@ Image timerRing = null;
                     closeCardForAnimOtherPicked.gameObject.SetActive(true);
 
                     closeCardForAnimOtherPicked.DOMove(R_CardManager.Instance.dropArea.GetComponent<RectTransform>().position, 0.5f);
-                    closeCardForAnimOtherPicked.DOScale(new Vector2(2.37f, 2.37f), 0.5f).OnComplete(()=>{
+                    closeCardForAnimOtherPicked.DOScale(new Vector2(2.37f, 2.37f), 0.5f).OnComplete(() =>
+                    {
                         closeCardForAnimOtherPicked.gameObject.SetActive(false);
                         R_CardManager.Instance.dropArea.GetComponent<Image>().sprite = spriteFromData;
                         closeCardForAnimOtherPicked.position = oldPosition;
@@ -1210,7 +1222,7 @@ Image timerRing = null;
         }
     }
 
-Image timerFinishRing = null;
+    Image timerFinishRing = null;
 
     public void PlayerSubmitTimer(string socketPacket)
     {
@@ -1219,11 +1231,11 @@ Image timerFinishRing = null;
 
         JsonData data = JsonMapper.ToObject(socketPacket);
         //["PLAYER_SUBMIT_TIMMER",{"timmer":29,"playerId":"592"}]
-        Debug.Log("PlayerSubmitTimer="+data[1]);
+        Debug.Log("PlayerSubmitTimer=" + data[1]);
         string timerSec = data[1]["timmer"].ToString();
         string playerId = data[1]["playerId"].ToString();
         int timerSecInt = int.Parse(timerSec);
-        if ((playerId==R_PlayerManager.instance.GetPlayerGameData().userId) && (timerSecInt >=0) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped))
+        if ((playerId == R_PlayerManager.instance.GetPlayerGameData().userId) && (timerSecInt >= 0) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped))
         {
             if (exitBtn.interactable)
             {
@@ -1234,12 +1246,12 @@ Image timerFinishRing = null;
                 int playerIndex = -1;
                 int countScript = allPlayersScript.Count();
 
-                if (timerSec=="29")  // || !R_SocketController.instance.isTossedCardReceived  //for reconnect
+                if (timerSec == "29")  // || !R_SocketController.instance.isTossedCardReceived  //for reconnect
                 {
                     for (int i = 0; i < countScript; i++)
                     {
                         R_PlayerData playerData = allPlayersScript[i].playerData;
-                        if (playerData.userId==R_PlayerManager.instance.GetPlayerGameData().userId)
+                        if (playerData.userId == R_PlayerManager.instance.GetPlayerGameData().userId)
                         {
                             playerIndex = i;
                             Debug.Log("dataCount timer img FOUND playerIndex=" + playerIndex, allPlayersScript[playerIndex].timerBarImg);
@@ -1252,7 +1264,7 @@ Image timerFinishRing = null;
 
                     if (!R_SocketController.instance.isTossedCardReceived) //for reconnect
                     {
-                        float divideAmtR = (1f / (finishTimer+0.5f));//1/29 == 0.034
+                        float divideAmtR = (1f / (finishTimer + 0.5f));//1/29 == 0.034
                         timerFinishRing.fillAmount = (float.Parse(timerSec) * divideAmtR);//divideAmt;  //1-0.51=0.49
                     }
                     else
@@ -1268,12 +1280,12 @@ Image timerFinishRing = null;
                     }
                     Rummy_InGameUiManager.instance.exitButton.interactable = false;
                 }
-                if (timerSec=="0")
+                if (timerSec == "0")
                 {
                     PlayerTimerReset();
                 }
 
-                if (timerFinishRing!=null && (((finishTimer)-1f)>=float.Parse(timerSec)))//14 >= 15)
+                if (timerFinishRing != null && (((finishTimer) - 1f) >= float.Parse(timerSec)))//14 >= 15)
                 {
                     float divideAmt = (1f / (finishTimer));
                     timerFinishRing.fillAmount = timerFinishRing.fillAmount - divideAmt;
@@ -1286,15 +1298,15 @@ Image timerFinishRing = null;
         }
     }
 
-string tempFinishTimerPlayerId = string.Empty;
-// string tempFinishTimerSec = string.Empty;
+    string tempFinishTimerPlayerId = string.Empty;
+    // string tempFinishTimerSec = string.Empty;
     public void StartFinishGameTimer(string socketPacket)
     {
         JsonData data = JsonMapper.ToObject(socketPacket);
         string timerSec = data[1].ToString();
-        
+
         int timerSecInt = int.Parse(timerSec);
-        if ((timerSecInt >=0) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped && ((sittingCount == 2) || (sittingCount > 2 && !isWrongShowByMe))))
+        if ((timerSecInt >= 0) && (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped && ((sittingCount == 2) || (sittingCount > 2 && !isWrongShowByMe))))
         {
             if (exitBtn.interactable)
             {
@@ -1316,7 +1328,7 @@ string tempFinishTimerPlayerId = string.Empty;
                         R_SoundManager.instance.PlaySound(R_SoundType.TIMER_LAST_10_SEC);
                     }
                 }
-                if (timerSec==finishTimer.ToString())
+                if (timerSec == finishTimer.ToString())
                 {
                     R_SoundManager.instance.PlaySound(R_SoundType.TIMER_ON);
                 }
@@ -1358,7 +1370,7 @@ string tempFinishTimerPlayerId = string.Empty;
                 //     //         if (timerFinishRing!=null && (((finishTimer)-1f)>=float.Parse(timerSec)))//14 >= 15)
                 //     //         {
                 //     //             // Debug.Log("timerRing!=null");
-                                
+
                 //     //             // Debug.Log("divideAmt: "+divideAmt);
                 //     //             timerFinishRing.fillAmount = timerFinishRing.fillAmount - divideAmt;
                 //     //             // Debug.Log("timerRing.fillAmount: "+timerFinishRing.fillAmount);
@@ -1374,81 +1386,82 @@ string tempFinishTimerPlayerId = string.Empty;
                 // }
                 // else
                 // {
-                    if ((timerSec==finishTimer.ToString()) || !R_SocketController.instance.isTossedCardReceived)
+                if ((timerSec == finishTimer.ToString()) || !R_SocketController.instance.isTossedCardReceived)
+                {
+                    // Debug.Log("from 15");
+                    // tempFinishTimerSec = timerSec;
+
+                    for (int i = 0; i < countScript; i++)
                     {
-                        // Debug.Log("from 15");
-                        // tempFinishTimerSec = timerSec;
-
-                        for (int i = 0; i < countScript; i++)
+                        R_PlayerData playerData = allPlayersScript[i].playerData;
+                        if (playerData.userId == R_PlayerManager.instance.GetPlayerGameData().userId)
                         {
-                            R_PlayerData playerData = allPlayersScript[i].playerData;
-                            if (playerData.userId==R_PlayerManager.instance.GetPlayerGameData().userId)
-                            {
-                                // R_SoundManager.instance.PlaySound(R_SoundType.TIMER_ON);
-                                playerIndex = i;
-                                // Debug.Log("dataCount timer img FOUND playerIndex=" + playerIndex, allPlayersScript[playerIndex].timerBarImg);
-                                allPlayersScript[playerIndex].timerBarImg.sprite = redTimerSprite;
-                                timerFinishRing = allPlayersScript[playerIndex].timerBarImg;
-                            }
+                            // R_SoundManager.instance.PlaySound(R_SoundType.TIMER_ON);
+                            playerIndex = i;
+                            // Debug.Log("dataCount timer img FOUND playerIndex=" + playerIndex, allPlayersScript[playerIndex].timerBarImg);
+                            allPlayersScript[playerIndex].timerBarImg.sprite = redTimerSprite;
+                            timerFinishRing = allPlayersScript[playerIndex].timerBarImg;
                         }
-
-                        PlayerTimerReset();
-                        if (!R_SocketController.instance.isTossedCardReceived)
-                        {
-                            float divideAmtR = (1f / (finishTimer+0.5f));//1/29 == 0.034
-                            timerFinishRing.fillAmount = (float.Parse(timerSec) * divideAmtR);//divideAmt;  //1-0.51=0.49
-                            // R_SocketController.instance.isReconnectForTimer = false;
-                        }
-                        else
-                        {
-                            timerFinishRing.fillAmount = 1f;
-                        }
-
-                        if (!isClickedSubmit || (isClickedSubmit==true && sittingCount > 2 && isPlayerSubmitTimerReceived))
-                        {
-                            Debug.Log("SHOW SUBMIT BUTTON");
-                            submitBtn.SetActive(true);
-                            dropBtn.SetActive(false);
-                            autoDropToggle.SetActive(false);
-                        }
-                        Rummy_InGameUiManager.instance.exitButton.interactable = false;
                     }
 
-                    if (timerSec=="0")
+                    PlayerTimerReset();
+                    if (!R_SocketController.instance.isTossedCardReceived)
                     {
-                        // Debug.Log("from 0");
-                        PlayerTimerReset();
+                        float divideAmtR = (1f / (finishTimer + 0.5f));//1/29 == 0.034
+                        timerFinishRing.fillAmount = (float.Parse(timerSec) * divideAmtR);//divideAmt;  //1-0.51=0.49
+                                                                                          // R_SocketController.instance.isReconnectForTimer = false;
                     }
+                    else
+                    {
+                        timerFinishRing.fillAmount = 1f;
+                    }
+                    Debug.Log(isClickedSubmit + " - " + sittingCount + " - " + isPlayerSubmitTimerReceived);
+                    //if (!isClickedSubmit || (isClickedSubmit == true && sittingCount > 2 && isPlayerSubmitTimerReceived))
+                    if (!isClickedSubmit && sittingCount > 2)
+                    {
+                        Debug.Log("SHOW SUBMIT BUTTON");
+                        submitBtn.SetActive(true);
+                        dropBtn.SetActive(false);
+                        autoDropToggle.SetActive(false);
+                    }
+                    Rummy_InGameUiManager.instance.exitButton.interactable = false;
+                }
 
-                    if (timerFinishRing!=null && (((finishTimer)-1f)>=float.Parse(timerSec)))//14 >= 15)
-                    {
-                        // Debug.Log("timerRing!=null");
-                        float divideAmt = (1f / (finishTimer));
-                        // Debug.Log("divideAmt: "+divideAmt);
-                        timerFinishRing.fillAmount = timerFinishRing.fillAmount - divideAmt;
-                        // Debug.Log("timerRing.fillAmount: "+timerFinishRing.fillAmount);
-                        // Debug.Log("Time.deltaTime: "+Time.deltaTime);
-                    }
+                if (timerSec == "0")
+                {
+                    // Debug.Log("from 0");
+                    PlayerTimerReset();
+                }
+
+                if (timerFinishRing != null && (((finishTimer) - 1f) >= float.Parse(timerSec)))//14 >= 15)
+                {
+                    // Debug.Log("timerRing!=null");
+                    float divideAmt = (1f / (finishTimer));
+                    // Debug.Log("divideAmt: "+divideAmt);
+                    timerFinishRing.fillAmount = timerFinishRing.fillAmount - divideAmt;
+                    // Debug.Log("timerRing.fillAmount: "+timerFinishRing.fillAmount);
+                    // Debug.Log("Time.deltaTime: "+Time.deltaTime);
+                }
                 // }
             }
         }
         else if (timerSecInt < 0)
         {
             int nextDisplaySec = Math.Abs(timerSecInt);
-            nextGameTimerText.text = "Next game starts in "+nextDisplaySec+" seconds.";
+            nextGameTimerText.text = "Next game starts in " + nextDisplaySec + " seconds.";
         }
     }
 
     public void SetSubmissionMsg(string socketPacket)
     {
         JsonData data = JsonMapper.ToObject(socketPacket);
-        Debug.Log("isMyTurnSkipped="+isMyTurnSkipped);
-        Debug.Log("isAutoDropByMe="+isAutoDropByMe);
-        Debug.Log("isDropByMe="+isDropByMe);
+        Debug.Log("isMyTurnSkipped=" + isMyTurnSkipped);
+        Debug.Log("isAutoDropByMe=" + isAutoDropByMe);
+        Debug.Log("isDropByMe=" + isDropByMe);
         if (!isAutoDropByMe && !isDropByMe && !isMyTurnSkipped)
         {
             //Rummy_InGameUiManager.instance.ShowTableMessage(data[1]["message"].ToString());
-            StartCoroutine(Rummy_InGameUiManager.instance.SetTableText(data[1]["message"].ToString(), 2f));
+            StartCoroutine(Rummy_InGameUiManager.instance.SetTableText(data[1]["message"].ToString(), 10f));
         }
     }
 
@@ -1473,7 +1486,7 @@ string tempFinishTimerPlayerId = string.Empty;
     {
         Rummy_InGameUiManager.instance.ShowTableMessage(string.Empty);
         JsonData data = JsonMapper.ToObject(socketPacket);
-        Debug.Log("SetResult: "+data[1]);
+        Debug.Log("SetResult: " + data[1]);
         // string result = data[1].ToString(); // {"459":91,"503":0,"winnerId":"503"}
         int dataCount = data[1].Count; //data[1]["result"].Count;
         // Debug.Log("dataCount: "+dataCount);
@@ -1484,7 +1497,7 @@ string tempFinishTimerPlayerId = string.Empty;
                 IDictionary iResult = data[1][i] as IDictionary;
                 if (iResult.Contains("playerId"))
                 {
-                    Debug.Log("data playerId="+ data[1][i]["playerId"] + ", score=" + data[1][i]["score"]);
+                    Debug.Log("data playerId=" + data[1][i]["playerId"] + ", score=" + data[1][i]["score"]);
 
                     GameObject resultRow = Instantiate(resultDataRow, resultScrollContent);
                     //resultScrollContent;
@@ -1501,10 +1514,10 @@ string tempFinishTimerPlayerId = string.Empty;
                     // }
                     // else
                     // {
-                        //     resultRow.transform.GetChild(0).GetComponent<Text>().text = playerId; //"Player " + i;
-                        string forTrimUsername = data[1][i]["playerName"].ToString();
-                        if (forTrimUsername.Length > 8){ forTrimUsername = forTrimUsername.Substring(0,8) + "..."; }
-                        resultRow.transform.GetChild(0).GetComponent<Text>().text = forTrimUsername;
+                    //     resultRow.transform.GetChild(0).GetComponent<Text>().text = playerId; //"Player " + i;
+                    string forTrimUsername = data[1][i]["playerName"].ToString();
+                    if (forTrimUsername.Length > 8) { forTrimUsername = forTrimUsername.Substring(0, 8) + "..."; }
+                    resultRow.transform.GetChild(0).GetComponent<Text>().text = forTrimUsername;
                     // }
 
                     resultRow.transform.GetChild(1).GetComponent<Text>().text = data[1][i]["status"].ToString();
@@ -1531,7 +1544,7 @@ string tempFinishTimerPlayerId = string.Empty;
                     // GameObject row = GameObject.Instantiate(resultDataRowGroup, resultRow.transform.GetChild(2));
                     for (int j = 0; j < data[1][i]["cards"].Count; j++)
                     {
-                        if(data[1][i]["cards"].Count == 13)
+                        if (data[1][i]["cards"].Count == 13)
                         {
                             GameObject group = GameObject.Instantiate(resultDataRowGroup, resultRow.transform.GetChild(2));
                             GameObject card = GameObject.Instantiate(resultDataRowGroupCard, group.transform);
@@ -1553,51 +1566,56 @@ string tempFinishTimerPlayerId = string.Empty;
 
 
                     // resultRow.transform.GetChild(3).GetComponent<Text>().text = data[1][i]["score"].ToString();
-// Debug.Log("Score = "+data[1][i]["score"].ToString(), resultRow.transform.GetChild(3).GetComponent<Text>());
+                    // Debug.Log("Score = "+data[1][i]["score"].ToString(), resultRow.transform.GetChild(3).GetComponent<Text>());
                     resultRow.transform.GetChild(3).GetComponent<Text>().text = data[1][i]["score"].ToString();
                     resultRow.transform.GetChild(4).GetComponent<Text>().text = data[1][i]["chips"].ToString();
                 }
                 else if (iResult.Contains("winnerId"))
                 {
-                    try {
+                    try
+                    {
                         if (data[1][i]["winnerId"].ToString() == R_PlayerManager.instance.GetPlayerGameData().userId)
                         {
                             R_SoundManager.instance.PlaySound(R_SoundType.WINNER);
-                        }            
-                    } catch(Exception e) {
-                        Debug.Log("error in getting winnerId="+e.Message);
+                        }
                     }
-                //     for (int j = 0; j < resultScrollContent.childCount; j++)
-                //     {
-                //         if (resultScrollContent.GetChild(j).name == data[1][i]["winnerId"].ToString())
-                //         {
-                //             resultScrollContent.GetChild(j).GetChild(1).GetComponent<Text>().text = "Winner";
-                //         }
-                //         else
-                //         {
-                //             resultScrollContent.GetChild(j).GetChild(1).GetComponent<Text>().text = "Lost";
-                //         }
-                //     }
+                    catch (Exception e)
+                    {
+                        Debug.Log("error in getting winnerId=" + e.Message);
+                    }
+                    //     for (int j = 0; j < resultScrollContent.childCount; j++)
+                    //     {
+                    //         if (resultScrollContent.GetChild(j).name == data[1][i]["winnerId"].ToString())
+                    //         {
+                    //             resultScrollContent.GetChild(j).GetChild(1).GetComponent<Text>().text = "Winner";
+                    //         }
+                    //         else
+                    //         {
+                    //             resultScrollContent.GetChild(j).GetChild(1).GetComponent<Text>().text = "Lost";
+                    //         }
+                    //     }
                 }
             }
             resultCutJoker.sprite = R_CardManager.Instance.jokerImg.sprite;
-            if(autoDropMsgPanel.activeSelf)
+            if (autoDropMsgPanel.activeSelf)
             {
                 autoDropMsgPanel.SetActive(false);
             }
             resultPanel.SetActive(true);
             resultAfterWait = new R_Task(R_GlobalGameManager.instance.WaitForDelay(20f));
-            resultAfterWait.Finished += delegate(bool manual) {
-                if(!manual && !isLeaveTableByMe)
+            resultAfterWait.Finished += delegate (bool manual)
+            {
+                if (!manual && !isLeaveTableByMe)
                 {
                     R_GlobalGameManager.instance.LoadScene(R_Scenes.InGame);
                 }
-                resultAfterWait.Finished -= delegate(bool manual){};
+                resultAfterWait.Finished -= delegate (bool manual) { };
             };
             if (Rummy_InGameManager.instance.lastGameToggle.GetComponent<Toggle>().isOn)
             {
                 Rummy_InGameUiManager.instance.resultTimerText.text = "Game exit in few seconds";
-                StartCoroutine(R_GlobalGameManager.instance.RunAfterDelay(10f, () => {
+                StartCoroutine(R_GlobalGameManager.instance.RunAfterDelay(10f, () =>
+                {
                     Rummy_InGameUiManager.instance.OnClickOnBack();
                 }));
             }
@@ -1636,7 +1654,7 @@ string tempFinishTimerPlayerId = string.Empty;
             }
         }
     }
-#endregion //socket_response
+    #endregion //socket_response
 
 
     void SetAvatarImages(string url, Image img, int index)
@@ -1646,11 +1664,12 @@ string tempFinishTimerPlayerId = string.Empty;
         R_Task coSetPlayerImage;
 
         coSetPlayerImage = new R_Task(R_WebServices.instance.LoadImageFromUrl(url, img));
-        coSetPlayerImage.Finished += delegate(bool manual) {
+        coSetPlayerImage.Finished += delegate (bool manual)
+        {
             if (!manual)
             {
-                Debug.Log("Image set for playerIndex="+index);
-                coSetPlayerImage.Finished -= delegate(bool manual){};
+                Debug.Log("Image set for playerIndex=" + index);
+                coSetPlayerImage.Finished -= delegate (bool manual) { };
             }
         };
     }
@@ -1663,8 +1682,8 @@ string tempFinishTimerPlayerId = string.Empty;
         yesConfBtn.onClick.RemoveAllListeners();
         reCheckConfBtn.onClick.RemoveAllListeners();
 
-        yesConfBtn.onClick.AddListener(() => {OnYesConfBtnClick(card);});
-        reCheckConfBtn.onClick.AddListener(() => {OnReCheckConfBtnClick(card);});
+        yesConfBtn.onClick.AddListener(() => { OnYesConfBtnClick(card); });
+        reCheckConfBtn.onClick.AddListener(() => { OnReCheckConfBtnClick(card); });
     }
 
     void OnYesConfBtnClick(GameObject card)
@@ -1683,8 +1702,8 @@ string tempFinishTimerPlayerId = string.Empty;
         // }
         // else
         // {
-            card.transform.SetParent(R_CardManager.Instance.handCards.GetChild(card.GetComponent<R_CardView>().groupIndexForConfirm));
-            card.transform.SetSiblingIndex(card.GetComponent<R_CardView>().cardIndexForConfirm);
+        card.transform.SetParent(R_CardManager.Instance.handCards.GetChild(card.GetComponent<R_CardView>().groupIndexForConfirm));
+        card.transform.SetSiblingIndex(card.GetComponent<R_CardView>().cardIndexForConfirm);
         // }
         confirmationPanel.SetActive(false);
     }
@@ -1740,7 +1759,7 @@ string tempFinishTimerPlayerId = string.Empty;
             Directory.CreateDirectory(Path.Combine(Application.persistentDataPath, "Screenshots"));
 
         byte[] byteArray = screenshot.EncodeToPNG();
-        File.WriteAllBytes(Path.Combine(Application.persistentDataPath , "Screenshots", "Image_" + tableValue + "_" + cardValue + date + "_" + time + ".png"), byteArray);
+        File.WriteAllBytes(Path.Combine(Application.persistentDataPath, "Screenshots", "Image_" + tableValue + "_" + cardValue + date + "_" + time + ".png"), byteArray);
 
         Debug.Log("Saved Screenshot successfully...");
         isScreenshotCaptured = false;
