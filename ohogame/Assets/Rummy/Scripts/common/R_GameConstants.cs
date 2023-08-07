@@ -17,7 +17,8 @@ public class R_GameConstants : MonoBehaviour
     public const int API_RETRY_LIMIT = 5;
     public const int API_TIME_OUT_LIMIT = 50;
 
-    public const string BASE_URL = "http://3.111.178.138";
+    public const string BASE_URL = "http://15.206.57.137"; //Production
+    //public const string BASE_URL = "http://3.111.178.138"; //Dev
 
     public const string URL = BASE_URL + ":4000/api/v1";
     public const string API_URL = URL;

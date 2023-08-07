@@ -175,7 +175,7 @@ public class WalletScreen : MonoBehaviour
 		{
 			for (int i = 0; i < data["data"].Count; i++)
 			{
-				TransactionItem transactionItem = CreateTransactionItems((data["data"][i]["other_type"]).ToString());
+				TransactionItem transactionItem = CreateTransactionItems((data["data"][i]["type"]).ToString());
 				transactionItems.Add(transactionItem);
 				string cat = "";
 				if (data["data"][i]["category"] != null)
@@ -184,6 +184,7 @@ public class WalletScreen : MonoBehaviour
 				transactionItem.SetTransactionDetails((int)data["data"][i]["transaction_id"],
 						(int)data["data"][i]["user_id"],
 						data["data"][i]["other_type"].ToString(),
+						data["data"][i]["type"].ToString(),
 						data["data"][i]["amount"].ToString(),
 						/*data["data"][i]["category"].ToString()*/cat,
 						data["data"][i]["createdAt"].ToString(),
@@ -200,11 +201,11 @@ public class WalletScreen : MonoBehaviour
 		TransactionItem transactionItem;
 		switch (typeOfTransaction) 
 		{
-			case "Deposit":
+			case "CR":
 				transactionItem = Instantiate(depositTransactionItemPrefab, transactionScrollContent).
 					GetComponent<TransactionItem>();
 				break;
-			case "Withdraw":
+			case "DR":
 				transactionItem = Instantiate(withdrawalTransactionItemPrefab, transactionScrollContent).
 					GetComponent<TransactionItem>();
 				break;
@@ -226,7 +227,7 @@ public class WalletScreen : MonoBehaviour
 	{
 		foreach (var item in transactionItems)
 		{
-			if (item.typeOfTransaction.Equals("Deposit"))
+			if (item.type.Equals("CR"))
 			{
 				item.gameObject.SetActive(toggle.isOn);
 			}
@@ -237,7 +238,7 @@ public class WalletScreen : MonoBehaviour
 	{
 		foreach (var item in transactionItems)
 		{
-			if (item.typeOfTransaction.Equals("Withdraw"))
+			if (item.type.Equals("DR"))
 			{
 				item.gameObject.SetActive(toggle.isOn);
 			}
@@ -248,7 +249,7 @@ public class WalletScreen : MonoBehaviour
 	{
 		foreach (var item in transactionItems)
 		{
-			if (item.typeOfTransaction.Equals("Cashback"))
+			if (item.otherType.Equals("Bonus"))
 			{
 				item.gameObject.SetActive(toggle.isOn);
 			}

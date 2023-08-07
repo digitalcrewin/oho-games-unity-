@@ -1417,7 +1417,7 @@ public class Rummy_InGameManager : MonoBehaviour
                     }
                     Debug.Log(isClickedSubmit + " - " + sittingCount + " - " + isPlayerSubmitTimerReceived);
                     //if (!isClickedSubmit || (isClickedSubmit == true && sittingCount > 2 && isPlayerSubmitTimerReceived))
-                    if (!isClickedSubmit && sittingCount > 2)
+                    if (!isClickedSubmit)
                     {
                         Debug.Log("SHOW SUBMIT BUTTON");
                         submitBtn.SetActive(true);

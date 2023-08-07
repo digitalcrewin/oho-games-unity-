@@ -43,8 +43,8 @@ public class GameConstants : MonoBehaviour
     public const int API_RETRY_LIMIT = 5;
     public const int API_TIME_OUT_LIMIT = 50;
 
-    public const string BASE_URL = "http://3.111.178.138"; //"http://65.0.179.149"; /*"http://43.204.114.209";*/ //"http://43.204.58.179"; //"http://3.111.156.191"; //
-                                                                                       //public const string BASE_URL = "http://bigfangame.dcgames.co.in"; // "http://3.111.156.191"; //"http://3.17.201.78";
+    public const string BASE_URL = "http://15.206.57.137"; //Production
+    //public const string BASE_URL = "http://3.111.178.138"; //Dev
 
     public const string SOCKET_URL_FLASH = "http://3.17.201.78" + ":8888";
 
