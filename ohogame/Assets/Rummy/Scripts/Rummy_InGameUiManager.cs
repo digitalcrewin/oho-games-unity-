@@ -319,6 +319,8 @@ public class Rummy_InGameUiManager : MonoBehaviour
     public void OnClickLeaveTable()
     {
         resultTimerText.text = "Game exit in few seconds";
+        if (Rummy_InGameManager.instance.resultAfterWait != null)
+            Rummy_InGameManager.instance.resultAfterWait.Stop();
         //if (!Rummy_InGameManager.instance.lastGameToggle.GetComponent<Toggle>().isOn)
         {
             R_SocketController.instance.SendExitGame();

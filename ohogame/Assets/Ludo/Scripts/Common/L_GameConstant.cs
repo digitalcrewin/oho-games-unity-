@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class L_GameConstant : MonoBehaviour
 {
-    public const string BASE_URL = "http://15.206.57.137"; //Production
-    //public const string BASE_URL = "http://3.111.178.138"; //Dev
+    //public const string BASE_URL = "http://15.206.57.137"; //Production
+    public const string BASE_URL = "http://3.111.178.138"; //Dev
 
     public const string API_URL = BASE_URL + ":4000/api/v1";
     public const string SOCKET_URL = BASE_URL + ":5000/socket.io"; //":3003";

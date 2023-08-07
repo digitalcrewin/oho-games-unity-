@@ -63,7 +63,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
         //diamondsText.text = Utility.GetTrimmedAmount("" + playerData.diamonds);
         //pointsText.text = Utility.GetTrimmedAmount("" + playerData.points);
 
-
+        MainDashboardScreen.instance.ShowScreen(MainDashboardScreen.MainDashboardScreens.Loading);
         GetProfileURLs(playerData.userId);
     }
 
@@ -77,6 +77,7 @@ public class EditProfileScreenUiManager : MonoBehaviour
         Debug.Log("Response => UserDetails: " + serverResponse);
         JsonData data = JsonMapper.ToObject(serverResponse);
 
+        MainDashboardScreen.instance.DestroyScreen(MainDashboardScreen.MainDashboardScreens.Loading);
         if (bool.Parse(data["status"].ToString()))
         {
             PlayerGameDetails playerData = Utility.ParseUserDetails(data);

@@ -14,6 +14,7 @@ public class WithdrawCash : MonoBehaviour
 		if (GlobalGameManager.instance.isKYCDone)
 			kycStatusText.text = "<color=green>Completed!</color>";
 
+		MainDashboardScreen.instance.ShowScreen(MainDashboardScreen.MainDashboardScreens.Loading);
 		GetWalletDetails();
 	}
 
@@ -27,6 +28,7 @@ public class WithdrawCash : MonoBehaviour
 		print("Wallet Response : " + serverResponse);
 		JsonData data = JsonMapper.ToObject(serverResponse);
 
+		MainDashboardScreen.instance.DestroyScreen(MainDashboardScreen.MainDashboardScreens.Loading);
 		if (data["statusCode"].ToString() == "200")
 		{
 			int totalBalance = int.Parse(data["data"]["real_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["bonus_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["win_amount"].ToString().Split('.')[0]);

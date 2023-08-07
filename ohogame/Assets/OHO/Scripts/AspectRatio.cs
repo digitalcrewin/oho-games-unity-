@@ -6,6 +6,11 @@ using UnityEngine.UI;
 public class AspectRatio : MonoBehaviour
 {
 
+    private void OnEnable()
+    {
+        Debug.Log("OnEnable " + gameObject.name);
+    }
+
     // Use this for initialization
     void Start()
     {

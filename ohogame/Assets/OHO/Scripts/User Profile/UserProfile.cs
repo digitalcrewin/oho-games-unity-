@@ -16,6 +16,7 @@ public class UserProfile : MonoBehaviour
 		else if (P_InGameUiManager.instance != null)
 			editBtn.SetActive(false);
 
+		MainDashboardScreen.instance.ShowScreen(MainDashboardScreen.MainDashboardScreens.Loading);
 		GetUserProfileDetails();
 	}
 
@@ -42,6 +43,7 @@ public class UserProfile : MonoBehaviour
 		Debug.Log("Response => UserDetails: " + serverResponse);
 		JsonData data = JsonMapper.ToObject(serverResponse);
 
+		MainDashboardScreen.instance.DestroyScreen(MainDashboardScreen.MainDashboardScreens.Loading);
 		if (data["statusCode"].ToString() == "200")
 		{
 			displayNameText.text = data["data"]["username"].ToString();

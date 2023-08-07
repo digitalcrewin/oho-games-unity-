@@ -40,6 +40,7 @@ public class P_Lobby : MonoBehaviour
 
     void Start()
     {
+        MainDashboardScreen.instance.ShowScreen(MainDashboardScreen.MainDashboardScreens.Loading);
         SetGameTypeInScrollView();
 
         //code to show "TEXAS" only

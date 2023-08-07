@@ -81,6 +81,7 @@ public class WalletScreen : MonoBehaviour
 
 	public void GetWalletDetails()
 	{
+		MainDashboardScreen.instance.ShowScreen(MainDashboardScreen.MainDashboardScreens.Loading);
 		StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/user/get-wallet", WalletDetailsResponse));
 	}
 
@@ -89,6 +90,7 @@ public class WalletScreen : MonoBehaviour
 		print("Wallet Response : " + serverResponse);
 		JsonData data = JsonMapper.ToObject(serverResponse);
 
+		MainDashboardScreen.instance.DestroyScreen(MainDashboardScreen.MainDashboardScreens.Loading);
 		if (data["statusCode"].ToString() == "200")
 		{
 			Debug.Log("Real Amount " + data["data"]["real_amount"].ToString());
