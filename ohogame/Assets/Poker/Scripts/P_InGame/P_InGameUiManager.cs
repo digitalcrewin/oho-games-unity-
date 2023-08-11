@@ -62,6 +62,11 @@ public class P_InGameUiManager : MonoBehaviour
     [SerializeField] Transform[] handRankMeterIcons;
     [SerializeField] Transform handRankHighlightFrame;
 
+    [Space(10)]
+    [SerializeField] GameObject reBuyPopUp;
+    [SerializeField] GameObject blindsUpPopUp;
+    [SerializeField] GameObject AddOnPopUp;
+
 
     void Awake()
     {
@@ -226,6 +231,8 @@ public class P_InGameUiManager : MonoBehaviour
             case P_InGameScreens.Leaderboard:
             case P_InGameScreens.SitNGoWinnerLooser:
             case P_InGameScreens.Profile:
+            case P_InGameScreens.TourneyWaitingForTable:
+            case P_InGameScreens.TourneyThanksForPlaying:
                 return P_IGScreenLayer.LAYER3;
             //case P_InGameScreens.:
                 //return P_IGScreenLayer.LAYER4;
@@ -1052,6 +1059,8 @@ public enum P_InGameScreens
     Leaderboard,
     SitNGoWinnerLooser,
     Profile,
+    TourneyWaitingForTable,
+    TourneyThanksForPlaying,
     //InGameShop,
     //HandRanking,
     //Missions,

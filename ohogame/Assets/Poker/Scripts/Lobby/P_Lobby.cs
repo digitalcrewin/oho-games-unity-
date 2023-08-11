@@ -147,6 +147,8 @@ public class P_Lobby : MonoBehaviour
                 Destroy(mainScrollViewContent.GetChild(i).gameObject);
             }
 
+            int tempCounterForTournamentDesign = 0;
+
             for (int i = 0; i < data["data"].Count; i++)
             {
                 int tempI = i;
@@ -278,6 +280,10 @@ public class P_Lobby : MonoBehaviour
                             });
                         }
                     }
+                    else if (currentCategory.Equals("TOURNAMENT"))
+                    {
+                        Debug.Log("TOURNAMENT");
+                    }
                     else
                     {
                         GameObject texas1 = Instantiate(texasPrefab, mainScrollViewContent);
@@ -343,6 +349,74 @@ public class P_Lobby : MonoBehaviour
                                 SecondPrefab("PRACTICE", data["data"][tempI]);
                             });
                         }
+                    }
+                }
+                else
+                {
+                    // temporary here for static TOURNAMENT
+                    if (currentCategory.Equals("TOURNAMENT"))
+                    {
+                        if (tempCounterForTournamentDesign == 0)
+                        {
+                            GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
+                            P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
+
+                            pLobbyTournament.registeringImg.sprite = pLobbyTournament.registeringBG;
+                            pLobbyTournament.registeringTxt.text = "Registering";
+
+                            pLobbyTournament.titleTxt.text = "Delhi Tournament";
+                            pLobbyTournament.dateMonthTxt.text = "11 Aug";
+                            pLobbyTournament.winAmountTxt.text = "5K";
+                            pLobbyTournament.activePlayersTxt.text = "2";
+                            pLobbyTournament.timerTxt.text = "07:00";
+                            pLobbyTournament.buyInTxt.text = "20";
+
+                            pLobbyTournament.registeringBtn.onClick.AddListener(() =>
+                            {
+                                SecondPrefabTournament(data["data"][tempI], "Registering");
+                            });
+                        }
+                        else if (tempCounterForTournamentDesign == 1)
+                        {
+                            GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
+                            P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
+
+                            pLobbyTournament.registeringImg.sprite = pLobbyTournament.startedNLateBG;
+                            pLobbyTournament.registeringTxt.text = "Late Reg";
+
+                            pLobbyTournament.titleTxt.text = "Hyper 1500 GTD (RE)";
+                            pLobbyTournament.dateMonthTxt.text = "10 Aug";
+                            pLobbyTournament.winAmountTxt.text = "2K";
+                            pLobbyTournament.activePlayersTxt.text = "4";
+                            pLobbyTournament.timerTxt.text = "05:00";
+                            pLobbyTournament.buyInTxt.text = "100";
+
+                            pLobbyTournament.registeringBtn.onClick.AddListener(() =>
+                            {
+                                SecondPrefabTournament(data["data"][tempI], "Late Reg");
+                            });
+                        }
+                        else if (tempCounterForTournamentDesign == 2)
+                        {
+                            GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
+                            P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
+
+                            pLobbyTournament.registeringImg.sprite = pLobbyTournament.finishedBG;
+                            pLobbyTournament.registeringTxt.text = "Finished";
+
+                            pLobbyTournament.titleTxt.text = "After Dark Hyper 1500 GTD (RE)";
+                            pLobbyTournament.dateMonthTxt.text = "8 Aug";
+                            pLobbyTournament.winAmountTxt.text = "5K";
+                            pLobbyTournament.activePlayersTxt.text = "83";
+                            pLobbyTournament.timerTxt.text = "03:00";
+                            pLobbyTournament.buyInTxt.text = "50";
+
+                            pLobbyTournament.registeringBtn.onClick.AddListener(() =>
+                            {
+                                SecondPrefabTournament(data["data"][tempI], "Finished");
+                            });
+                        }
+                        tempCounterForTournamentDesign++;
                     }
                 }
             }
@@ -591,6 +665,13 @@ public class P_Lobby : MonoBehaviour
         //}
 
         P_SocketController.instance.lobbySelectedGameType = gameType;
+    }
+
+    void SecondPrefabTournament(JsonData dataOfI, string registrationStatus)
+    {
+        string gameType = "TOURNAMENT";
+        Debug.Log("registrationStatus: " + registrationStatus);
+        P_LobbySceneManager.instance.ShowScreen(P_LobbyScreens.LobbyTournaments);
     }
 
     void ClearMainScrollView()
