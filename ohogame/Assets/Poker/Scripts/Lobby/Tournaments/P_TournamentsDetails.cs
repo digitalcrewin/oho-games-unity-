@@ -78,6 +78,8 @@ public class P_TournamentsDetails : MonoBehaviour
     [SerializeField] Text regCnfErrorTxt;
     [SerializeField] Text regCnfBuyInTxt;
     [SerializeField] Text regCnfMyBalanceTxt;
+    [SerializeField] Button regCnfRegBtn;
+    [SerializeField] Button regCnfCloseBtn;
 
     [Space(10)]
 
@@ -86,13 +88,35 @@ public class P_TournamentsDetails : MonoBehaviour
     [SerializeField] Image regSuccessImg;
 
     JsonData roomData;
+    public JsonData RoomData
+    {
+        //get { return roomData; }   // get method
+        set { roomData = value; }  // set method
+    }
+
+    public bool isMyIdRegistered = false;
 
     Coroutine tournamentsTimerCo;
 
+    void Awake()
+    {
+        instance = this;
+    }
 
     void Start()
     {
-        SetIntialData();
+        //SetIntialData();
+        Debug.Log("isMyIdRegistered:" + isMyIdRegistered);
+        if (isMyIdRegistered)
+        {
+            registerBtnImage.sprite = unRegisterBtnBG;
+            registerBtnText.text = "Unregister";
+        }
+        else
+        {
+            registerBtnImage.sprite = registerBtnBG;
+            registerBtnText.text = "Register";
+        }
     }
 
     void SetIntialData()
@@ -208,22 +232,138 @@ public class P_TournamentsDetails : MonoBehaviour
 
                     //    //GameStarted();
                     //}));
-
                     registerConfirmPopUp.SetActive(true);
 
                 }
                 else if (registerBtnText.text == "Unregister")
                 {
-                    registerBtnImage.sprite = registerBtnBG;
-                    registerBtnText.text = "Register";
+                    registerBtn.interactable = false;
+                    string jsonRequestDeReg = "{\"game_id\":" + roomData["game_id"].ToString() + "}";
+                    Debug.Log("register request json:" + jsonRequestDeReg);
+                    StartCoroutine(P_WebServices.instance.POSTRequestData(P_RequestType.DeRegisterTournament, jsonRequestDeReg, (string downloadText, bool isError, string errorString) =>
+                    {
+                        bool isResponseError = false;
+                        string unRegErrMsg = "Error in Unregister";
+                        if (isError)
+                        {
+                            if (P_GameConstant.enableErrorLog)
+                                Debug.Log("Tournament DeRegister Error: " + errorString);
+
+                            isResponseError = true;
+                        }
+                        else
+                        {
+                            if (P_GameConstant.enableLog)
+                                Debug.Log("Tournament DeRegister: " + downloadText);
+
+                            JsonData data = JsonMapper.ToObject(downloadText);
+                            IDictionary iData = data as IDictionary;
+                            if (iData.Contains("statusCode"))
+                            {
+                                if (data["statusCode"].ToString() == "200")
+                                {
+                                    registerBtnImage.sprite = registerBtnBG;
+                                    registerBtnText.text = "Register";
+                                }
+                                else
+                                {
+                                    isResponseError = true;
+                                    if (iData.Contains("message"))
+                                    {
+                                        unRegErrMsg = data["message"].ToString();
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                isResponseError = true;
+                            }
+                        }
+                        if (isResponseError)
+                        {
+                            P_LobbySceneManager.instance.ShowScreen(P_LobbyScreens.Message);
+                            if (P_Message.instance != null)
+                            {
+                                P_Message.instance.HideHeadingCloseButton();
+                                P_Message.instance.headingText.text = "Error";
+                                P_Message.instance.ShowSingleButtonPopUp(unRegErrMsg, () => {
+                                    P_LobbySceneManager.instance.DestroyScreen(P_LobbyScreens.Message);
+                                });
+                            }
+                            registerBtnImage.sprite = unRegisterBtnBG;
+                            registerBtnText.text = "Unregister";
+                        }
+                        registerBtn.interactable = true;
+                    }));
                 }
                 break;
 
             case "regCnfRegisterBtn":
-                registerBtnImage.sprite = unRegisterBtnBG;
-                registerBtnText.text = "Unregister";
-                registerConfirmPopUp.SetActive(false);
-                registerSuccessPopUp.SetActive(true);
+
+                regCnfRegBtn.interactable = false;
+                regCnfCloseBtn.interactable = false;
+                string jsonRequest = "{\"game_id\":" + roomData["game_id"].ToString() + "}";
+                Debug.Log("register request json:" + jsonRequest);
+                StartCoroutine(P_WebServices.instance.POSTRequestData(P_RequestType.RegisterTournament, jsonRequest, (string downloadText, bool isError, string errorString) =>
+                {
+                    bool isResponseError = false;
+                    string regErrMsg = "Error in Register";
+                    if (isError)
+                    {
+                        if (P_GameConstant.enableErrorLog)
+                            Debug.Log("Tournament Register Error: " + errorString);
+
+                        isResponseError = true;
+                    }
+                    else
+                    {
+                        if (P_GameConstant.enableLog)
+                            Debug.Log("Tournament Register: " + downloadText);
+
+                        JsonData data = JsonMapper.ToObject(downloadText);
+                        IDictionary iData = data as IDictionary;
+                        if (iData.Contains("statusCode"))
+                        {
+                            if (data["statusCode"].ToString() == "200")
+                            {
+                                registerBtnImage.sprite = unRegisterBtnBG;
+                                registerBtnText.text = "Unregister";
+                                registerConfirmPopUp.SetActive(false);
+                                regSuccessTxt.text = "Registered Successfully";
+                                registerSuccessPopUp.SetActive(true);
+                            }
+                            else
+                            {
+                                isResponseError = true;
+                                if (iData.Contains("message"))
+                                {
+                                    regErrMsg = data["message"].ToString();
+                                }
+                            }
+                        }
+                        else
+                        {
+                            isResponseError = true;
+                        }
+                    }
+                    if (isResponseError)
+                    {
+                        
+                        P_LobbySceneManager.instance.ShowScreen(P_LobbyScreens.Message);
+                        if (P_Message.instance != null)
+                        {
+                            P_Message.instance.HideHeadingCloseButton();
+                            P_Message.instance.headingText.text = "Error";
+                            P_Message.instance.ShowSingleButtonPopUp(regErrMsg, () => {
+                                P_LobbySceneManager.instance.DestroyScreen(P_LobbyScreens.Message);
+                                registerConfirmPopUp.SetActive(false);
+                            });
+                        }
+                    }
+                    regCnfRegBtn.interactable = true;
+                    regCnfCloseBtn.interactable = true;
+                }));
+                
                 break;
 
             case "regCnfClosePopUpBtn":
@@ -232,6 +372,14 @@ public class P_TournamentsDetails : MonoBehaviour
 
             case "regSuccessClosePopUpBtn":
                 registerSuccessPopUp.SetActive(false);
+                //StartCoroutine(GlobalGameManager.instance.RunAfterDelay(3f, () => {
+                //    if (registerBtnText.text == "Unregister")
+                //    {
+                //        P_MainSceneManager.instance.ScreenDestroy();
+                //        P_MainSceneManager.instance.LoadScene(P_MainScenes.InGame);
+                //        P_InGameUiManager.instance.ShowTournamentReBuyPopUp();
+                //    }
+                //}));
                 break;
         }
     }

@@ -1016,6 +1016,31 @@ public class P_InGameUiManager : MonoBehaviour
 
 
 
+    public void ShowTournamentReBuyPopUp()
+    {
+        reBuyPopUp.SetActive(true);
+    }
+
+    public void ShowTournamentBlindsUpPopUp()
+    {
+        blindsUpPopUp.SetActive(true);
+        StartCoroutine(GlobalGameManager.instance.RunAfterDelay(3f, () => {
+            blindsUpPopUp.SetActive(false);
+            ShowTournamentAddOnPopUp();
+        }));
+    }
+
+    public void ShowTournamentAddOnPopUp()
+    {
+        AddOnPopUp.SetActive(true);
+        StartCoroutine(GlobalGameManager.instance.RunAfterDelay(3f, () => {
+            AddOnPopUp.SetActive(false);
+        }));
+    }
+
+
+
+
 
 
     void OnDestroy()

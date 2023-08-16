@@ -283,6 +283,153 @@ public class P_Lobby : MonoBehaviour
                     else if (currentCategory.Equals("TOURNAMENT"))
                     {
                         Debug.Log("TOURNAMENT");
+
+                        GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
+                        P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
+
+                        bool isMyIdRegistered = false;
+
+                        if (iDataI.Contains("game_json_data"))
+                        {
+                            IDictionary iDataIgame = data["data"][i]["game_json_data"] as IDictionary;
+
+                            if (iDataIgame.Contains("room_name"))
+                                pLobbyTournament.titleTxt.text = data["data"][i]["game_json_data"]["room_name"].ToString();
+                            else
+                                pLobbyTournament.titleTxt.text = "";
+
+                            if (iDataIgame.Contains("prize_money"))
+                                pLobbyTournament.winAmountTxt.text = data["data"][i]["game_json_data"]["prize_money"].ToString();
+                            else
+                                pLobbyTournament.winAmountTxt.text = "";
+
+                            if (iDataIgame.Contains("minimum_buyin"))
+                                pLobbyTournament.buyInTxt.text = data["data"][i]["game_json_data"]["minimum_buyin"].ToString();
+                            else
+                                pLobbyTournament.buyInTxt.text = "";
+
+                            if (iDataIgame.Contains("totalPlayers"))
+                                pLobbyTournament.activePlayersTxt.text = data["data"][i]["game_json_data"]["totalPlayers"].ToString();
+                            else
+                                pLobbyTournament.activePlayersTxt.text = "";
+
+                            if (iDataIgame.Contains("players"))
+                            {
+                                for (int j = 0; j < data["data"][i]["game_json_data"]["players"].Count; j++)
+                                {
+                                    Debug.Log("Players: "+ data["data"][i]["game_json_data"]["players"][j].ToString());
+                                    if (data["data"][i]["game_json_data"]["players"][j].ToString() == P_SocketController.instance.gamePlayerId)
+                                        isMyIdRegistered = true;
+                                }
+                            }
+
+                            if (iDataIgame.Contains("registration_start_date") && iDataIgame.Contains("registration_end_date") && iDataIgame.Contains("start_date"))
+                            {
+                                DateTime regStartDate = Convert.ToDateTime(data["data"][i]["game_json_data"]["registration_start_date"].ToString()).ToLocalTime();
+                                DateTime gameStartDate = Convert.ToDateTime(data["data"][i]["game_json_data"]["start_date"].ToString()).ToLocalTime();
+
+
+                                DateTime today = DateTime.Now;
+
+                                TimeSpan differenceRegStart = today.Subtract(regStartDate);
+                                int totalSecondsRegStart = (int)differenceRegStart.TotalSeconds;
+
+                                TimeSpan differenceGameStart = today.Subtract(gameStartDate);
+                                int totalSecondsGameStart = (int)differenceGameStart.TotalSeconds;
+
+
+                                string buttonStatus = string.Empty;
+
+                                if (totalSecondsGameStart < 0)
+                                {
+                                    if (isMyIdRegistered)
+                                    {
+                                        buttonStatus = "Registered";
+                                    }
+                                    else
+                                    {
+                                        buttonStatus = "Register";
+                                    }
+
+                                    //if (isMyIdRegistered)
+                                    //{
+                                    //    // enrolled
+                                    //    buttonStatus = "enrolled";
+
+                                    //}
+                                    //else
+                                    //{
+                                    //    // register
+                                    //    buttonStatus = "register";
+
+                                    //}
+                                }
+                                else
+                                {
+                                    if (isMyIdRegistered)
+                                    {
+                                        buttonStatus = "Join";
+                                    }
+                                    else
+                                    {
+                                        buttonStatus = "View";
+                                    }
+
+                                    //if (totSecondLateRegWithNow < 0)
+                                    //{
+                                    //    if (isMyIdRegistered)
+                                    //    {
+                                    //        // join
+                                    //        buttonStatus = "join";
+
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        // late reg.
+                                    //        buttonStatus = "late reg.";
+
+                                    //    }
+                                    //}
+                                    //else
+                                    //{
+                                    //    if (data.status > 3)
+                                    //    {
+                                    //        // finished
+                                    //        buttonStatus = "finished";
+
+                                    //    }
+                                    //    else
+                                    //    {
+                                    //        if (isMyIdRegistered)
+                                    //        {
+                                    //            // join
+                                    //            buttonStatus = "join";
+
+                                    //        }
+                                    //        else
+                                    //        {
+                                    //            // observe
+                                    //            buttonStatus = "observe";
+
+                                    //        }
+                                    //    }
+                                    //}
+                                }
+
+
+                                pLobbyTournament.registeringImg.sprite = pLobbyTournament.registeringBG;
+                                //pLobbyTournament.registeringTxt.text = "Registering";
+                                pLobbyTournament.registeringTxt.text = buttonStatus;
+                            }
+                        }
+
+                        pLobbyTournament.dateMonthTxt.text = "11 Aug";
+                        pLobbyTournament.timerTxt.text = "07:00";
+
+                        pLobbyTournament.registeringBtn.onClick.AddListener(() =>
+                        {
+                            SecondPrefabTournament(data["data"][tempI], "Registering", isMyIdRegistered);
+                        });
                     }
                     else
                     {
@@ -354,70 +501,70 @@ public class P_Lobby : MonoBehaviour
                 else
                 {
                     // temporary here for static TOURNAMENT
-                    if (currentCategory.Equals("TOURNAMENT"))
-                    {
-                        if (tempCounterForTournamentDesign == 0)
-                        {
-                            GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
-                            P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
+                    //if (currentCategory.Equals("TOURNAMENT"))
+                    //{
+                    //    if (tempCounterForTournamentDesign == 0)
+                    //    {
+                    //        GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
+                    //        P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
 
-                            pLobbyTournament.registeringImg.sprite = pLobbyTournament.registeringBG;
-                            pLobbyTournament.registeringTxt.text = "Registering";
+                    //        pLobbyTournament.registeringImg.sprite = pLobbyTournament.registeringBG;
+                    //        pLobbyTournament.registeringTxt.text = "Registering";
 
-                            pLobbyTournament.titleTxt.text = "Delhi Tournament";
-                            pLobbyTournament.dateMonthTxt.text = "11 Aug";
-                            pLobbyTournament.winAmountTxt.text = "5K";
-                            pLobbyTournament.activePlayersTxt.text = "2";
-                            pLobbyTournament.timerTxt.text = "07:00";
-                            pLobbyTournament.buyInTxt.text = "20";
+                    //        pLobbyTournament.titleTxt.text = "Delhi Tournament";
+                    //        pLobbyTournament.dateMonthTxt.text = "11 Aug";
+                    //        pLobbyTournament.winAmountTxt.text = "5K";
+                    //        pLobbyTournament.activePlayersTxt.text = "2";
+                    //        pLobbyTournament.timerTxt.text = "07:00";
+                    //        pLobbyTournament.buyInTxt.text = "20";
 
-                            pLobbyTournament.registeringBtn.onClick.AddListener(() =>
-                            {
-                                SecondPrefabTournament(data["data"][tempI], "Registering");
-                            });
-                        }
-                        else if (tempCounterForTournamentDesign == 1)
-                        {
-                            GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
-                            P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
+                    //        pLobbyTournament.registeringBtn.onClick.AddListener(() =>
+                    //        {
+                    //            SecondPrefabTournament(data["data"][tempI], "Registering");
+                    //        });
+                    //    }
+                    //    else if (tempCounterForTournamentDesign == 1)
+                    //    {
+                    //        GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
+                    //        P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
 
-                            pLobbyTournament.registeringImg.sprite = pLobbyTournament.startedNLateBG;
-                            pLobbyTournament.registeringTxt.text = "Late Reg";
+                    //        pLobbyTournament.registeringImg.sprite = pLobbyTournament.startedNLateBG;
+                    //        pLobbyTournament.registeringTxt.text = "Late Reg";
 
-                            pLobbyTournament.titleTxt.text = "Hyper 1500 GTD (RE)";
-                            pLobbyTournament.dateMonthTxt.text = "10 Aug";
-                            pLobbyTournament.winAmountTxt.text = "2K";
-                            pLobbyTournament.activePlayersTxt.text = "4";
-                            pLobbyTournament.timerTxt.text = "05:00";
-                            pLobbyTournament.buyInTxt.text = "100";
+                    //        pLobbyTournament.titleTxt.text = "Hyper 1500 GTD (RE)";
+                    //        pLobbyTournament.dateMonthTxt.text = "10 Aug";
+                    //        pLobbyTournament.winAmountTxt.text = "2K";
+                    //        pLobbyTournament.activePlayersTxt.text = "4";
+                    //        pLobbyTournament.timerTxt.text = "05:00";
+                    //        pLobbyTournament.buyInTxt.text = "100";
 
-                            pLobbyTournament.registeringBtn.onClick.AddListener(() =>
-                            {
-                                SecondPrefabTournament(data["data"][tempI], "Late Reg");
-                            });
-                        }
-                        else if (tempCounterForTournamentDesign == 2)
-                        {
-                            GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
-                            P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
+                    //        pLobbyTournament.registeringBtn.onClick.AddListener(() =>
+                    //        {
+                    //            SecondPrefabTournament(data["data"][tempI], "Late Reg");
+                    //        });
+                    //    }
+                    //    else if (tempCounterForTournamentDesign == 2)
+                    //    {
+                    //        GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
+                    //        P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
 
-                            pLobbyTournament.registeringImg.sprite = pLobbyTournament.finishedBG;
-                            pLobbyTournament.registeringTxt.text = "Finished";
+                    //        pLobbyTournament.registeringImg.sprite = pLobbyTournament.finishedBG;
+                    //        pLobbyTournament.registeringTxt.text = "Finished";
 
-                            pLobbyTournament.titleTxt.text = "After Dark Hyper 1500 GTD (RE)";
-                            pLobbyTournament.dateMonthTxt.text = "8 Aug";
-                            pLobbyTournament.winAmountTxt.text = "5K";
-                            pLobbyTournament.activePlayersTxt.text = "83";
-                            pLobbyTournament.timerTxt.text = "03:00";
-                            pLobbyTournament.buyInTxt.text = "50";
+                    //        pLobbyTournament.titleTxt.text = "After Dark Hyper 1500 GTD (RE)";
+                    //        pLobbyTournament.dateMonthTxt.text = "8 Aug";
+                    //        pLobbyTournament.winAmountTxt.text = "5K";
+                    //        pLobbyTournament.activePlayersTxt.text = "83";
+                    //        pLobbyTournament.timerTxt.text = "03:00";
+                    //        pLobbyTournament.buyInTxt.text = "50";
 
-                            pLobbyTournament.registeringBtn.onClick.AddListener(() =>
-                            {
-                                SecondPrefabTournament(data["data"][tempI], "Finished");
-                            });
-                        }
-                        tempCounterForTournamentDesign++;
-                    }
+                    //        pLobbyTournament.registeringBtn.onClick.AddListener(() =>
+                    //        {
+                    //            SecondPrefabTournament(data["data"][tempI], "Finished");
+                    //        });
+                    //    }
+                    //    tempCounterForTournamentDesign++;
+                    //}
                 }
             }
         }
@@ -667,11 +814,19 @@ public class P_Lobby : MonoBehaviour
         P_SocketController.instance.lobbySelectedGameType = gameType;
     }
 
-    void SecondPrefabTournament(JsonData dataOfI, string registrationStatus)
+    void SecondPrefabTournament(JsonData dataOfI, string registrationStatus, bool isMyIdRegistered)
     {
         string gameType = "TOURNAMENT";
-        Debug.Log("registrationStatus: " + registrationStatus);
+
         P_LobbySceneManager.instance.ShowScreen(P_LobbyScreens.LobbyTournaments);
+        StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.1f, () => {
+            if (P_TournamentsDetails.instance != null)
+            {
+                P_TournamentsDetails.instance.RoomData = dataOfI;
+                Debug.Log("isMyIdRegistered:" + isMyIdRegistered);
+                P_TournamentsDetails.instance.isMyIdRegistered = isMyIdRegistered;
+            }
+        }));
     }
 
     void ClearMainScrollView()

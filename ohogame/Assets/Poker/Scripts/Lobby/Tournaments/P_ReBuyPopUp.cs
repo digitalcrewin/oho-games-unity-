@@ -43,6 +43,8 @@ public class P_ReBuyPopUp : MonoBehaviour
 
     public void OnClickReBuyBtn()
     {
-        Debug.Log("Re Buy clicked...");
+        //Debug.Log("Re Buy clicked...");
+        ShowReBuyPopup(false);
+        P_InGameUiManager.instance.ShowTournamentBlindsUpPopUp();
     }
 }

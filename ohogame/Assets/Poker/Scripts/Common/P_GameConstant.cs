@@ -29,7 +29,9 @@ public class P_GameConstant : MonoBehaviour
         API_URL + "/poker/tables/",
         API_URL + "/poker/hand-history/",
         API_URL + "/poker/leaderboard/",
-        API_URL + "/poker/game-result/"
+        API_URL + "/poker/game-result/",
+        API_URL + "/poker/register-tournament",
+        API_URL + "/poker/deregister-tournament"
         //API_URL + "/game",  //?type=1&varient=2
         //API_URL + "/lobby",
         //API_URL + "/lobby/players",
@@ -47,7 +49,9 @@ public enum P_RequestType
     PokerTableList,
     PokerHandHistory,
     PokerLeaderboard,
-    RealtimeResult
+    RealtimeResult,
+    RegisterTournament,
+    DeRegisterTournament
     //GameVarient,
     //GameVarientForGameId,
     //Lobby,
