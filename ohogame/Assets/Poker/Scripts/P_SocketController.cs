@@ -1103,6 +1103,20 @@ public class P_SocketController : MonoBehaviour
         request.requestDataStructure = requestStringData;
         P_SocketRequest.Add(request);
     }
+
+    public void SendJoinTournament()
+    {
+        string requestStringData = "{\"gameId\":" + gameId + ", \"userId\":" + gamePlayerId + ", \"userName\":\"" + gamePlayerName + "\"}";
+        if (P_GameConstant.enableLog)
+            Debug.Log("SendJoinTournament ---> " + requestStringData);
+        object requestObjectData = Json.Decode(requestStringData);
+        P_SocketRequest request = new P_SocketRequest();
+        request.emitEvent = "JOIN_TOURNAMENT";
+        request.plainDataToBeSend = null;
+        request.jsonDataToBeSend = requestObjectData;
+        request.requestDataStructure = requestStringData;
+        P_SocketRequest.Add(request);
+    }
     #endregion
 
 
