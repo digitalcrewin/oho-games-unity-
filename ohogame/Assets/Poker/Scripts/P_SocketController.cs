@@ -293,6 +293,8 @@ public class P_SocketController : MonoBehaviour
         socketManager.Socket.On<string>("SNG_GAME_STARTED", OnSNGGameStartReceived);
         socketManager.Socket.On<string>("SNG_WIN_LOSS", OnSNGWinLossReceived);
         socketManager.Socket.On<string>("GAME_RESULT_RES", OnGameResultResReceived);
+        socketManager.Socket.On<string>("TOURNAMENT_GAME_STARTED", OnTournamentGameStartedReceived);
+        socketManager.Socket.On<string>("TOURNAMENT_WIN_LOSS", OnTournamentWinLossReceived);
 
         socketManager.Open();
     }
@@ -734,6 +736,83 @@ public class P_SocketController : MonoBehaviour
 
         if (P_RealTimeResultSitNGo.instance != null)
             P_RealTimeResultSitNGo.instance.OnGameResultRes(str);
+    }
+
+    private void OnTournamentGameStartedReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>TOURNAMENT_GAME_STARTED</color>: " + str);
+
+        if (P_TournamentsDetails.instance != null)
+            P_TournamentsDetails.instance.OnTournamentGameStartedReceived(str);
+
+
+        JsonData data = JsonMapper.ToObject(str);
+        TABLE_ID = data["tableId"].ToString();
+        lobbySelectedGameType = "TOURNAMENT";
+
+        if (!P_MainSceneManager.instance.IsInGameSceneActive())
+        {
+            P_MainSceneManager.instance.ScreenDestroy();
+            P_MainSceneManager.instance.LoadScene(P_MainScenes.InGame);
+        }
+
+        Debug.Log("gameTableMaxPlayers: " + gameTableMaxPlayers);
+        // remaining: seat hide according to lobby maxPlayers
+        if (gameTableMaxPlayers == 6)
+        {
+            for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+            {
+                if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "2" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "6")
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+            }
+        }
+        else if (gameTableMaxPlayers == 4)
+        {
+            for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+            {
+                if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "7" ||
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "5")
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+            }
+        }
+        else if (gameTableMaxPlayers == 2)
+        {
+            for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+            {
+                if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "2" ||
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "5" ||
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.name == "6" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "7")
+                    P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+            }
+        }
+
+        int counterPos = 1;
+        for (int i = P_InGameManager.instance.allPlayerPos.Count - 1; i >= 0; i--)
+        {
+            if (P_InGameManager.instance.allPlayerPos[i].gameObject.activeSelf)
+            {
+                P_InGameManager.instance.allPlayerPos[i].transform.GetChild(0).GetComponent<P_PlayerSeat>().seatNo = counterPos.ToString();
+                counterPos++;
+            }
+            else
+            {
+                Destroy(P_InGameManager.instance.allPlayerPos[i].gameObject);
+                Destroy(P_InGameManager.instance.playersScript[i].gameObject);
+                P_InGameManager.instance.allPlayerPos.Remove(P_InGameManager.instance.allPlayerPos[i]);
+                P_InGameManager.instance.playersScript.Remove(P_InGameManager.instance.playersScript[i]);
+                P_InGameManager.instance.players.Remove(P_InGameManager.instance.players[i]);
+            }
+        }
+    }
+
+    private void OnTournamentWinLossReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>TOURNAMENT_WIN_LOSS</color>: " + str);
+
+        if (P_InGameUiManager.instance != null)
+            P_InGameUiManager.instance.OnTournamentWinLoss(str);
     }
 
     void OnSocketError(SocketCustomError args)

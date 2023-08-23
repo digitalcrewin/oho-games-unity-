@@ -178,6 +178,10 @@ public class P_TournamentsDetails : MonoBehaviour
 
         //isMyIdRegisteredFromPlayerAPI = isMyIdRegistered;
         //SetRegisterUnregisterBtnInteraction();
+
+        //if (checkForStartTournamentCo != null)
+        //    StopCoroutine(checkForStartTournamentCo);
+        //checkForStartTournamentCo = StartCoroutine(CheckForStartTournament());
     }
 
     IEnumerator StartDetailsTimer(DateTime gameStartDt)//TimeSpan t, Text sitNGoTimerText)
@@ -262,7 +266,7 @@ public class P_TournamentsDetails : MonoBehaviour
                     entriesNoData.SetActive(false);
                     entriesSelfEntry.SetActive(false);
                 }
-                isMyIdRegisteredFromPlayerAPI = false;
+                bool isMyIdRegisteredFromPlayerAPITemp = false;
 
                 for (int i = 0; i < data["data"].Count; i++)
                 {
@@ -286,9 +290,10 @@ public class P_TournamentsDetails : MonoBehaviour
                         //entriesRegisterBtnText.text = "Registered";
                         ////Image entriesRegisterBtnImage
 
-                        isMyIdRegisteredFromPlayerAPI = true;
+                        isMyIdRegisteredFromPlayerAPITemp = true;
                     }
                 }
+                isMyIdRegisteredFromPlayerAPI = isMyIdRegisteredFromPlayerAPITemp;
 
 
                 //float maxPlayers = 0f;
@@ -370,9 +375,9 @@ public class P_TournamentsDetails : MonoBehaviour
             registerBtnText.text = "Unregister";
 
             // start coroutine that continous check for tournament start
-            if (checkForStartTournamentCo != null)
-                StopCoroutine(checkForStartTournamentCo);
-            checkForStartTournamentCo = StartCoroutine(CheckForStartTournament());
+            //if (checkForStartTournamentCo != null)
+            //    StopCoroutine(checkForStartTournamentCo);
+            //checkForStartTournamentCo = StartCoroutine(CheckForStartTournament());
 
             Debug.Log("earlier isMyIdRegisteredFromPlayerAPI IF");
         }
@@ -381,50 +386,48 @@ public class P_TournamentsDetails : MonoBehaviour
             registerBtnImage.sprite = registerBtnBG;
             registerBtnText.text = "Register";
 
-            if (checkForStartTournamentCo != null)
-                StopCoroutine(checkForStartTournamentCo);
+            //if (checkForStartTournamentCo != null)
+            //    StopCoroutine(checkForStartTournamentCo);
 
             Debug.Log("earlier isMyIdRegisteredFromPlayerAPI ELSE");
         }
     }
 
-    IEnumerator CheckForStartTournament()
-    {
-        DateTime gameStartDate = Convert.ToDateTime(roomData["game_json_data"]["start_date"].ToString()).ToLocalTime();
-        //DateTime gameStartDate = Convert.ToDateTime("2023-08-21T09:39:00.000Z").ToLocalTime();
-        Debug.Log("Join Tournament gameStartDate:" + gameStartDate);
+    //IEnumerator CheckForStartTournament()
+    //{
+    //    DateTime gameStartDate = Convert.ToDateTime(roomData["game_json_data"]["start_date"].ToString()).ToLocalTime();
+    //    //DateTime gameStartDate = Convert.ToDateTime("2023-08-21T09:39:00.000Z").ToLocalTime();
+    //    Debug.Log("Join Tournament gameStartDate:" + gameStartDate);
 
-        TimeSpan differenceGameStart = DateTime.Now.Subtract(gameStartDate);
-        //Debug.Log("differenceGameStart.TotalSeconds:" + differenceGameStart.TotalSeconds);
+    //    TimeSpan differenceGameStart = DateTime.Now.Subtract(gameStartDate);
+    //    //Debug.Log("differenceGameStart.TotalSeconds:" + differenceGameStart.TotalSeconds);
 
-        while (differenceGameStart.TotalSeconds < 0)
-        {
-            differenceGameStart = differenceGameStart.Add(TimeSpan.FromSeconds(1));
-            //Debug.Log("t.Days:" + differenceGameStart.Days + ", t.Hours:" + differenceGameStart.Hours + ", t.Minutes:" + differenceGameStart.Minutes);
-            //daysTxt.text = ((int)differenceGameStart.Days * -1).ToString("D2");
-            //hoursTxt.text = ((int)differenceGameStart.Hours * -1).ToString("D2");
-            //minutesTxt.text = ((int)differenceGameStart.Minutes * -1).ToString("D2");
-            yield return new WaitForSeconds(1);
-            Debug.Log("Join Tournament while");
-        }
-        if (differenceGameStart.TotalSeconds >= 0)
-        {
-            if (isMyIdRegisteredFromPlayerAPI) //(tournamentStatus == "TOURNAMENT_STARTED") && 
-            {
-                P_SocketController.instance.gameId = roomData["game_id"].ToString();
-                P_SocketController.instance.TABLE_ID = roomData["game_id"].ToString();
+    //    while (differenceGameStart.TotalSeconds < 0)
+    //    {
+    //        differenceGameStart = differenceGameStart.Add(TimeSpan.FromSeconds(1));
+    //        //Debug.Log("t.Days:" + differenceGameStart.Days + ", t.Hours:" + differenceGameStart.Hours + ", t.Minutes:" + differenceGameStart.Minutes);
+    //        yield return new WaitForSeconds(1);
+    //        Debug.Log("Join Tournament while");
+    //    }
+    //    Debug.Log("Join Tournament while end TotalSeconds:"+ (int) differenceGameStart.TotalSeconds + ", isMyIdRegisteredFromPlayerAPI:"+ isMyIdRegisteredFromPlayerAPI);
+    //    if ((int) differenceGameStart.TotalSeconds >= 0)
+    //    {
+    //        if (isMyIdRegisteredFromPlayerAPI) //(tournamentStatus == "TOURNAMENT_STARTED") && 
+    //        {
+    //            P_SocketController.instance.gameId = roomData["game_id"].ToString();
+    //            //P_SocketController.instance.TABLE_ID = roomData["game_id"].ToString();
 
-                IDictionary RoomDataGameJsonData = roomData["game_json_data"] as IDictionary;
-                if (RoomDataGameJsonData.Contains("maximum_player_in_table"))
-                    P_SocketController.instance.gameTableMaxPlayers = Convert.ToInt32(roomData["game_json_data"]["maximum_player_in_table"].ToString());
+    //            IDictionary RoomDataGameJsonData = roomData["game_json_data"] as IDictionary;
+    //            if (RoomDataGameJsonData.Contains("maximum_player_in_table"))
+    //                P_SocketController.instance.gameTableMaxPlayers = Convert.ToInt32(roomData["game_json_data"]["maximum_player_in_table"].ToString());
 
-                P_SocketController.instance.SendJoinTournament();
-                Debug.Log("Join Tournament Sended");
-            }
-            yield return null;
-            Debug.Log("Join Tournament null");
-        }
-    }
+    //            P_SocketController.instance.SendJoinTournament();
+    //            Debug.Log("Join Tournament Sended");
+    //        }
+    //        yield return null;
+    //        Debug.Log("Join Tournament null");
+    //    }
+    //}
 
     void PrizeDataResponse(string serverResponse, bool isErrorMessage, string errorMessage)
     {
@@ -487,6 +490,11 @@ public class P_TournamentsDetails : MonoBehaviour
         {
             case "back":
                 P_LobbySceneManager.instance.DestroyScreen(P_LobbyScreens.LobbyTournaments);
+                Debug.Log("P_TournamentDetails back");
+                if (P_Lobby.instance != null)
+                {
+                    P_Lobby.instance.SetGameTypeInScrollView();
+                }
                 break;
 
             case "blind_structure":
@@ -671,5 +679,11 @@ public class P_TournamentsDetails : MonoBehaviour
                 //}));
                 break;
         }
+    }
+
+
+    public void OnTournamentGameStartedReceived(string str)
+    {
+        Debug.Log("P_TournamentDetails TournamentGameStarted: " + str);
     }
 }

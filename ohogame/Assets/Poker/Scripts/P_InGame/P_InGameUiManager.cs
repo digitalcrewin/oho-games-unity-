@@ -484,6 +484,28 @@ public class P_InGameUiManager : MonoBehaviour
         }
     }
 
+    public void OnTournamentWinLoss(string str)
+    {
+        JsonData data = JsonMapper.ToObject(str);
+
+        ShowScreen(P_InGameScreens.SitNGoWinnerLooser);
+
+        if ((bool)data["isWinner"] == true)
+        {
+            if (P_SitNGoWinnerLooser.instance != null)
+            {
+                P_SitNGoWinnerLooser.instance.SetWinner(data["amount"].ToString());
+            }
+        }
+        else
+        {
+            if (P_SitNGoWinnerLooser.instance != null)
+            {
+                P_SitNGoWinnerLooser.instance.SetLooser(data["amount"].ToString());
+            }
+        }
+    }
+
     #endregion
 
 

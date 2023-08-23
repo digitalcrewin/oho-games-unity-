@@ -27,6 +27,7 @@ public class P_Lobby : MonoBehaviour
 
     [SerializeField] Text titleText;
     public Text errorText;
+    [SerializeField] GameObject noDataText;
 
     public string currentCategory = "TEXAS";
 
@@ -71,7 +72,7 @@ public class P_Lobby : MonoBehaviour
         }
     }
 
-    void SetGameTypeInScrollView()
+    public void SetGameTypeInScrollView()
     {
         for (int i = 0; i < gameTypeStr.Length; i++)
         {
@@ -166,6 +167,9 @@ public class P_Lobby : MonoBehaviour
 
                     if (currentCategory.Equals("SIT N GO"))
                     {
+                        if (noDataText.activeInHierarchy)
+                            noDataText.SetActive(false);
+
                         GameObject sitNGoObj = Instantiate(sitNGoPrefab, mainScrollViewContent);
                         P_Lobby_SitnGo pLobbySitNGo = sitNGoObj.GetComponent<P_Lobby_SitnGo>();
 
@@ -286,7 +290,8 @@ public class P_Lobby : MonoBehaviour
                     }
                     else if (currentCategory.Equals("TOURNAMENT"))
                     {
-                        Debug.Log("TOURNAMENT");
+                        if (noDataText.activeInHierarchy)
+                            noDataText.SetActive(false);
 
                         GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
                         P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
@@ -354,7 +359,7 @@ public class P_Lobby : MonoBehaviour
 
                                 if (tournamentStatus == "CREATED")
                                 {
-                                    buttonStatus = "Register";
+                                    buttonStatus = "Reg. will Start";
                                 }
                                 else if (tournamentStatus == "REGISTRATION_OPEN")
                                 {
@@ -387,6 +392,14 @@ public class P_Lobby : MonoBehaviour
                                 {
                                     buttonStatus = "Started";
                                     pLobbyTournament.registeringImg.sprite = pLobbyTournament.startedNLateBG;
+                                    if (isMyIdRegistered)
+                                    {
+                                        P_SocketController.instance.gameId = data["data"][i]["game_id"].ToString();
+                                        if (iDataIgame.Contains("maximum_player_in_table"))
+                                            P_SocketController.instance.gameTableMaxPlayers = Convert.ToInt32(data["data"][i]["game_json_data"]["maximum_player_in_table"].ToString());
+                                        P_SocketController.instance.SendJoinTournament();
+                                        Debug.Log("Join Tournament Sended from " + data["data"][i]["game_id"].ToString() + ", name:" + data["data"][i]["game_json_data"]["room_name"].ToString());
+                                    }
                                 }
                                 else if (tournamentStatus == "TOURNAMENT_ENDED")
                                 {
@@ -399,12 +412,12 @@ public class P_Lobby : MonoBehaviour
 
                             if (regStartDate != null && gameStartDate != null)
                             {
-                                Debug.Log("gameStartDate != null regStartDate:"+ regStartDate+ ",  gameStartDate:"+ gameStartDate);
+                                //Debug.Log("gameStartDate != null regStartDate:"+ regStartDate+ ",  gameStartDate:"+ gameStartDate);
                                 DateTime today = DateTime.Now;
 
                                 TimeSpan differenceRegStart = today.Subtract((DateTime)regStartDate);
                                 int totalSecondsRegStart = (int)differenceRegStart.TotalSeconds;
-                                Debug.Log("totalSecondsRegStart:" + totalSecondsRegStart);
+                                //Debug.Log("totalSecondsRegStart:" + totalSecondsRegStart);
 
                                 TimeSpan differenceGameStart = today.Subtract((DateTime)gameStartDate);
                                 int totalSecondsGameStart = (int)differenceGameStart.TotalSeconds;
@@ -412,13 +425,13 @@ public class P_Lobby : MonoBehaviour
                                 // registration k phele ka time
                                 if ((totalSecondsRegStart < 0)) //&& (differenceRegStart.Days == 0) && (differenceRegStart.Hours == 0))
                                 {
-                                    Debug.Log("regStartDate registration k phele ka time");
+                                    //Debug.Log("regStartDate registration k phele ka time");
                                     tournamentTimerCoList.Add(
                                         StartCoroutine(TournamentStartTimer((DateTime)regStartDate, totalSecondsRegStart, pLobbyTournament.timerTxt, (myReturnValue) =>
                                         {
                                             if (myReturnValue)
                                             {
-                                                Debug.Log("Timer Finished regStartDate");
+                                                //Debug.Log("Timer Finished regStartDate");
                                                 pLobbyTournament.timerTxt.text = "";
                                                 pLobbyTournament.timerTxt.transform.parent.gameObject.SetActive(false);
                                                 P_SocketController.instance.SendGetRooms();
@@ -429,13 +442,13 @@ public class P_Lobby : MonoBehaviour
                                 // game start k phele ka time
                                 else if ((totalSecondsGameStart < 0)) //&& (differenceGameStart.Days == 0)) && (differenceGameStart.Hours == 0))
                                 {
-                                    Debug.Log("gameStartDate game start k phele ka time");
+                                    //Debug.Log("gameStartDate game start k phele ka time");
                                     tournamentTimerCoList.Add(
                                         StartCoroutine(TournamentStartTimer((DateTime)gameStartDate, totalSecondsGameStart, pLobbyTournament.timerTxt, (myReturnValue) =>
                                         {
                                             if (myReturnValue)
                                             {
-                                                Debug.Log("Timer Finished gameStartDate");
+                                                //Debug.Log("Timer Finished gameStartDate");
                                                 pLobbyTournament.timerTxt.text = "";
                                                 pLobbyTournament.timerTxt.transform.parent.gameObject.SetActive(false);
                                                 P_SocketController.instance.SendGetRooms();
@@ -554,6 +567,9 @@ public class P_Lobby : MonoBehaviour
                     }
                     else
                     {
+                        if (noDataText.activeInHierarchy)
+                            noDataText.SetActive(false);
+
                         GameObject texas1 = Instantiate(texasPrefab, mainScrollViewContent);
                         P_Lobby_Texas pLobbyTexas1 = texas1.GetComponent<P_Lobby_Texas>();
 
