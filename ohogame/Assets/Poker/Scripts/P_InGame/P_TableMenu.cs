@@ -79,6 +79,7 @@ public class P_TableMenu : MonoBehaviour
                             if (P_SocketController.instance.isJoinSended)
                             {
                                 P_SocketController.instance.SendLeaveSeat();
+                                P_InGameUiManager.instance.ResetHandMeterIcons();
                             }
                         }
                         else
