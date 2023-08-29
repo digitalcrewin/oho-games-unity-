@@ -295,6 +295,7 @@ public class P_SocketController : MonoBehaviour
         socketManager.Socket.On<string>("GAME_RESULT_RES", OnGameResultResReceived);
         socketManager.Socket.On<string>("TOURNAMENT_GAME_STARTED", OnTournamentGameStartedReceived);
         socketManager.Socket.On<string>("TOURNAMENT_WIN_LOSS", OnTournamentWinLossReceived);
+        socketManager.Socket.On<string>("WAITING_FOR_PLAYERS", OnWaitingForPlayersReceived);
 
         socketManager.Open();
     }
@@ -813,6 +814,15 @@ public class P_SocketController : MonoBehaviour
 
         if (P_InGameUiManager.instance != null)
             P_InGameUiManager.instance.OnTournamentWinLoss(str);
+    }
+
+    private void OnWaitingForPlayersReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>WAITING_FOR_PLAYERS</color>: " + str);
+
+        if (P_InGameUiManager.instance != null)
+            P_InGameUiManager.instance.OnWaitingForPlayers(str);
     }
 
     void OnSocketError(SocketCustomError args)

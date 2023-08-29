@@ -710,6 +710,12 @@ public class P_InGameManager : MonoBehaviour
             Debug.Log("LEAVE SEAT 6 " + System.DateTime.Now.ToString("hh.mm.ss.ffffff"));
         }
 
+        if (P_InGameUiManager.instance.IsScreenActive(P_InGameScreens.TourneyWaitingForTable))
+        {
+            P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.TourneyWaitingForTable);
+            Debug.Log("TourneyWaitingForTable destroyed");
+        }
+
         JsonData data = JsonMapper.ToObject(str);
 
 

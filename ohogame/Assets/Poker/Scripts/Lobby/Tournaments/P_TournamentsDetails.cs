@@ -136,6 +136,7 @@ public class P_TournamentsDetails : MonoBehaviour
         lateRegistrationTxt.text = "-";
         blindsUpTxt.text = "-";
         detailsBuyInTxt.text = roomData["game_json_data"]["minimum_buyin"].ToString();
+        regCnfBuyInTxt.text = roomData["game_json_data"]["minimum_buyin"].ToString();
         detailsPrizeTxt.text = roomData["game_json_data"]["prize_money"].ToString();
         reEntriesTxt.text = "-";
         avgStackTxt.text = roomData["game_json_data"]["default_stack"].ToString();
@@ -518,6 +519,15 @@ public class P_TournamentsDetails : MonoBehaviour
                     //    //GameStarted();
                     //}));
                     registerConfirmPopUp.SetActive(true);
+                    StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/user/get-wallet", (string serverResponse, bool isErrorMessage, string errorMessage) =>
+                    {
+                        JsonData data = JsonMapper.ToObject(serverResponse);
+                        if (data["statusCode"].ToString() == "200")
+                        {
+                            int totalBalance = int.Parse(data["data"]["real_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["bonus_amount"].ToString().Split('.')[0]) + int.Parse(data["data"]["win_amount"].ToString().Split('.')[0]);
+                            regCnfMyBalanceTxt.text = "" + totalBalance;
+                        }
+                    }));
 
                 }
                 else if (registerBtnText.text == "Unregister")

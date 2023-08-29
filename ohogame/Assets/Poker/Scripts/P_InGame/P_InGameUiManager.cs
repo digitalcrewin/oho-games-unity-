@@ -115,6 +115,8 @@ public class P_InGameUiManager : MonoBehaviour
             case "real_time_result":
                 if (P_SocketController.instance.lobbySelectedGameType == "SIT N GO")
                     ShowScreen(P_InGameScreens.RealTimeResultSitNGo);
+                else if (P_SocketController.instance.lobbySelectedGameType == "TOURNAMENT")
+                    ShowScreen(P_InGameScreens.RealTimeResultSitNGo);
                 else
                     ShowScreen(P_InGameScreens.RealTimeResult);
                 break;
@@ -504,6 +506,14 @@ public class P_InGameUiManager : MonoBehaviour
                 P_SitNGoWinnerLooser.instance.SetLooser(data["amount"].ToString());
             }
         }
+    }
+
+    public void OnWaitingForPlayers(string str)
+    {
+        JsonData data = JsonMapper.ToObject(str);
+
+        ShowScreen(P_InGameScreens.TourneyWaitingForTable);
+        Debug.Log("TourneyWaitingForTable showed");
     }
 
     #endregion
