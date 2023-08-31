@@ -397,8 +397,43 @@ public class P_Lobby : MonoBehaviour
                                         P_SocketController.instance.gameId = data["data"][i]["game_id"].ToString();
                                         if (iDataIgame.Contains("maximum_player_in_table"))
                                             P_SocketController.instance.gameTableMaxPlayers = Convert.ToInt32(data["data"][i]["game_json_data"]["maximum_player_in_table"].ToString());
-                                        P_SocketController.instance.SendJoinTournament();
-                                        Debug.Log("Join Tournament Sended from " + data["data"][i]["game_id"].ToString() + ", name:" + data["data"][i]["game_json_data"]["room_name"].ToString());
+
+                                        bool canSendJoinTournament = true;
+
+                                        // if totalSecondsGameStart > 20 - prevent multiple time SendJoinTournament()
+                                        TimeSpan differenceGameStart = DateTime.Now.Subtract((DateTime)gameStartDate);
+                                        int totalSecondsGameStart = (int)differenceGameStart.TotalSeconds;
+                                        if (totalSecondsGameStart > 20)
+                                        {
+                                            //Debug.Log("totalSecondsGameStart > 20");
+                                            canSendJoinTournament = false;
+                                        }
+
+                                        try
+                                        {
+                                            // to prevent multiple time SendJoinTournament()
+                                            if (canSendJoinTournament && P_SocketController.instance.onTournamentGameStartedData != null)
+                                            {
+                                                IDictionary iOnTournamentGameStartedData = P_SocketController.instance.onTournamentGameStartedData as IDictionary;
+                                                if (iOnTournamentGameStartedData.Contains("gameId"))
+                                                {
+                                                    if (P_SocketController.instance.onTournamentGameStartedData["gameId"].ToString() == P_SocketController.instance.gameId)
+                                                    {
+                                                        //Debug.Log("already joined");
+                                                        canSendJoinTournament = false;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        catch (Exception e)
+                                        {
+                                            Debug.Log("canSendJoinTournament check: " + e.Message);
+                                        }
+                                        
+                                        //Debug.Log("Join Tournament canSendJoinTournament: " + canSendJoinTournament);
+                                        if (canSendJoinTournament)
+                                            P_SocketController.instance.SendJoinTournament();
+                                        //Debug.Log("Join Tournament Sended from " + data["data"][i]["game_id"].ToString() + ", name:" + data["data"][i]["game_json_data"]["room_name"].ToString());
                                     }
                                 }
                                 else if (tournamentStatus == "TOURNAMENT_ENDED")

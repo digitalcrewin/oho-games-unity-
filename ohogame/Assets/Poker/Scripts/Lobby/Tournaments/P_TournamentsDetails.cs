@@ -33,6 +33,7 @@ public class P_TournamentsDetails : MonoBehaviour
     [SerializeField] Text daysTxt;
     [SerializeField] Text hoursTxt;
     [SerializeField] Text minutesTxt;
+    [SerializeField] Text secondsTxt;
     [SerializeField] Text startingLevelTxt;
     [SerializeField] Text lateRegistrationTxt;
     [SerializeField] Text blindsUpTxt;
@@ -196,6 +197,7 @@ public class P_TournamentsDetails : MonoBehaviour
             daysTxt.text = ((int)differenceGameStart.Days * -1).ToString("D2");
             hoursTxt.text = ((int)differenceGameStart.Hours * -1).ToString("D2");
             minutesTxt.text = ((int)differenceGameStart.Minutes * -1).ToString("D2");
+            secondsTxt.text = ((int)differenceGameStart.Seconds * -1).ToString("D2");
             yield return new WaitForSeconds(1);
         }
     }

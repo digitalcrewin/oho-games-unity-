@@ -196,6 +196,7 @@ public class P_RealTimeResultSitNGo : MonoBehaviour
     public void OnGameResultRes(string str)
     {
         JsonData data = JsonMapper.ToObject(str);
+        IDictionary iData = data as IDictionary;
 
         levelTxt.text = "Level " + data["currentLevel"].ToString();
         currentSbBbTxt.text = data["currentSB"].ToString() + "/" + data["currentBB"].ToString();
@@ -243,21 +244,27 @@ public class P_RealTimeResultSitNGo : MonoBehaviour
         }
 
         ClearPrizeScrollView();
-        for (int i = 0; i < data["prize_structure"].Count; i++)
+        if (iData.Contains("prize_structure"))
         {
-            GameObject go = Instantiate(prizeScrollItemPrefab, prizeContent);
-            go.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = data["prize_structure"][i]["rank"].ToString();
-            go.transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = "<sup><size=30><sprite=0></size></sup>" + data["prize_structure"][i]["price"].ToString();
+            for (int i = 0; i < data["prize_structure"].Count; i++)
+            {
+                GameObject go = Instantiate(prizeScrollItemPrefab, prizeContent);
+                go.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = data["prize_structure"][i]["rank"].ToString();
+                go.transform.GetChild(1).GetChild(0).GetComponent<TMP_Text>().text = "<sup><size=30><sprite=0></size></sup>" + data["prize_structure"][i]["price"].ToString();
+            }
         }
 
         ClearBlindScrollView();
-        for (int i = 0; i < data["blind_structure"].Count; i++)
+        if (iData.Contains("blind_structure"))
         {
-            GameObject go = Instantiate(blindScrollItemPrefab, blindContent);
-            go.transform.GetChild(0).GetComponent<Text>().text = data["blind_structure"][i]["level"].ToString();
-            go.transform.GetChild(1).GetComponent<Text>().text = data["blind_structure"][i]["small_blind"].ToString() + " / " + data["blind_structure"][i]["big_blind"].ToString();
-            go.transform.GetChild(2).GetComponent<Text>().text = data["blind_structure"][i]["ante"].ToString();
-            go.transform.GetChild(3).GetComponent<Text>().text = data["blind_structure"][i]["blinds_up"].ToString() + "m";
+            for (int i = 0; i < data["blind_structure"].Count; i++)
+            {
+                GameObject go = Instantiate(blindScrollItemPrefab, blindContent);
+                go.transform.GetChild(0).GetComponent<Text>().text = data["blind_structure"][i]["level"].ToString();
+                go.transform.GetChild(1).GetComponent<Text>().text = data["blind_structure"][i]["small_blind"].ToString() + " / " + data["blind_structure"][i]["big_blind"].ToString();
+                go.transform.GetChild(2).GetComponent<Text>().text = data["blind_structure"][i]["ante"].ToString();
+                go.transform.GetChild(3).GetComponent<Text>().text = data["blind_structure"][i]["blinds_up"].ToString() + "m";
+            }
         }
     }
 

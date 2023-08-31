@@ -78,6 +78,10 @@ public class P_SocketController : MonoBehaviour
     public bool isLeaveSeatSended;
     //bool isSNGGameStartReceived = false;
 
+    // tournament related
+    public JsonData onTournamentGameStartedData;
+    public JsonData sendJoinTournamentData;
+
     void Awake()
     {
         instance = this;
@@ -96,6 +100,9 @@ public class P_SocketController : MonoBehaviour
         //StartCoroutine(WaitAndCheckInternetConnection());
         SetStartingDetails();
         Connect();
+
+        onTournamentGameStartedData = null;
+        sendJoinTournamentData = null;
     }
 
     private bool OnQuit()
@@ -296,6 +303,7 @@ public class P_SocketController : MonoBehaviour
         socketManager.Socket.On<string>("TOURNAMENT_GAME_STARTED", OnTournamentGameStartedReceived);
         socketManager.Socket.On<string>("TOURNAMENT_WIN_LOSS", OnTournamentWinLossReceived);
         socketManager.Socket.On<string>("WAITING_FOR_PLAYERS", OnWaitingForPlayersReceived);
+        socketManager.Socket.On<string>("MERGING_TABLES", OnMergingTablesReceived);
 
         socketManager.Open();
     }
@@ -750,6 +758,7 @@ public class P_SocketController : MonoBehaviour
 
         JsonData data = JsonMapper.ToObject(str);
         TABLE_ID = data["tableId"].ToString();
+        onTournamentGameStartedData = data;
         lobbySelectedGameType = "TOURNAMENT";
 
         if (!P_MainSceneManager.instance.IsInGameSceneActive())
@@ -758,6 +767,97 @@ public class P_SocketController : MonoBehaviour
             P_MainSceneManager.instance.LoadScene(P_MainScenes.InGame);
         }
 
+        SetSeating();
+
+        //Debug.Log("gameTableMaxPlayers: " + gameTableMaxPlayers);
+        //// remaining: seat hide according to lobby maxPlayers
+        //if (gameTableMaxPlayers == 6)
+        //{
+        //    for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+        //    {
+        //        if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "2" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "6")
+        //            P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+        //    }
+        //}
+        //else if (gameTableMaxPlayers == 4)
+        //{
+        //    for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+        //    {
+        //        if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "7" ||
+        //            P_InGameManager.instance.allPlayerPos[i].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "5")
+        //            P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+        //    }
+        //}
+        //else if (gameTableMaxPlayers == 2)
+        //{
+        //    for (int i = 0; i < P_InGameManager.instance.allPlayerPos.Count; i++)
+        //    {
+        //        if (P_InGameManager.instance.allPlayerPos[i].gameObject.name == "1" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "2" ||
+        //            P_InGameManager.instance.allPlayerPos[i].gameObject.name == "3" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "5" ||
+        //            P_InGameManager.instance.allPlayerPos[i].gameObject.name == "6" || P_InGameManager.instance.allPlayerPos[i].gameObject.name == "7")
+        //            P_InGameManager.instance.allPlayerPos[i].gameObject.SetActive(false);
+        //    }
+        //}
+
+        //int counterPos = 1;
+        //for (int i = P_InGameManager.instance.allPlayerPos.Count - 1; i >= 0; i--)
+        //{
+        //    if (P_InGameManager.instance.allPlayerPos[i].gameObject.activeSelf)
+        //    {
+        //        P_InGameManager.instance.allPlayerPos[i].transform.GetChild(0).GetComponent<P_PlayerSeat>().seatNo = counterPos.ToString();
+        //        counterPos++;
+        //    }
+        //    else
+        //    {
+        //        Destroy(P_InGameManager.instance.allPlayerPos[i].gameObject);
+        //        Destroy(P_InGameManager.instance.playersScript[i].gameObject);
+        //        P_InGameManager.instance.allPlayerPos.Remove(P_InGameManager.instance.allPlayerPos[i]);
+        //        P_InGameManager.instance.playersScript.Remove(P_InGameManager.instance.playersScript[i]);
+        //        P_InGameManager.instance.players.Remove(P_InGameManager.instance.players[i]);
+        //    }
+        //}
+    }
+
+    private void OnTournamentWinLossReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>TOURNAMENT_WIN_LOSS</color>: " + str);
+
+        if (P_InGameUiManager.instance != null)
+            P_InGameUiManager.instance.OnTournamentWinLoss(str);
+    }
+
+    private void OnWaitingForPlayersReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>WAITING_FOR_PLAYERS</color>: " + str);
+
+        if (P_InGameUiManager.instance != null)
+            P_InGameUiManager.instance.OnWaitingForPlayers(str);
+    }
+
+    private void OnMergingTablesReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>MERGING_TABLES</color>: " + str);
+
+        JsonData data = JsonMapper.ToObject(str);
+        TABLE_ID = data["tableId"].ToString();
+        gameId = data["gameId"].ToString();
+
+        lobbySelectedGameType = "TOURNAMENT";
+
+        //if (P_MainSceneManager.instance.IsInGameSceneActive())
+        {
+            P_MainSceneManager.instance.ScreenDestroy();
+            P_MainSceneManager.instance.LoadScene(P_MainScenes.InGame);
+        }
+
+        SetSeating();
+    }
+
+    void SetSeating()
+    {
         Debug.Log("gameTableMaxPlayers: " + gameTableMaxPlayers);
         // remaining: seat hide according to lobby maxPlayers
         if (gameTableMaxPlayers == 6)
@@ -805,24 +905,6 @@ public class P_SocketController : MonoBehaviour
                 P_InGameManager.instance.players.Remove(P_InGameManager.instance.players[i]);
             }
         }
-    }
-
-    private void OnTournamentWinLossReceived(string str)
-    {
-        if (P_GameConstant.enableLog)
-            Debug.Log("<color=yellow>TOURNAMENT_WIN_LOSS</color>: " + str);
-
-        if (P_InGameUiManager.instance != null)
-            P_InGameUiManager.instance.OnTournamentWinLoss(str);
-    }
-
-    private void OnWaitingForPlayersReceived(string str)
-    {
-        if (P_GameConstant.enableLog)
-            Debug.Log("<color=yellow>WAITING_FOR_PLAYERS</color>: " + str);
-
-        if (P_InGameUiManager.instance != null)
-            P_InGameUiManager.instance.OnWaitingForPlayers(str);
     }
 
     void OnSocketError(SocketCustomError args)
@@ -1205,6 +1287,7 @@ public class P_SocketController : MonoBehaviour
         request.jsonDataToBeSend = requestObjectData;
         request.requestDataStructure = requestStringData;
         P_SocketRequest.Add(request);
+        sendJoinTournamentData = JsonMapper.ToObject("{\"gameId\":" + gameId + "}");
     }
     #endregion
 

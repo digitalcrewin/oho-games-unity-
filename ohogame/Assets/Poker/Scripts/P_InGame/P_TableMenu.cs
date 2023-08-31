@@ -86,6 +86,8 @@ public class P_TableMenu : MonoBehaviour
                         {
                             P_SocketController.instance.SendLeaveViewer();
                         }
+                        P_SocketController.instance.onTournamentGameStartedData = null;
+                        P_SocketController.instance.sendJoinTournamentData = null;
                     }
                     OnClickOnButton("close");
                 }
@@ -136,6 +138,8 @@ public class P_TableMenu : MonoBehaviour
                             P_SocketController.instance.SendLeaveViewer();
                         }
                         P_SocketController.instance.isJoinSended = false;
+                        P_SocketController.instance.onTournamentGameStartedData = null;
+                        P_SocketController.instance.sendJoinTournamentData = null;
                     }
                     P_InGameUiManager.instance.ShowScreen(P_InGameScreens.Loading);
 
