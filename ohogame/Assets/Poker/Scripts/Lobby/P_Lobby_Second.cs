@@ -122,6 +122,9 @@ public class P_Lobby_Second : MonoBehaviour
                 pLobbyTexas1.bgButton.onClick.AddListener(() =>
                 {
                     if (P_GameConstant.enableLog)
+                        Debug.Log("bgButton.onClick");
+
+                    if (P_GameConstant.enableLog)
                         Debug.Log("TableId: " + data["data"][tempI]["game_id"].ToString());
 
                     P_MainSceneManager.instance.ScreenDestroy();
