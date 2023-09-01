@@ -81,6 +81,7 @@ public class P_SocketController : MonoBehaviour
     // tournament related
     public JsonData onTournamentGameStartedData;
     public JsonData sendJoinTournamentData;
+    public string tournamentName;
 
     void Awake()
     {
@@ -623,6 +624,10 @@ public class P_SocketController : MonoBehaviour
         else if (P_LobbySceneManager.instance != null)
         {
             P_Lobby.instance.CreateLobby1Data(str);
+            if (P_TournamentsDetails.instance != null)
+            {
+                P_TournamentsDetails.instance.LobbyData(str);
+            }
         }
     }
     
@@ -758,6 +763,7 @@ public class P_SocketController : MonoBehaviour
 
         JsonData data = JsonMapper.ToObject(str);
         TABLE_ID = data["tableId"].ToString();
+        tournamentName = data["tournamentName"].ToString();
         onTournamentGameStartedData = data;
         lobbySelectedGameType = "TOURNAMENT";
 

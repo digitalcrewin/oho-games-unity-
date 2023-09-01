@@ -107,8 +107,9 @@ public class P_TournamentsDetails : MonoBehaviour
     public bool isMyIdRegistered = false;
     bool isMyIdRegisteredFromPlayerAPI = false;
 
-    Coroutine tournamentsTimerCo;
-    Coroutine checkForStartTournamentCo;
+    Coroutine tournamentStartTimerCo;
+    //Coroutine checkForStartTournamentCo;
+    Coroutine tournamentRegisterCo;
 
     void Awake()
     {
@@ -142,6 +143,18 @@ public class P_TournamentsDetails : MonoBehaviour
         reEntriesTxt.text = "-";
         avgStackTxt.text = roomData["game_json_data"]["default_stack"].ToString();
 
+        bool isMyIdRegistered = false;
+        
+        IDictionary iDataIgame = roomData["game_json_data"] as IDictionary;
+
+        if (iDataIgame.Contains("players"))
+        {
+            for (int j = 0; j < roomData["game_json_data"]["players"].Count; j++)
+            {
+                if (roomData["game_json_data"]["players"][j].ToString() == P_SocketController.instance.gamePlayerId)
+                    isMyIdRegistered = true;
+            }
+        }
 
         DateTime regStartDate = Convert.ToDateTime(roomData["game_json_data"]["registration_start_date"].ToString()).ToLocalTime();
         //DateTime regStartDate = Convert.ToDateTime("2023-08-20T05:30:00.000Z").ToLocalTime();
@@ -149,10 +162,10 @@ public class P_TournamentsDetails : MonoBehaviour
         //DateTime regEndDate = Convert.ToDateTime("2023-08-21T05:30:00.000Z").ToLocalTime();
         DateTime gameStartDate = Convert.ToDateTime(roomData["game_json_data"]["start_date"].ToString()).ToLocalTime();
         //DateTime gameStartDate = Convert.ToDateTime("2023-08-19T20:10:00.000Z").ToLocalTime();
-        Debug.Log("regStartDate:" + regStartDate + ", regEndDate:" + regEndDate + ", gameStartDate:" + gameStartDate);
+        Debug.Log("regStartDate:" + regStartDate + ", regEndDate:" + regEndDate + ", gameStartDate:" + gameStartDate + ", tournamentStatus:" + tournamentStatus);
 
         tournamentStatus = roomData["tournament_status"].ToString(); //"REGISTRATION_OPEN";
-        Debug.Log("tournamentStatus:" + tournamentStatus);
+
         if (tournamentStatus == "TOURNAMENT_STARTED")
         {
             StartingInLbl.text = "Started";
@@ -171,8 +184,42 @@ public class P_TournamentsDetails : MonoBehaviour
         }
         else if (tournamentStatus == "CREATED" || tournamentStatus == "REGISTRATION_OPEN" || tournamentStatus == "REGISTRATION_CLOSED")
         {
-            StartCoroutine(StartDetailsTimer(gameStartDate));
+            if (tournamentStatus == "CREATED")
+                StartingInLbl.text = "Reg. will Start";
+            else if (tournamentStatus == "REGISTRATION_OPEN" || tournamentStatus == "REGISTRATION_CLOSED")
+                StartingInLbl.text = "Starting in";
         }
+
+        DateTime today = DateTime.Now;
+
+        TimeSpan differenceRegStart = today.Subtract((DateTime)regStartDate);
+        int totalSecondsRegStart = (int)differenceRegStart.TotalSeconds;
+
+        TimeSpan differenceGameStart = today.Subtract((DateTime)gameStartDate);
+        int totalSecondsGameStart = (int)differenceGameStart.TotalSeconds;
+
+        // registration k phele ka time
+        if ((totalSecondsRegStart < 0))
+        {
+            tournamentRegisterCo = StartCoroutine(TournamentStartTimer((DateTime)regStartDate, totalSecondsRegStart, (myReturnValue) =>
+            {
+                StopCoroutine(tournamentRegisterCo);
+                // recall GET_GAMES event
+                P_SocketController.instance.SendGetRooms();
+            }));
+        }
+        // game start k phele ka time
+        else if ((totalSecondsGameStart < 0))
+        {
+            //tournamentStartTimerCo = StartCoroutine(StartDetailsTimer(gameStartDate)); //old
+            tournamentStartTimerCo = StartCoroutine(TournamentStartTimer((DateTime)gameStartDate, totalSecondsGameStart, (myReturnValue) =>
+            {
+                StopCoroutine(tournamentStartTimerCo);
+                // recall GET_GAMES event
+                P_SocketController.instance.SendGetRooms();
+            }));
+        }
+        
 
 
         if (!string.IsNullOrEmpty(roomData["game_id"].ToString()))
@@ -184,6 +231,28 @@ public class P_TournamentsDetails : MonoBehaviour
         //if (checkForStartTournamentCo != null)
         //    StopCoroutine(checkForStartTournamentCo);
         //checkForStartTournamentCo = StartCoroutine(CheckForStartTournament());
+    }
+
+    public void LobbyData(string responseData)
+    {
+        JsonData data = JsonMapper.ToObject(responseData);
+        if (data["data"].Count > 0)
+        {
+            if (!string.IsNullOrEmpty(roomData["game_id"].ToString()))
+            {
+                for (int i = 0; i < data["data"].Count; i++)
+                {
+                    int tempI = i;
+                    string categoryData = data["data"][i]["game_type"]["name"].ToString();
+
+                    if (roomData["game_id"].ToString() == data["data"][i]["game_id"].ToString())
+                    {
+                        RoomData = data["data"][tempI];
+                        SetIntialData();
+                    }
+                }
+            }
+        }
     }
 
     IEnumerator StartDetailsTimer(DateTime gameStartDt)//TimeSpan t, Text sitNGoTimerText)
@@ -199,6 +268,42 @@ public class P_TournamentsDetails : MonoBehaviour
             minutesTxt.text = ((int)differenceGameStart.Minutes * -1).ToString("D2");
             secondsTxt.text = ((int)differenceGameStart.Seconds * -1).ToString("D2");
             yield return new WaitForSeconds(1);
+        }
+    }
+
+    IEnumerator TournamentStartTimer(DateTime tournDateTime, int totalSeconds, System.Action<bool> callback)
+    {
+        for (int i = totalSeconds; i <= 0; i++)
+        {
+            TimeSpan difference1 = DateTime.Now.Subtract(tournDateTime);
+            if (i == 0)
+            {
+                daysTxt.text = "00";
+                hoursTxt.text = "00";
+                minutesTxt.text = "00";
+                secondsTxt.text = "00";
+                yield return null;
+                callback(true);
+                break;
+            }
+            else
+            {
+                try
+                {
+                    //if (difference1.TotalHours < 0 && ((int)difference1.TotalHours != 0))
+                    //{
+                        daysTxt.text = ((int)difference1.Days * -1).ToString("D2");
+                        hoursTxt.text = ((int)difference1.Hours * -1).ToString("D2");
+                        minutesTxt.text = ((int)difference1.Minutes * -1).ToString("D2");
+                        secondsTxt.text = ((int)difference1.Seconds * -1).ToString("D2");
+                    //}
+                }
+                catch (Exception e)
+                {
+                    Debug.Log("error in timerText: " + e.Message);
+                }
+                yield return new WaitForSecondsRealtime(1f);
+            }
         }
     }
 
@@ -330,7 +435,7 @@ public class P_TournamentsDetails : MonoBehaviour
 
     void SetRegisterUnregisterBtnInteraction()
     {
-        Debug.Log("earlier 0");
+        //Debug.Log("earlier 0");
 
         if (tournamentStatus == "REGISTRATION_OPEN")
         {
@@ -339,7 +444,7 @@ public class P_TournamentsDetails : MonoBehaviour
             int regStartDateCompare = DateTime.Compare(regStartDate, today);
             DateTime regEndDate = Convert.ToDateTime(roomData["game_json_data"]["registration_end_date"].ToString()).ToLocalTime();
             int regEndDateCompare = DateTime.Compare(regEndDate, today);
-            Debug.Log("earlier 1 regStartDate:" + regStartDate + ", regEndDate:" + regEndDate);
+            //Debug.Log("earlier 1 regStartDate:" + regStartDate + ", regEndDate:" + regEndDate);
 
             if (regStartDateCompare < 0)
             {
@@ -351,27 +456,27 @@ public class P_TournamentsDetails : MonoBehaviour
 
                     // show register/unregister button
                     registerBtn.interactable = true;
-                    Debug.Log("earlier 2");
+                    //Debug.Log("earlier 2");
                 }
                 else
                 {
                     registerBtn.interactable = false;
-                    Debug.Log("earlier 3");
+                    //Debug.Log("earlier 3");
                 }
             }
             else
             {
                 registerBtn.interactable = false;
-                Debug.Log("earlier 5");
+                //Debug.Log("earlier 5");
             }
         }
         else
         {
             registerBtn.interactable = false;
-            Debug.Log("earlier 6");
+            //Debug.Log("earlier 6");
         }
 
-        Debug.Log("earlier isMyIdRegisteredFromPlayerAPI");
+        //Debug.Log("earlier isMyIdRegisteredFromPlayerAPI");
         if (isMyIdRegisteredFromPlayerAPI) //(isMyIdRegistered)
         {
             registerBtnImage.sprite = unRegisterBtnBG;
@@ -382,7 +487,7 @@ public class P_TournamentsDetails : MonoBehaviour
             //    StopCoroutine(checkForStartTournamentCo);
             //checkForStartTournamentCo = StartCoroutine(CheckForStartTournament());
 
-            Debug.Log("earlier isMyIdRegisteredFromPlayerAPI IF");
+            //Debug.Log("earlier isMyIdRegisteredFromPlayerAPI IF");
         }
         else
         {
@@ -392,7 +497,7 @@ public class P_TournamentsDetails : MonoBehaviour
             //if (checkForStartTournamentCo != null)
             //    StopCoroutine(checkForStartTournamentCo);
 
-            Debug.Log("earlier isMyIdRegisteredFromPlayerAPI ELSE");
+            //Debug.Log("earlier isMyIdRegisteredFromPlayerAPI ELSE");
         }
     }
 
@@ -493,11 +598,18 @@ public class P_TournamentsDetails : MonoBehaviour
         {
             case "back":
                 P_LobbySceneManager.instance.DestroyScreen(P_LobbyScreens.LobbyTournaments);
-                Debug.Log("P_TournamentDetails back");
                 if (P_Lobby.instance != null)
                 {
-                    P_Lobby.instance.SetGameTypeInScrollView();
+                    for (int i = 0; i < P_Lobby.instance.gameTypeStr.Length; i++)
+                    {
+                        int tempI = i;
+                        if (P_Lobby.instance.gameTypeStr[i] == P_SocketController.instance.lobbySelectedGameType)
+                        {
+                            P_Lobby.instance.OnGameTypeButtonClick(tempI, P_SocketController.instance.lobbySelectedGameType);
+                        }
+                    }
                 }
+                P_SocketController.instance.lobbySelectedGameType = "";
                 break;
 
             case "blind_structure":
@@ -697,5 +809,14 @@ public class P_TournamentsDetails : MonoBehaviour
     public void OnTournamentGameStartedReceived(string str)
     {
         Debug.Log("P_TournamentDetails TournamentGameStarted: " + str);
+        P_SocketController.instance.tableData = roomData;
+    }
+
+    void OnDestroy()
+    {
+        if (tournamentRegisterCo != null)
+            StopCoroutine(tournamentRegisterCo);
+        if (tournamentStartTimerCo != null)
+            StopCoroutine(tournamentStartTimerCo);
     }
 }

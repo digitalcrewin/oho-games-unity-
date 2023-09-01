@@ -74,6 +74,10 @@ public class P_Lobby : MonoBehaviour
 
     public void SetGameTypeInScrollView()
     {
+        for (int i = 0; i < gameTypeContent.childCount; i++)
+        {
+            Destroy(gameTypeContent.GetChild(i).gameObject);
+        }
         for (int i = 0; i < gameTypeStr.Length; i++)
         {
             int tempI = i;
@@ -999,6 +1003,7 @@ public class P_Lobby : MonoBehaviour
                 P_TournamentsDetails.instance.isMyIdRegistered = isMyIdRegistered;
             }
         //}));
+        P_SocketController.instance.lobbySelectedGameType = gameType;
     }
 
     void ClearMainScrollView()

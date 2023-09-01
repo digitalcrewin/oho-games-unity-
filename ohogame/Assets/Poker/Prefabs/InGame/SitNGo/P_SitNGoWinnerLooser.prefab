@@ -608,6 +608,8 @@ MonoBehaviour:
   closeBtn: {fileID: 774692725718008027}
   winAmountTxt: {fileID: 2869532075245598018}
   loseAmountTxt: {fileID: 6460649135229158364}
+  winTableTitleTxt: {fileID: 2258594586455427021}
+  loseTableTitleTxt: {fileID: 8967056493788029756}
 --- !u!1 &2865830139552159139
 GameObject:
   m_ObjectHideFlags: 0
@@ -839,7 +841,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 32.7}
-  m_SizeDelta: {x: 450, y: 30}
+  m_SizeDelta: {x: 450, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3402930348709901583
 CanvasRenderer:
@@ -882,7 +884,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Double or Nothing 10
+  m_Text: 
 --- !u!1 &4483098058513157372
 GameObject:
   m_ObjectHideFlags: 0
@@ -1787,7 +1789,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 32.7}
-  m_SizeDelta: {x: 450, y: 30}
+  m_SizeDelta: {x: 450, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3745737263432250362
 CanvasRenderer:
@@ -1830,4 +1832,4 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Double or Nothing 10
+  m_Text: 
