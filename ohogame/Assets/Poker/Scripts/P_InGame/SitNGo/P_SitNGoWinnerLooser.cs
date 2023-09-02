@@ -36,15 +36,10 @@ public class P_SitNGoWinnerLooser : MonoBehaviour
         looserParent.SetActive(false);
         winnerParent.SetActive(true);
         winAmountTxt.text = "<size=50>₹</size> " + amountStr;
-        try
-        {
-            if (!String.IsNullOrEmpty(P_SocketController.instance.tournamentName))
+
+        //    if (!String.IsNullOrEmpty(P_SocketController.instance.tournamentName))
                 winTableTitleTxt.text = P_SocketController.instance.tournamentName;
-        }
-        catch (Exception e)
-        {
-            winTableTitleTxt.text = "";
-        }
+        //}
     }
 
     public void SetLooser(string amountStr)
@@ -55,15 +50,10 @@ public class P_SitNGoWinnerLooser : MonoBehaviour
             loseAmountTxt.text = "";
         else
             loseAmountTxt.text = "<size=50>₹</size> " + amountStr;
-        try
-        {
-            if (!String.IsNullOrEmpty(P_SocketController.instance.tournamentName))
+
+        //    if (!String.IsNullOrEmpty(P_SocketController.instance.tournamentName))
                 winTableTitleTxt.text = P_SocketController.instance.tournamentName;
-        }
-        catch (Exception e)
-        {
-            loseTableTitleTxt.text = "";
-        }
+        //}
     }
 
     void OnclickShareBtn()

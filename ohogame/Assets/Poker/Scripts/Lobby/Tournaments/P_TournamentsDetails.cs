@@ -126,6 +126,7 @@ public class P_TournamentsDetails : MonoBehaviour
         for (int i = 0; i < gameTypeContent.childCount; i++)
         {
             Button gameTypeBtn = gameTypeContent.GetChild(i).GetComponent<Button>();
+            gameTypeBtn.onClick.RemoveListener(() => { });
             gameTypeBtn.onClick.AddListener(() =>
             {
                 GameTypeButtonClickSetImageNColor(gameTypeBtn, gameTypeBtn.gameObject.name);
@@ -205,7 +206,11 @@ public class P_TournamentsDetails : MonoBehaviour
             {
                 StopCoroutine(tournamentRegisterCo);
                 // recall GET_GAMES event
-                P_SocketController.instance.SendGetRooms();
+                //StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.3f, () =>
+                //{
+                //    Debug.Log("SendGetRooms() from Tournament Details");
+                //    P_SocketController.instance.SendGetRooms();
+                //}));
             }));
         }
         // game start k phele ka time
@@ -216,7 +221,7 @@ public class P_TournamentsDetails : MonoBehaviour
             {
                 StopCoroutine(tournamentStartTimerCo);
                 // recall GET_GAMES event
-                P_SocketController.instance.SendGetRooms();
+                //P_SocketController.instance.SendGetRooms();
             }));
         }
         
@@ -243,7 +248,7 @@ public class P_TournamentsDetails : MonoBehaviour
                 for (int i = 0; i < data["data"].Count; i++)
                 {
                     int tempI = i;
-                    string categoryData = data["data"][i]["game_type"]["name"].ToString();
+                    //string categoryData = data["data"][i]["game_type"]["name"].ToString();
 
                     if (roomData["game_id"].ToString() == data["data"][i]["game_id"].ToString())
                     {
@@ -255,21 +260,21 @@ public class P_TournamentsDetails : MonoBehaviour
         }
     }
 
-    IEnumerator StartDetailsTimer(DateTime gameStartDt)//TimeSpan t, Text sitNGoTimerText)
-    {
-        TimeSpan differenceGameStart = DateTime.Now.Subtract((DateTime)gameStartDt);
-        //Debug.Log("differenceGameStart.TotalSeconds:" + differenceGameStart.TotalSeconds);
-        while (differenceGameStart.TotalSeconds < 0)
-        {
-            differenceGameStart = differenceGameStart.Add(TimeSpan.FromSeconds(1));
-            //Debug.Log("t.Days:" + differenceGameStart.Days + ", t.Hours:" + differenceGameStart.Hours + ", t.Minutes:" + differenceGameStart.Minutes);
-            daysTxt.text = ((int)differenceGameStart.Days * -1).ToString("D2");
-            hoursTxt.text = ((int)differenceGameStart.Hours * -1).ToString("D2");
-            minutesTxt.text = ((int)differenceGameStart.Minutes * -1).ToString("D2");
-            secondsTxt.text = ((int)differenceGameStart.Seconds * -1).ToString("D2");
-            yield return new WaitForSeconds(1);
-        }
-    }
+    //IEnumerator StartDetailsTimer(DateTime gameStartDt)//TimeSpan t, Text sitNGoTimerText)
+    //{
+    //    TimeSpan differenceGameStart = DateTime.Now.Subtract((DateTime)gameStartDt);
+    //    //Debug.Log("differenceGameStart.TotalSeconds:" + differenceGameStart.TotalSeconds);
+    //    while (differenceGameStart.TotalSeconds < 0)
+    //    {
+    //        differenceGameStart = differenceGameStart.Add(TimeSpan.FromSeconds(1));
+    //        //Debug.Log("t.Days:" + differenceGameStart.Days + ", t.Hours:" + differenceGameStart.Hours + ", t.Minutes:" + differenceGameStart.Minutes);
+    //        daysTxt.text = ((int)differenceGameStart.Days * -1).ToString("D2");
+    //        hoursTxt.text = ((int)differenceGameStart.Hours * -1).ToString("D2");
+    //        minutesTxt.text = ((int)differenceGameStart.Minutes * -1).ToString("D2");
+    //        secondsTxt.text = ((int)differenceGameStart.Seconds * -1).ToString("D2");
+    //        yield return new WaitForSeconds(1);
+    //    }
+    //}
 
     IEnumerator TournamentStartTimer(DateTime tournDateTime, int totalSeconds, System.Action<bool> callback)
     {

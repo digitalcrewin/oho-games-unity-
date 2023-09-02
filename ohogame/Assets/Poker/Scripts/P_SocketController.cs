@@ -104,6 +104,7 @@ public class P_SocketController : MonoBehaviour
 
         onTournamentGameStartedData = null;
         sendJoinTournamentData = null;
+        tournamentName = string.Empty;
     }
 
     private bool OnQuit()
@@ -623,7 +624,11 @@ public class P_SocketController : MonoBehaviour
         }
         else if (P_LobbySceneManager.instance != null)
         {
-            P_Lobby.instance.CreateLobby1Data(str);
+            if (P_Lobby.instance != null)
+            {
+                P_Lobby.instance.CreateLobby1Data(str);
+            }
+
             if (P_TournamentsDetails.instance != null)
             {
                 P_TournamentsDetails.instance.LobbyData(str);
