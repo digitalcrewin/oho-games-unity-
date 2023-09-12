@@ -664,7 +664,8 @@ public class P_SocketController : MonoBehaviour
             Debug.Log("<color=yellow>GET_CHAT_RES</color>: " + str);
 
         if (P_ChatManager.instance != null)
-            P_ChatManager.instance.OnChatMessageReceived(str);
+            P_ChatManager.instance.OnGetChatMessageReceived(str);
+            //P_ChatManager.instance.OnChatMessageReceived(str);
     }
 
     private void OnSNGGameStartReceived(string str)

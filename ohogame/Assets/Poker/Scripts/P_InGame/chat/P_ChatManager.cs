@@ -48,6 +48,28 @@ public class P_ChatManager : MonoBehaviour
         }
     }
 
+    public void OnGetChatMessageReceived(string serverResponse)
+    {
+        JsonData jsonData = JsonMapper.ToObject(serverResponse);
+
+        if (jsonData.Count > 0) { chatList.Clear(); }
+
+        for (int i = 0; i < jsonData.Count; i++)
+        {
+            P_ChatMessage data = new P_ChatMessage();
+            data.desc = jsonData[i]["message"].ToString();
+            data.title = jsonData[i]["userName"].ToString();
+            data.userId = jsonData[i]["userId"].ToString();
+            data.isMe = false;
+            chatList.Add(data);
+        }
+
+        if (P_ChatUiManager.instance != null)
+        {
+            P_ChatUiManager.instance.UpdateChatList();
+        }
+    }
+
     public void SendChatMessage(string messageToSend)
     {
         P_ChatMessage chatMessage = new P_ChatMessage();
