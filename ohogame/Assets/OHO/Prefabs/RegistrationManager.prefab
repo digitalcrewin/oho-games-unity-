@@ -8924,13 +8924,6 @@ MonoBehaviour:
   - {fileID: 2175628334894986888}
   - {fileID: 2175628335928172638}
   - {fileID: 2175628336049796304}
-  CustommobilePassFields:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
   loginWithOTPFields:
   - {fileID: 2772598641859186854}
   - {fileID: 2772598640423607724}

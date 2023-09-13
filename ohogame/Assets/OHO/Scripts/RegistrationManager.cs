@@ -614,6 +614,7 @@ public class RegistrationManager : MonoBehaviour
                     registrationVerifyScreen.SetActive(true);
                     registrationScreen.SetActive(false);
                     createPasswordScreen.SetActive(false);
+                    StartCoroutine(ActivateInputFieldWithDelay(mobilePassFields[0]));
                 }
                 break;
 
@@ -652,6 +653,7 @@ public class RegistrationManager : MonoBehaviour
                     mobileOTOFields = new Dictionary<int, bool>();
                     forgotPasswordVerify.SetActive(true);
                     forgotPassword.SetActive(false);
+                    StartCoroutine(ActivateInputFieldWithDelay(forgetOTPFields[0]));
                 }
                 break;
 
@@ -1297,7 +1299,9 @@ public class RegistrationManager : MonoBehaviour
         {
             mobileOTOFields.Add(otpNum, true);
             if (otpNum < 5)
+            {
                 mobilePassFields[otpNum + 1].Select();
+            }
         }
         Debug.Log("ZZZZ " + mobileOTOFields.Count);
         if (mobileOTOFields.Count == 6)
@@ -1308,7 +1312,9 @@ public class RegistrationManager : MonoBehaviour
         if (string.IsNullOrEmpty(mobilePassFields[otpNum].text) && mobileOTOFields.ContainsKey(otpNum) && mobileOTOFields[otpNum] == true)
         {
             if (otpNum > 0)
+            {
                 mobilePassFields[otpNum - 1].Select();
+            }
             mobileOTOFields.Remove(otpNum);
         }
     }
@@ -1396,4 +1402,13 @@ public class RegistrationManager : MonoBehaviour
     {
         Debug.Log(this.gameObject.name + " was selected");
     }
+
+    IEnumerator ActivateInputFieldWithDelay(InputField inputF)
+    {
+        yield return new WaitForSeconds(0.1f);
+        EventSystem.current.SetSelectedGameObject(inputF.gameObject, null);
+        inputF.OnPointerClick(new PointerEventData(EventSystem.current));
+        TouchScreenKeyboard.Open("", TouchScreenKeyboardType.NumberPad, false, false, false, false);
+    }
+
 }
