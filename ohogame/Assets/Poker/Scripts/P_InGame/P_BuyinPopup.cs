@@ -142,7 +142,7 @@ public class P_BuyinPopup : MonoBehaviour
                 break;
 
             case "SendTopUp":
-                if (p_InGameUiManager.isTopUp || p_InGameUiManager.isCallFromMenu)
+                if (p_InGameUiManager.isTopUp || p_InGameUiManager.isCallFromMenu || p_InGameUiManager.zeroBalanceAfterWin)
                 {
                     // top up code
                     float selectedText = 0;
@@ -154,6 +154,7 @@ public class P_BuyinPopup : MonoBehaviour
                             P_SocketController.instance.SendTopUp(selectedText);
                             buyInButton.interactable = false;
                             buyInCloseButton.interactable = false;
+                            p_InGameUiManager.zeroBalanceAfterWin = false;
                         }
                     }
                 }

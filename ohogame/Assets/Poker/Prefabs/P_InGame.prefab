@@ -11835,7 +11835,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 11
+  m_Text: 
 --- !u!1 &2044618265653230653
 GameObject:
   m_ObjectHideFlags: 0
@@ -20316,7 +20316,7 @@ GameObject:
   - component: {fileID: 4736639755626167016}
   - component: {fileID: 3276924826083248826}
   m_Layer: 5
-  m_Name: ReBuyPopUp
+  m_Name: T_ReBuyPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20452,6 +20452,7 @@ MonoBehaviour:
   reBuyErrorTxt: {fileID: 4053585141252561405}
   reBuyBuyInTxt: {fileID: 1199995731103805256}
   reBuyMyBalanceTxt: {fileID: 1903172193645972512}
+  reBuyBtn: {fileID: 3133971148778013043}
 --- !u!1 &4384138523455708372
 GameObject:
   m_ObjectHideFlags: 0
@@ -20572,7 +20573,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6826786826859527812}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8821113661979799593}
+        m_TargetAssemblyTypeName: P_AddOnPopUp, Assembly-CSharp
+        m_MethodName: OnClickAddOn
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4422615902589112667
 GameObject:
   m_ObjectHideFlags: 0
@@ -24829,7 +24842,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 1000
+  m_Text: 
 --- !u!1 &5416216355084421298
 GameObject:
   m_ObjectHideFlags: 0
@@ -26517,7 +26530,7 @@ GameObject:
   - component: {fileID: 8952976192233364379}
   - component: {fileID: 1684253570580336662}
   m_Layer: 5
-  m_Name: BlindsUpPopUp
+  m_Name: T_BlindsUpPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29628,7 +29641,7 @@ GameObject:
   - component: {fileID: 3233821372994690982}
   - component: {fileID: 8821113661979799593}
   m_Layer: 5
-  m_Name: AddOnPopUp
+  m_Name: T_AddOnPopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -29766,6 +29779,7 @@ MonoBehaviour:
   aESStackTxt: {fileID: 4699644237997909964}
   aESTimerTxt: {fileID: 3391889111439872378}
   aESTimerImg: {fileID: 2937240552022107988}
+  aESAddOnButton: {fileID: 5897588783421492201}
 --- !u!1 &6586056742284732182
 GameObject:
   m_ObjectHideFlags: 0
@@ -31795,7 +31809,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 30:00:00
+  m_Text: 
 --- !u!1 &7134393899574799956
 GameObject:
   m_ObjectHideFlags: 0
@@ -35057,6 +35071,7 @@ MonoBehaviour:
   p_BuyinPopup: {fileID: 5955626194616224218}
   buyInErrorText: {fileID: 1079539088600066008}
   isTopUp: 0
+  zeroBalanceAfterWin: 0
   isCallFromMenu: 0
   handRankArray:
   - {fileID: 9045240291767645778}
@@ -35081,9 +35096,9 @@ MonoBehaviour:
   - {fileID: 4557842049585577325}
   - {fileID: 8124832954477819808}
   handRankHighlightFrame: {fileID: 3511619384204544414}
-  reBuyPopUp: {fileID: 4336033062719932195}
-  blindsUpPopUp: {fileID: 5821258678018039053}
-  AddOnPopUp: {fileID: 6585127462305400316}
+  reBuyPopUp: {fileID: 3276924826083248826}
+  blindsUpPopUp: {fileID: 1684253570580336662}
+  AddOnPopUp: {fileID: 8821113661979799593}
 --- !u!1 &8131980406079796182
 GameObject:
   m_ObjectHideFlags: 0

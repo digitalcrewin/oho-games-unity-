@@ -95,11 +95,18 @@ public class P_TableMenu : MonoBehaviour
 
             case "topup":
                 P_InGameUiManager.instance.isCallFromMenu = true;
-                P_InGameUiManager.instance.p_BuyinPopup.ShowBuyInPopup(true);
                 if (P_InGameUiManager.instance.IsScreenActive(P_InGameScreens.Menu))
                     P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.Menu);
                 if (P_InGameUiManager.instance.IsScreenActive(P_InGameScreens.MenuForViewer))
                     P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.MenuForViewer);
+                if (P_SocketController.instance.lobbySelectedGameType == "TOURNAMENT")
+                {
+                    P_InGameUiManager.instance.AddOnPopUp.ShowAddOnPopUp(true);
+                }
+                else
+                {
+                    P_InGameUiManager.instance.p_BuyinPopup.ShowBuyInPopup(true);
+                }
                 break;
 
             case "leaderboard":

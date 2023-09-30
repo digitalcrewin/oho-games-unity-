@@ -82,6 +82,7 @@ public class P_SocketController : MonoBehaviour
     public JsonData onTournamentGameStartedData;
     public JsonData sendJoinTournamentData;
     public string tournamentName;
+    public bool isTourneyTableDataNull;
 
     void Awake()
     {
@@ -306,6 +307,9 @@ public class P_SocketController : MonoBehaviour
         socketManager.Socket.On<string>("TOURNAMENT_WIN_LOSS", OnTournamentWinLossReceived);
         socketManager.Socket.On<string>("WAITING_FOR_PLAYERS", OnWaitingForPlayersReceived);
         socketManager.Socket.On<string>("MERGING_TABLES", OnMergingTablesReceived);
+        socketManager.Socket.On<string>("LEVEL_UP", OnLevelUpReceived);  // for tournament
+        socketManager.Socket.On<string>("CAN_REBUY_IN", OnCanReBuyIn);  // for tournament
+        socketManager.Socket.On<string>("SUCCESS", OnSuccess);  // for tournament
 
         socketManager.Open();
     }
@@ -634,6 +638,28 @@ public class P_SocketController : MonoBehaviour
                 P_TournamentsDetails.instance.LobbyData(str);
             }
         }
+        else
+        {
+            if (isTourneyTableDataNull)
+            {
+                JsonData data = JsonMapper.ToObject(str);
+
+                if (data["data"].Count > 0)
+                {
+                    for (int i = 0; i < data["data"].Count; i++)
+                    {
+                        if (data["data"][i]["game_id"].ToString() == gameId)
+                        {
+                            int tempI = i;
+                            if (P_GameConstant.enableLog)
+                                Debug.Log("Tournament game Data found " + gameId);
+                            tableData = data["data"][tempI];
+                            isTourneyTableDataNull = false;
+                        }
+                    }
+                }
+            }
+        }
     }
     
     private void OnGetTableByGameIdRes(string str)
@@ -673,11 +699,12 @@ public class P_SocketController : MonoBehaviour
         if (P_GameConstant.enableLog)
             Debug.Log("<color=yellow>SNG_GAME_STARTED</color>: " + str);
 
-        //{"tableId":3131,"isGameStarted":true}
+        //{"tableId":3137,"isGameStarted":true,"tableName":"Double 2"}
 
 
         JsonData data = JsonMapper.ToObject(str);
         TABLE_ID = data["tableId"].ToString();
+        tournamentName = data["tableName"].ToString();
         lobbySelectedGameType = "SIT N GO";
 
         if (!P_MainSceneManager.instance.IsInGameSceneActive())
@@ -772,6 +799,15 @@ public class P_SocketController : MonoBehaviour
         tournamentName = data["tournamentName"].ToString();
         onTournamentGameStartedData = data;
         lobbySelectedGameType = "TOURNAMENT";
+        gameId = data["gameId"].ToString();
+        if (tableData == null)
+        {
+            if (P_GameConstant.enableLog)
+                Debug.Log("Tournament game Data NULL");
+
+            isTourneyTableDataNull = true;
+            SendGetRooms();
+        }
 
         if (!P_MainSceneManager.instance.IsInGameSceneActive())
         {
@@ -866,6 +902,44 @@ public class P_SocketController : MonoBehaviour
         }
 
         SetSeating();
+    }
+
+    private void OnLevelUpReceived(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>LEVEL_UP</color>: " + str);
+
+        P_InGameUiManager.instance.ShowTournamentBlindsUpPopUp(str);
+    }
+
+    private void OnCanReBuyIn(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>CAN_REBUY_IN</color>: " + str);
+
+        if (lobbySelectedGameType == "TOURNAMENT")
+        {
+            P_InGameUiManager.instance.reBuyPopUp.ShowReBuyPopup(true);
+        }
+    }
+
+    private void OnSuccess(string str)
+    {
+        if (P_GameConstant.enableLog)
+            Debug.Log("<color=yellow>SUCCESS</color>: " + str);
+
+        JsonData data = JsonMapper.ToObject(str);
+
+        if (data["type"].ToString() == "add_on")
+        {
+            if (P_AddOnPopUp.instance != null)
+                P_AddOnPopUp.instance.OnSuccess();
+        }
+        else if (data["type"].ToString() == "re_buy_in")
+        {
+            if (P_ReBuyPopUp.instance != null)
+                P_ReBuyPopUp.instance.OnSuccess();
+        }    
     }
 
     void SetSeating()
@@ -1002,7 +1076,7 @@ public class P_SocketController : MonoBehaviour
         string requestStringData = "{\"roomId\":" + roomId + "}";
 
         if (P_GameConstant.enableLog)
-            Debug.Log("GET_GAMES ---> " + requestStringData);
+            Debug.Log("GET_TABLES_BY_GAME_ID ---> " + requestStringData);
 
         object requestObjectData = Json.Decode(requestStringData);
         P_SocketRequest request = new P_SocketRequest();
@@ -1095,7 +1169,7 @@ public class P_SocketController : MonoBehaviour
         string requestStringData = "{\"tableId\":" + tableId + "," + "\"userId\":" + gamePlayerId + "}";
 
         if (P_GameConstant.enableLog)
-            Debug.Log("SendCheck ---> " + requestStringData);
+            Debug.Log("SendCall ---> " + requestStringData);
 
         object requestObjectData = Json.Decode(requestStringData);
         P_SocketRequest request = new P_SocketRequest();
@@ -1114,7 +1188,7 @@ public class P_SocketController : MonoBehaviour
         string requestStringData = "{\"tableId\":" + tableId + "," + "\"userId\":" + gamePlayerId + "}";
 
         if (P_GameConstant.enableLog)
-            Debug.Log("SendCheck ---> " + requestStringData);
+            Debug.Log("SendFold ---> " + requestStringData);
 
         object requestObjectData = Json.Decode(requestStringData);
         P_SocketRequest request = new P_SocketRequest();
@@ -1300,6 +1374,34 @@ public class P_SocketController : MonoBehaviour
         request.requestDataStructure = requestStringData;
         P_SocketRequest.Add(request);
         sendJoinTournamentData = JsonMapper.ToObject("{\"gameId\":" + gameId + "}");
+    }
+
+    public void SendReBuyIn()  //for tournament
+    {
+        string requestStringData = "{\"tableId\":" + TABLE_ID + ", \"userId\":" + gamePlayerId + "}";
+        if (P_GameConstant.enableLog)
+            Debug.Log("SendReBuyIn ---> " + requestStringData);
+        object requestObjectData = Json.Decode(requestStringData);
+        P_SocketRequest request = new P_SocketRequest();
+        request.emitEvent = "RE_BUY_IN";
+        request.plainDataToBeSend = null;
+        request.jsonDataToBeSend = requestObjectData;
+        request.requestDataStructure = requestStringData;
+        P_SocketRequest.Add(request);
+    }
+
+    public void SendAddOn()  //for tournament
+    {
+        string requestStringData = "{\"tableId\":" + TABLE_ID + ", \"userId\":" + gamePlayerId + "}";
+        if (P_GameConstant.enableLog)
+            Debug.Log("SendAddOn ---> " + requestStringData);
+        object requestObjectData = Json.Decode(requestStringData);
+        P_SocketRequest request = new P_SocketRequest();
+        request.emitEvent = "ADD_ON";
+        request.plainDataToBeSend = null;
+        request.jsonDataToBeSend = requestObjectData;
+        request.requestDataStructure = requestStringData;
+        P_SocketRequest.Add(request);
     }
     #endregion
 

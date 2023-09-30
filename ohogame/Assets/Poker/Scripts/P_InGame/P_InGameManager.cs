@@ -1253,6 +1253,18 @@ public class P_InGameManager : MonoBehaviour
                     }
                 }
             }
+
+            if (data["type"].ToString() == "ADD_ON")
+            {
+                if (P_AddOnPopUp.instance != null)
+                    P_AddOnPopUp.instance.OnErrorAfterAddOnClicked(data["message"].ToString());
+            }
+
+            if (data["type"].ToString() == "RE_BUY_IN")
+            {
+                if (P_ReBuyPopUp.instance != null)
+                    P_ReBuyPopUp.instance.OnErrorAfterAddOnClicked(data["message"].ToString());
+            }
         }
     }
 
@@ -1695,11 +1707,12 @@ public class P_InGameManager : MonoBehaviour
                             if (data["other"][i]["stackSize"].ToString() == "0")
                             {
                                 P_SocketController.instance.isMyBalanceZero = true;
-                                if (P_SocketController.instance.gameTypeName != "SIT N GO")
+                                if ((P_SocketController.instance.gameTypeName != "SIT N GO") && (P_SocketController.instance.lobbySelectedGameType != "TOURNAMENT"))
                                 {
                                     StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(5f, () =>
                                     {
-                                        P_InGameUiManager.instance.isTopUp = true;
+                                        //P_InGameUiManager.instance.isTopUp = true;
+                                        P_InGameUiManager.instance.zeroBalanceAfterWin = true;
                                         P_InGameUiManager.instance.p_BuyinPopup.ShowBuyInPopup(true);  //P_InGameUiManager.instance.ShowBuyInPopup(true);
                                     }));
                                 }

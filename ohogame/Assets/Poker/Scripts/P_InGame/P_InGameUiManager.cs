@@ -5,6 +5,7 @@ using System;
 using UnityEngine.UI;
 using LitJson;
 using DG.Tweening;
+using System.Text;
 
 public class P_InGameUiManager : MonoBehaviour
 {
@@ -54,6 +55,7 @@ public class P_InGameUiManager : MonoBehaviour
     public P_BuyinPopup p_BuyinPopup;
     public Text buyInErrorText;
     public bool isTopUp = false;
+    public bool zeroBalanceAfterWin = false;
     public bool isCallFromMenu = false;
 
     [Space(10)]
@@ -63,9 +65,11 @@ public class P_InGameUiManager : MonoBehaviour
     [SerializeField] Transform handRankHighlightFrame;
 
     [Space(10)]
-    [SerializeField] GameObject reBuyPopUp;
-    [SerializeField] GameObject blindsUpPopUp;
-    [SerializeField] GameObject AddOnPopUp;
+    public P_ReBuyPopUp reBuyPopUp;
+    public P_BlindsUpPopUp blindsUpPopUp;
+    public P_AddOnPopUp AddOnPopUp;
+
+    StringBuilder builder;
 
 
     void Awake()
@@ -83,6 +87,7 @@ public class P_InGameUiManager : MonoBehaviour
     void Start()
     {
         SwitchTables();
+        builder = new StringBuilder(50);
     }
 
     void Update()
@@ -491,6 +496,9 @@ public class P_InGameUiManager : MonoBehaviour
         JsonData data = JsonMapper.ToObject(str);
 
         ShowScreen(P_InGameScreens.SitNGoWinnerLooser);
+
+        if (AddOnPopUp.gameObject.activeSelf)
+            P_AddOnPopUp.instance.ShowAddOnPopUp(false);
 
         if ((bool)data["isWinner"] == true)
         {
@@ -1048,25 +1056,25 @@ public class P_InGameUiManager : MonoBehaviour
 
 
 
-    public void ShowTournamentReBuyPopUp()
-    {
-        reBuyPopUp.SetActive(true);
-    }
 
-    public void ShowTournamentBlindsUpPopUp()
+    public void ShowTournamentBlindsUpPopUp(string str)
     {
-        blindsUpPopUp.SetActive(true);
-        StartCoroutine(GlobalGameManager.instance.RunAfterDelay(3f, () => {
-            blindsUpPopUp.SetActive(false);
-            ShowTournamentAddOnPopUp();
-        }));
-    }
+        JsonData data = JsonMapper.ToObject(str);
+        //{"smallBlind":10,"bigBlind":20,"ante":51,"level":1,"timeForNextLevel":-1}
+        blindsUpPopUp.gameObject.SetActive(true);
+        
+        builder.Length = 0;
+        builder.Append(data["smallBlind"].ToString());
+        builder.Append("/");
+        builder.Append(data["bigBlind"].ToString());
+        builder.Append(", ");
+        builder.Append(data["ante"].ToString());
+        builder.Append(" (Ante)");
 
-    public void ShowTournamentAddOnPopUp()
-    {
-        AddOnPopUp.SetActive(true);
+        string strLvlUp = builder.ToString();
+        P_BlindsUpPopUp.instance.ShowBlindsUpPopUp(true, strLvlUp);
         StartCoroutine(GlobalGameManager.instance.RunAfterDelay(3f, () => {
-            AddOnPopUp.SetActive(false);
+            P_BlindsUpPopUp.instance.ShowBlindsUpPopUp(false);
         }));
     }
 

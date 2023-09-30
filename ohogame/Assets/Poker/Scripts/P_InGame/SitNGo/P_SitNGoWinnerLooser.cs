@@ -52,7 +52,7 @@ public class P_SitNGoWinnerLooser : MonoBehaviour
             loseAmountTxt.text = "<size=50>₹</size> " + amountStr;
 
         //    if (!String.IsNullOrEmpty(P_SocketController.instance.tournamentName))
-                winTableTitleTxt.text = P_SocketController.instance.tournamentName;
+        loseTableTitleTxt.text = P_SocketController.instance.tournamentName;
         //}
     }
 

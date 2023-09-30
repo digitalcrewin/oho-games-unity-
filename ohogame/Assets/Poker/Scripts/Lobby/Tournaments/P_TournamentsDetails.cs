@@ -813,8 +813,8 @@ public class P_TournamentsDetails : MonoBehaviour
 
     public void OnTournamentGameStartedReceived(string str)
     {
-        Debug.Log("P_TournamentDetails TournamentGameStarted: " + str);
-        P_SocketController.instance.tableData = roomData;
+        //Debug.Log("P_TournamentDetails TournamentGameStarted: " + str);
+        //P_SocketController.instance.tableData = roomData;
     }
 
     void OnDestroy()
