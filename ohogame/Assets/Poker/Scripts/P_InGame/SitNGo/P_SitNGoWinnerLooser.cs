@@ -44,8 +44,8 @@ public class P_SitNGoWinnerLooser : MonoBehaviour
 
     public void SetLooser(string amountStr)
     {
-        winnerParent.SetActive(false);
         looserParent.SetActive(true);
+        winnerParent.SetActive(false);
         if (string.IsNullOrEmpty(amountStr))
             loseAmountTxt.text = "";
         else
@@ -58,13 +58,13 @@ public class P_SitNGoWinnerLooser : MonoBehaviour
 
     void OnclickShareBtn()
     {
-        P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.SitNGoWinnerLooser);
+        //P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.SitNGoWinnerLooser);
         Exit();
     }
 
     public void OnclickPlayAgainBtn()
     {
-        P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.SitNGoWinnerLooser);
+        //P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.SitNGoWinnerLooser);
         Exit();
     }
 
@@ -85,13 +85,15 @@ public class P_SitNGoWinnerLooser : MonoBehaviour
                 P_SocketController.instance.SendLeaveViewer();
             }
             P_SocketController.instance.isJoinSended = false;
+            P_SocketController.instance.onTournamentGameStartedData = null;
+            P_SocketController.instance.sendJoinTournamentData = null;
         }
         P_InGameUiManager.instance.ShowScreen(P_InGameScreens.Loading);
 
         P_MainSceneManager.instance.LoadScene(P_MainScenes.LobbyScene);
 
         // back to selected lobby
-        StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.5f, () =>
+        StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.4f, () =>
         {
             if (P_Lobby.instance != null)
             {
@@ -106,6 +108,7 @@ public class P_SitNGoWinnerLooser : MonoBehaviour
                 }
             }
             P_SocketController.instance.lobbySelectedGameType = "";
+            P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.SitNGoWinnerLooser);
         }));
     }
 }

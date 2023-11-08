@@ -205,27 +205,17 @@ public class P_TournamentsDetails : MonoBehaviour
             tournamentRegisterCo = StartCoroutine(TournamentStartTimer((DateTime)regStartDate, totalSecondsRegStart, (myReturnValue) =>
             {
                 StopCoroutine(tournamentRegisterCo);
-                // recall GET_GAMES event
-                //StartCoroutine(P_MainSceneManager.instance.RunAfterDelay(0.3f, () =>
-                //{
-                //    Debug.Log("SendGetRooms() from Tournament Details");
-                //    P_SocketController.instance.SendGetRooms();
-                //}));
             }));
         }
         // game start k phele ka time
         else if ((totalSecondsGameStart < 0))
         {
-            //tournamentStartTimerCo = StartCoroutine(StartDetailsTimer(gameStartDate)); //old
             tournamentStartTimerCo = StartCoroutine(TournamentStartTimer((DateTime)gameStartDate, totalSecondsGameStart, (myReturnValue) =>
             {
                 StopCoroutine(tournamentStartTimerCo);
-                // recall GET_GAMES event
-                //P_SocketController.instance.SendGetRooms();
             }));
         }
         
-
 
         if (!string.IsNullOrEmpty(roomData["game_id"].ToString()))
             StartCoroutine(WebServices.instance.GETRequestData(GameConstants.API_URL + "/poker/games/" + roomData["game_id"].ToString() + "/players", PlayersResponse));
@@ -248,7 +238,6 @@ public class P_TournamentsDetails : MonoBehaviour
                 for (int i = 0; i < data["data"].Count; i++)
                 {
                     int tempI = i;
-                    //string categoryData = data["data"][i]["game_type"]["name"].ToString();
 
                     if (roomData["game_id"].ToString() == data["data"][i]["game_id"].ToString())
                     {
@@ -295,13 +284,10 @@ public class P_TournamentsDetails : MonoBehaviour
             {
                 try
                 {
-                    //if (difference1.TotalHours < 0 && ((int)difference1.TotalHours != 0))
-                    //{
-                        daysTxt.text = ((int)difference1.Days * -1).ToString("D2");
-                        hoursTxt.text = ((int)difference1.Hours * -1).ToString("D2");
-                        minutesTxt.text = ((int)difference1.Minutes * -1).ToString("D2");
-                        secondsTxt.text = ((int)difference1.Seconds * -1).ToString("D2");
-                    //}
+                    daysTxt.text = ((int)difference1.Days * -1).ToString("D2");
+                    hoursTxt.text = ((int)difference1.Hours * -1).ToString("D2");
+                    minutesTxt.text = ((int)difference1.Minutes * -1).ToString("D2");
+                    secondsTxt.text = ((int)difference1.Seconds * -1).ToString("D2");
                 }
                 catch (Exception e)
                 {

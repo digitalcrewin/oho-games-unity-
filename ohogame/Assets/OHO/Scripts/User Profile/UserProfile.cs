@@ -46,6 +46,9 @@ public class UserProfile : MonoBehaviour
 		MainDashboardScreen.instance.DestroyScreen(MainDashboardScreen.MainDashboardScreens.Loading);
 		if (data["statusCode"].ToString() == "200")
 		{
+			PlayerManager.instance.GetPlayerGameData().userName = data["data"]["username"].ToString();
+			MainDashboardScreen.instance.userNameText.text = PlayerManager.instance.GetPlayerGameData().userName;
+
 			displayNameText.text = data["data"]["username"].ToString();
 			mobileNumberText.text = data["data"]["mobile"].ToString();
 			emailIdText.text = data["data"]["email"].ToString();

@@ -59,6 +59,7 @@ public class P_Players : MonoBehaviour
     {
         if (PlayerManager.instance.GetPlayerGameData().userId == playerData.userId)
         {
+            //realTimeResult.text = "";
             lastActionImage.SetActive(false);
             P_InGameManager.instance.suggestionBtnParent.SetActive(false);
         }
@@ -85,7 +86,12 @@ public class P_Players : MonoBehaviour
         playerData.totalBet = 0f;
         playerData.cards = new P_CardData[0];
         playerData.seatNo = "";
-        realTimeResult.text = "";
+
+        //realTimeResult.text = "";
+        if(P_SocketController.instance.isJoinSended == false && playerData.isPlaying == false)
+        {
+            realTimeResult.text = "";
+        }
 
         P_InGameManager.instance.mySeatIndex = 0;
         P_InGameManager.instance.mySeatIndexTemp = -1;

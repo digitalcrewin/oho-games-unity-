@@ -1274,6 +1274,17 @@ public class P_SocketController : MonoBehaviour
         request.jsonDataToBeSend = requestObjectData;
         request.requestDataStructure = requestStringData;
         P_SocketRequest.Add(request);
+
+        for (int i = 0; i < P_InGameManager.instance.playersScript.Count; i++)
+        {
+            //if (PlayerManager.instance.GetPlayerGameData().userId == gamePlayerId)    //P_Players.instance.playerData.userId
+            if (P_InGameManager.instance.playersScript[i].playerData.userId == gamePlayerId)
+            {
+                Debug.Log("SendLeave:");
+                //P_Players.instance.realTimeResult.text = "";
+                P_InGameManager.instance.playersScript[i].realTimeResult.text = "";
+            }
+        }
     }
 
     public void SendTopUp(float amount)

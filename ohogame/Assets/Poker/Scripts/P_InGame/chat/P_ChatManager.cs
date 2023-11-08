@@ -79,7 +79,16 @@ public class P_ChatManager : MonoBehaviour
         chatList.Add(chatMessage);
 
         if (P_InGameUiManager.instance != null)
-            P_SocketController.instance.SendChatMessage(GetUserName(), messageToSend, P_SocketController.instance.TABLE_ID);
+        {
+            if (P_SocketController.instance.lobbySelectedGameType == "ANONYMOUS")
+            {
+                P_SocketController.instance.SendChatMessage("XXXXX", messageToSend, P_SocketController.instance.TABLE_ID);
+            }
+            else
+            {
+                P_SocketController.instance.SendChatMessage(GetUserName(), messageToSend, P_SocketController.instance.TABLE_ID);
+            }
+        }
     }
 
     private string GetUserName()

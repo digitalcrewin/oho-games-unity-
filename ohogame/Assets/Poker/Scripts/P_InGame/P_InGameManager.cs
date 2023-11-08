@@ -702,7 +702,7 @@ public class P_InGameManager : MonoBehaviour
             P_InGameUiManager.instance.gameStartInText.gameObject.SetActive(false);
         }
 
-        P_InGameUiManager.instance.ResetPlayerAllData();
+        //P_InGameUiManager.instance.ResetPlayerAllData();
         if (P_SocketController.instance.isLeaveSeatSended && P_InGameUiManager.instance.IsScreenActive(P_InGameScreens.Loading))
         {
             P_InGameUiManager.instance.DestroyScreen(P_InGameScreens.Loading);
@@ -776,6 +776,7 @@ public class P_InGameManager : MonoBehaviour
                     matchMakingPlayerData.Add(playerData);
                 }
             }
+            P_InGameUiManager.instance.ResetPlayerAllData();
 
             SeatRotation(matchMakingPlayerData);
         }
@@ -1459,7 +1460,7 @@ public class P_InGameManager : MonoBehaviour
             }
         }
 
-        if (selectedSuggestionAction != P_SuggestionActions.Null)
+        //if (selectedSuggestionAction != P_SuggestionActions.Null)
         {
             switch (selectedSuggestionAction)
             {
@@ -1506,7 +1507,7 @@ public class P_InGameManager : MonoBehaviour
                     break;
             }
         }
-        else
+        //else
         {
             ActionButtonElse(data);
         }
@@ -1538,6 +1539,7 @@ public class P_InGameManager : MonoBehaviour
                 }
                 else if (data[i].Equals("call"))
                 {
+                    actionButtons[1].SetActive(false);
                     actionButtons[3].SetActive(true);
                 }
                 else if (data[i].Equals("allin"))
@@ -1946,50 +1948,140 @@ public class P_InGameManager : MonoBehaviour
                         playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                         playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 0f);
                         break;
+
                     case "2":
-                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(112f, 12f);
-                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
+                        if (P_SocketController.instance.gameTableMaxPlayers == 6 || P_SocketController.instance.gameTableMaxPlayers == 8)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(112f, 12f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                        }
+                        else if (P_SocketController.instance.gameTableMaxPlayers == 4)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(112f, -7f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                        }
+                        else if (P_SocketController.instance.gameTableMaxPlayers == 2)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(35f, -121f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(0f, 5f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(111f, 60f);
+                        }
                         playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
                         playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
-                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 0f);
                         break;
+
                     case "3":
-                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(112f, -7f);
-                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        if (P_SocketController.instance.gameTableMaxPlayers == 8)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(112f, -7f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        }
+                        if (P_SocketController.instance.gameTableMaxPlayers == 6)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(121f, -75f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(102f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        }
+                        else if (P_SocketController.instance.gameTableMaxPlayers == 4)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(35f, -121f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(111f, 60f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(0f, 5f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        }
                         playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
-                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
-                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
                         break;
+
                     case "4":
-                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(121f, -75f);
-                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(102f, 42f);
+                        if(P_SocketController.instance.gameTableMaxPlayers  == 8)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(121f, -75f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(102f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        }
+                        if (P_SocketController.instance.gameTableMaxPlayers == 6)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(35f, -121f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(111f, 60f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(0f, 5f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        }
+                        else if (P_SocketController.instance.gameTableMaxPlayers == 4)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(-112f, -7f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 180f);
+                        }
                         playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
-                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
-                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
                         break;
+
                     case "5":
-                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(35f, -121f);
-                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(111f, 60f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 5f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        if (P_SocketController.instance.gameTableMaxPlayers == 6)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(-121f, -75f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 180f);
+                        }
+                        else if (P_SocketController.instance.gameTableMaxPlayers == 8)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(35, -121f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(111f, 60f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(0f, 5f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
+                        }
                         playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconTopBottom;
-                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(180f, 0f, 0f);
-                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(180f, 0f, 0f);
                         break;
+
                     case "6":
-                        playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-121f, -75f);
-                        playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().anchoredPosition = new Vector2(7.5f, 0f);
-                        playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                        if (P_SocketController.instance.gameTableMaxPlayers == 6)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(-112, 12f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 180f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(102f, 40f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 180f, 0f);
+                        }
+                        else if (P_SocketController.instance.gameTableMaxPlayers == 8)
+                        {
+                            playersScript[i].chatObj.GetComponent<RectTransform>().localPosition = new Vector2(-121f, -75f);
+                            playersScript[i].chatObj.GetComponent<RectTransform>().sizeDelta = new Vector2(126f, 51f);
+                            playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().localPosition = new Vector2(7.5f, 0f);
+                            playersScript[i].chatObj.transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector2(101f, 42f);
+                            playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 180f);
+                        }
                         playersScript[i].chatObj.GetComponent<Image>().sprite = chatIconLeftRight;
-                        playersScript[i].chatObj.transform.localRotation = Quaternion.Euler(0f, 0f, 180f);
-                        playersScript[i].chatObj.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0f, 180f);
                         break;
                     case "7":
                         playersScript[i].chatObj.GetComponent<RectTransform>().anchoredPosition = new Vector2(-112f, -7f);
@@ -2011,11 +2103,14 @@ public class P_InGameManager : MonoBehaviour
                         break;
                 }
 
+                Debug.Log("Chat message set-->");
+
                 if (jsonData[0]["message"].ToString().Length > 22)
                     playersScript[i].chatObj.transform.GetChild(0).GetComponent<Text>().text = jsonData[0]["message"].ToString().Substring(0, 20) + "..";
                 else
                     playersScript[i].chatObj.transform.GetChild(0).GetComponent<Text>().text = jsonData[0]["message"].ToString();
 
+                Debug.Log("ChatObj On-->");
                 playersScript[i].chatObj.SetActive(true);
 
                 StartCoroutine(HideChatOnPlayer(playersScript[i].chatObj));
@@ -2025,7 +2120,7 @@ public class P_InGameManager : MonoBehaviour
 
     IEnumerator HideChatOnPlayer(GameObject chatObj)
     {
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(10f);
         chatObj.SetActive(false);
     }
 }
