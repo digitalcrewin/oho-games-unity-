@@ -2120,7 +2120,7 @@ public class P_InGameManager : MonoBehaviour
 
     IEnumerator HideChatOnPlayer(GameObject chatObj)
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(2f);
         chatObj.SetActive(false);
     }
 }

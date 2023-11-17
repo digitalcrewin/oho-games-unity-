@@ -1069,6 +1069,11 @@ public class P_SocketController : MonoBehaviour
         request.jsonDataToBeSend = requestObjectData;
         request.requestDataStructure = requestStringData;
         P_SocketRequest.Add(request);
+
+        if (P_Lobby.instance != null)
+        {
+            P_Lobby.instance.loadingText.SetActive(true);
+        }
     }
 
     public void SendGetTables(string roomId)

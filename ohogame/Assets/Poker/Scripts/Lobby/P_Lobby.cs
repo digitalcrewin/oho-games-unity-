@@ -28,6 +28,7 @@ public class P_Lobby : MonoBehaviour
     [SerializeField] Text titleText;
     public Text errorText;
     [SerializeField] GameObject noDataText;
+    public GameObject loadingText;
 
     public string currentCategory = "TEXAS";
 
@@ -55,6 +56,7 @@ public class P_Lobby : MonoBehaviour
         switch(buttonName)
         {
             case "back":
+                P_SocketController.instance.SocketClose();
                 P_MainSceneManager.instance.ScreenDestroy();
                 GlobalGameManager.instance.LoadScene(Scenes.MainDashboard);
 
@@ -171,8 +173,8 @@ public class P_Lobby : MonoBehaviour
 
                     if (currentCategory.Equals("SIT N GO"))
                     {
-                        if (noDataText.activeInHierarchy)
-                            noDataText.SetActive(false);
+                        if (loadingText.activeInHierarchy)
+                            loadingText.SetActive(false);
 
                         GameObject sitNGoObj = Instantiate(sitNGoPrefab, mainScrollViewContent);
                         P_Lobby_SitnGo pLobbySitNGo = sitNGoObj.GetComponent<P_Lobby_SitnGo>();
@@ -294,8 +296,8 @@ public class P_Lobby : MonoBehaviour
                     }
                     else if (currentCategory.Equals("TOURNAMENT"))
                     {
-                        if (noDataText.activeInHierarchy)
-                            noDataText.SetActive(false);
+                        if (loadingText.activeInHierarchy)
+                            loadingText.SetActive(false);
 
                         GameObject tournamentObj = Instantiate(tournamentPrefab, mainScrollViewContent);
                         P_Lobby_Tournament pLobbyTournament = tournamentObj.GetComponent<P_Lobby_Tournament>();
@@ -606,8 +608,8 @@ public class P_Lobby : MonoBehaviour
                     }
                     else
                     {
-                        if (noDataText.activeInHierarchy)
-                            noDataText.SetActive(false);
+                        if (loadingText.activeInHierarchy)
+                            loadingText.SetActive(false);
 
                         GameObject texas1 = Instantiate(texasPrefab, mainScrollViewContent);
                         P_Lobby_Texas pLobbyTexas1 = texas1.GetComponent<P_Lobby_Texas>();
@@ -682,6 +684,9 @@ public class P_Lobby : MonoBehaviour
         }
         else
         {
+            if (loadingText.activeInHierarchy)
+                loadingText.SetActive(false);
+
             errorText.text = "Data not found from server";
             errorText.gameObject.SetActive(true);
         }

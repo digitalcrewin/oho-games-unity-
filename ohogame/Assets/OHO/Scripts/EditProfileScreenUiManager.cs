@@ -111,15 +111,23 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 //emailGetOTPBtn.SetActive(false);
             }
 
-            if (!string.IsNullOrEmpty(d["dob"].ToString()))
+            if (d["dob"] != null)
             {
-                DateTime dt;
-                if (DateTime.TryParse(d["dob"].ToString(), out dt))
+                if (!string.IsNullOrEmpty(d["dob"].ToString()))
                 {
-                    dobText.text = dt.ToString("dd-MM-yyyy");
+                    DateTime dt;
+                    if (DateTime.TryParse(d["dob"].ToString(), out dt))
+                    {
+                        dobText.text = dt.ToString("dd-MM-yyyy");
+                    }
+                    else
+                        dobText.text = d["dob"].ToString();
                 }
                 else
-                    dobText.text = d["dob"].ToString();
+                {
+                    dobText.transform.parent.GetComponent<Text>().color = new Color(0.56f, 0.55f, 0.58f, 0f);
+                    dobText.placeholder.GetComponent<Text>().text = "Date of Birth (DD-MM-YYYY)";
+                }
             }
             else
             {
@@ -180,12 +188,14 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 mobileGetOTPBtn.transform.GetChild(0).gameObject.SetActive(false);
                 mobileGetOTPBtn.transform.GetChild(1).gameObject.SetActive(true);
                 mobileGetOTPBtn.GetComponent<Button>().enabled = false;
+                mobileText.GetComponent<InputField>().interactable = false;
             }
             else if (!bool.Parse(data["data"]["is_mobile_verified"].ToString()))
             {
                 mobileGetOTPBtn.transform.GetChild(0).gameObject.SetActive(true);
                 mobileGetOTPBtn.transform.GetChild(1).gameObject.SetActive(false);
                 mobileGetOTPBtn.GetComponent<Button>().enabled = true;
+                mobileText.GetComponent<InputField>().interactable = true;
             }
 
             if (bool.Parse(data["data"]["is_email_verified"].ToString()))
@@ -193,13 +203,15 @@ public class EditProfileScreenUiManager : MonoBehaviour
                 emailGetOTPBtn.transform.GetChild(0).gameObject.SetActive(false);
                 emailGetOTPBtn.transform.GetChild(1).gameObject.SetActive(true);
                 emailGetOTPBtn.GetComponent<Button>().enabled = false;
+                emailText.GetComponent<InputField>().interactable = false;
             }
             else if (!bool.Parse(data["data"]["is_email_verified"].ToString()))
             {
                 emailGetOTPBtn.transform.GetChild(0).gameObject.SetActive(true);
                 emailGetOTPBtn.transform.GetChild(1).gameObject.SetActive(false);
                 emailGetOTPBtn.GetComponent<Button>().enabled = true;
-            }                
+                emailText.GetComponent<InputField>().interactable = true;
+            }
         }
         else
         {
