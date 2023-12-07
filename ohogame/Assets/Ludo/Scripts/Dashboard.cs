@@ -188,11 +188,16 @@ public class Dashboard : MonoBehaviour
                                 }
                             }
 
-                            if (!data["data"]["full_name"].ToString().Equals(PlayerManager.instance.GetPlayerGameData().fullName))
+                            if (data["data"]["full_name"] != null)
                             {
-                                playerData.fullName = data["data"]["full_name"].ToString();
-                                changeCount++;
+                                if (!data["data"]["full_name"].ToString().Equals(PlayerManager.instance.GetPlayerGameData().fullName))
+                                {
+                                    playerData.fullName = data["data"]["full_name"].ToString();
+                                    changeCount++;
+                                }
                             }
+
+                                
 
                             if (!data["data"]["email"].ToString().Equals(PlayerManager.instance.GetPlayerGameData().userEmail))
                             {

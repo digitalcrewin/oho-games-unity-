@@ -18,13 +18,13 @@ public class R_GameConstants : MonoBehaviour
     public const int API_TIME_OUT_LIMIT = 50;
 
     //public const string BASE_URL = "http://15.206.57.137"; //Production
-    public const string BASE_URL = "http://3.111.178.138"; //Dev
+    public const string BASE_URL = "http://15.206.169.205"; //Dev
 
     public const string URL = BASE_URL + ":4000/api/v1";
     public const string API_URL = URL;
 
-    public const string SOCKET_URL = "http://3.111.178.138"+ ":5001";
-    public const string NEW_API_URL = "http://3.111.178.138:4000/api/v1/rummy";
+    public const string SOCKET_URL = "http://15.206.169.205" + ":3002";
+    public const string NEW_API_URL = "http://15.206.169.205:4000/api/v1/rummy";
 
     public static string[] GAME_URLS =
     {
